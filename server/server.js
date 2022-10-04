@@ -6,6 +6,7 @@ const cors = require('cors');
 require('dotenv').config()
 const connection = require('./db')
 const student_routes = require('./routes/student-routes')
+const faculty_routes = require('./routes/faculty-routes')
 
 // connecting to database
 connection()
@@ -21,6 +22,7 @@ app.use(express.json())
 
 // set routes
 app.use('/api/student', student_routes)
+app.use('/api/faculty', faculty_routes)
 
 // listening to port
 try {

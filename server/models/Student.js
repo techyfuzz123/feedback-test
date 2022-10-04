@@ -36,7 +36,8 @@ const studentSchema = mongoose.Schema ({
     "regNo" : {
         type : Number,
         required : true,
-        trim : true
+        trim : true,
+        unique : true
     },
     "batch" : {
         type : Number,
