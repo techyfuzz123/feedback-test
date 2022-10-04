@@ -76,9 +76,13 @@ const studentSchema = mongoose.Schema ({
             type : Array,
             trim : true
         }
+    },
+    "staff" : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "Faculty"
     }
 }, {versionKey : false})
 
-const Student = mongoose.model('student', studentSchema)
+const Student = mongoose.model('Student', studentSchema)
 
 module.exports = {Student}

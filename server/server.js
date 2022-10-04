@@ -8,6 +8,7 @@ const connection = require('./db')
 const student_routes = require('./routes/student-routes')
 const faculty_routes = require('./routes/faculty-routes')
 const subject_routes = require('./routes/subject-routes')
+const classroom_routes = require('./routes/classroom-routes')
 
 // connecting to database
 connection()
@@ -25,6 +26,7 @@ app.use(express.json())
 app.use('/api/student', student_routes)
 app.use('/api/faculty', faculty_routes)
 app.use('/api/subject', subject_routes)
+app.use('/api/classroom', classroom_routes)
 
 // listening to port
 try {

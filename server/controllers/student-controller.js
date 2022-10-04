@@ -55,7 +55,7 @@ const getStudent = async (req, res) => {
     // see if the register number already exists
     let existingStudent
     try {
-        existingStudent = await Student.findOne({"regNo" : regNo}, "-password")
+        existingStudent = await Student.findOne({"regNo" : regNo}, "-password").populate('staff')
     } catch (error) {
         console.log(error)
         return res.status(500).json({"message" : "Internal Server Error"})
@@ -64,6 +64,17 @@ const getStudent = async (req, res) => {
         return res.status(409).json({"message" : "Student does'nt Exists"})
     }
     return res.status(200).json({"student" : existingStudent})
+}
+
+const getStudents = async (req,res) => {
+    let students;
+    try {
+        students = await Student.find({}, "-password").populate('staff')
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({"message" : "Internal Server Error"})
+    }
+    return res.status(200).json({students})
 }
 
 /* 
@@ -114,4 +125,4 @@ const deleteStudent = async (req, res) => {
     return res.status(200).json({"message" : "Student Deleted"})
 }
 
-module.exports = { addStudent, getStudent, updateStudent, deleteStudent }
+module.exports = { addStudent, getStudent, getStudents, updateStudent, deleteStudent }
