@@ -7,6 +7,7 @@ require('dotenv').config()
 const connection = require('./db')
 const student_routes = require('./routes/student-routes')
 const faculty_routes = require('./routes/faculty-routes')
+const subject_routes = require('./routes/subject-routes')
 
 // connecting to database
 connection()
@@ -23,6 +24,7 @@ app.use(express.json())
 // set routes
 app.use('/api/student', student_routes)
 app.use('/api/faculty', faculty_routes)
+app.use('/api/subject', subject_routes)
 
 // listening to port
 try {

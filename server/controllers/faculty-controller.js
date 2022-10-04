@@ -11,7 +11,6 @@ const addFaculties = async (req, res) => {
             return res.status(500).json({ "message": "internal server error" });
         }
         return res.status(200).json({ message: `${docs.insertedCount} faculties added successfully` });
-
     })
 }
 
