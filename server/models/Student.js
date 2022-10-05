@@ -63,23 +63,46 @@ const studentSchema = mongoose.Schema ({
         default : false
     },
     "subjects" : {
-        "regular" : {
-            type : Array,
-            required: true,
-            trim : true
-        },
-        "arrear" : {
-            type : Array,
-            trim : true
-        },
-        "elective" : {
-            type : Array,
-            trim : true
-        }
-    },
-    "staff" : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "Faculty"
+        "include" : [
+            {
+                "subjectCode" : {
+                    type : String,
+                    required : true
+                },
+                "subjectType" : {
+                    type : String,
+                    required : true
+                },
+                "subjectName" : {
+                    type : String,
+                    required : true
+                },
+                "faculty" : {
+                    type : String,
+                    required : true
+                },
+            }
+        ],
+        "exclude" : [
+            {
+                "subjectCode" : {
+                    type : String,
+                    required : true
+                },
+                "subjectType" : {
+                    type : String,
+                    required : true
+                },
+                "subjectName" : {
+                    type : String,
+                    required : true
+                },
+                "faculty" : {
+                    type : String,
+                    required : true
+                },
+            }
+        ]
     }
 }, {versionKey : false})
 
