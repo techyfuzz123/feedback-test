@@ -58,16 +58,18 @@ const studentSchema = mongoose.Schema ({
         type : String,
         default : "hicet"
     },
-    "feedback" : {
-        "semester" : {
-            type : String,
-            required : true
-        },
-        "isFeedBackSubmitted" : {
-            type : Boolean,
-            default : false
+    "feedback" : [
+        {
+            "semester" : {
+                type : String,
+                required : true
+            },
+            "isFeedBackSubmitted" : {
+                type : Boolean,
+                default : false
+            }
         }
-    },
+    ],
     "subjects" : {
         "include" : [
             {
