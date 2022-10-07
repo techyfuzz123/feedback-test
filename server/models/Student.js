@@ -1,4 +1,3 @@
-const Joi = require('joi');
 const mongoose = require('mongoose');
 
 /* 
@@ -9,20 +8,26 @@ const mongoose = require('mongoose');
         "section" : "C",
         "degree" : "BE-CSE",
         "password" : "hicet",
-        "isFeedBackSubmitied" : false,
+        "feedback" : [
+            {
+                "semester" : "V",
+                "isFeedBackSubmitted" : false
+            }
+        ],
         "subjects" : {
-            "regular" : [
-                "19VS4421",
-                "19VS4422",
-                "19VS4423",
-                "19VS4424",
-                "19VS4425"
+            "include" : [
+                {
+                    "subjectCode" : "19CS3322",
+                    "subjectName" : "CS for Nobody",
+                    "faculty" : "JD"
+                }
             ],
-            "arrear" : [
-                "29SD4583"
-            ],
-            "elective" : [
-                "34DF4554"
+            "exclude" : [
+                {
+                    "subjectCode" : "19CS3321",
+                    "subjectName" : "CS for Everybody",
+                    "faculty" : "JD"
+                }
             ]
         }
     }
@@ -38,7 +43,7 @@ const studentSchema = mongoose.Schema ({
     "feedback" : [
         {
             "semester" : { type : String, required : true },
-            "isFeedBackSubmitted" : { type : Boolean, default : false }
+            "isFeedbackSubmitted" : { type : Boolean, default : false }
         }
     ],
     "subjects" : {
@@ -61,22 +66,5 @@ const studentSchema = mongoose.Schema ({
 
 const Student = mongoose.model('Student', studentSchema)
 
-const validate = (data) => {
-    const schema = Joi.object({
-        firstName: Joi.string().required().label("First Name"),
-        lastName: Joi.string().required().label("Last Name"),
-        email: Joi.string().email().required().label("email"),
-        password: passwordComplexity().required().label("password"),
-
-        name : Joi.string().required(),
-        regNo : Joi.number().integer().required(),
-        batch : Joi.number().integer().required(),
-        degree : Joi.string().required(),
-        section : Joi.string().required(),
-        password : Joi.string().required(),
-
-    })
-    return schema.validate(data)
-}
 
 module.exports = {Student}

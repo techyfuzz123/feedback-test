@@ -3,7 +3,7 @@ require('dotenv').config()
 
 // Variables
 const DB = process.env.DB
-const DB_URL = process.env.DB_URL 
+const DB_URL = process.env.DB_URL + DB
 
 // connection to database
 module.exports = () => {
