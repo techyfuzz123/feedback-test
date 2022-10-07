@@ -10,7 +10,7 @@ const feedbackSchema = {
     required: ['semester', 'isFeedbackSubmitted']
 }
 
-const singleSubjectSchema = {
+const subjectSchema = {
     type: 'object',
     properties: {
         subjectCode: { type: 'string', minLength: 7, maxLength: 10 },
@@ -20,39 +20,33 @@ const singleSubjectSchema = {
     required: ['subjectCode', 'subjectName', 'faculty']
 }
 
-const subjectSchema = {
+
+
+// IT IS THE MAIN SCHEMA
+const studentSchema = {
     type: 'object',
     properties: {
-        include: { type: 'array', items: singleSubjectSchema },
-        exclude: { type: 'array', items: singleSubjectSchema }
+      name: { type: 'string', minLength: 4 },
+      regNo: { type: 'number'},
+      batch: { type: 'number'},
+      degree: { type: 'string', minLength: 5, maxLength: 10 },
+      section: { type: 'string', minLength: 1, maxLength: 1 },
+      password: { type: 'string', minLength: 5, maxLength: 10 },
+      feedback : { type: 'array', items: feedbackSchema },
+      subjects : { 
+          type: 'object',
+          properties: {
+              include: { type: 'array', items: subjectSchema },
+              exclude: { type: 'array', items: subjectSchema }
+          },
+          required: ['include']
+        }
     },
-    required: ['include']
-}
+    required: ['name', 'regNo', 'batch', 'degree', 'section'],
+  };
 
 
-const studentSchema = {
-  type: 'object',
-  properties: {
-    name: { type: 'string', minLength: 4 },
-    regNo: { type: 'number'},
-    batch: { type: 'number'},
-    degree: { type: 'string', minLength: 5, maxLength: 10 },
-    section: { type: 'string', minLength: 1, maxLength: 1 },
-    password: { type: 'string', minLength: 5, maxLength: 10 },
-    feedback : { type: 'array', items: feedbackSchema },
-    subjects : { 
-        type: 'object',
-        properties: {
-            include: { type: 'array', items: singleSubjectSchema },
-            exclude: { type: 'array', items: singleSubjectSchema }
-        },
-        required: ['include']
-      }
-  },
-  required: ['name', 'regNo', 'batch', 'degree', 'section'],
-};
-
-
+// array of students
 const studentsSchema = {
     type: "array",
     items: studentSchema

@@ -25,6 +25,7 @@ const updateReport = async (req, res, next) => {
 
 
 
+// it is a middleware that takes schema and the req.body to validata the data
 function validateData(ajvValidate) {
     return (req, res, next) => {
       const valid = ajvValidate(req.body);
