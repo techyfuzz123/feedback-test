@@ -32,23 +32,23 @@ const responseSchema = mongoose.Schema({
                 required : true
             },
             "response" : {
-                "1" : {
+                "a" : {
                     type : Number,
                     required : true
                 },
-                "2" : {
+                "b" : {
                     type : Number,
                     required : true
                 },
-                "3" : {
+                "c" : {
                     type : Number,
                     required : true
                 },
-                "4" : {
+                "d" : {
                     type : Number,
                     required : true
                 },
-                "5" : {
+                "e" : {
                     type : Number,
                     required : true
                 },
