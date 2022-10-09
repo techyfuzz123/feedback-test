@@ -1,13 +1,13 @@
 const ajvInstance = require('./ajv-instance');
 
 
-const feedbackSchema = {
+const feedbacksSchema = {
     type: 'object',
     properties: {
         semester: { type: 'string', minLength: 1, maxLength: 1 },
         isFeedbackSubmitted: { type: 'boolean' }
     },
-    required: ['semester', 'isFeedbackSubmitted']
+    required: [ 'semester' ]
 }
 
 const subjectSchema = {
@@ -29,10 +29,10 @@ const studentSchema = {
       name: { type: 'string', minLength: 4 },
       regNo: { type: 'number'},
       batch: { type: 'number'},
-      degree: { type: 'string', minLength: 5, maxLength: 10 },
+      degree: { type: 'string' }, // minLength: 1, maxLength: 10
       section: { type: 'string', minLength: 1, maxLength: 1 },
       password: { type: 'string', minLength: 5, maxLength: 10 },
-      feedback : { type: 'array', items: feedbackSchema },
+      feedbacks : { type: 'array', items: feedbacksSchema },
       subjects : { 
           type: 'object',
           properties: {

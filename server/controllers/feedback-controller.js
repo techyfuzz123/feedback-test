@@ -1,4 +1,5 @@
 const { Feedback } = require('../models/Feedback')
+const { Student } = require('../models/Student')
 
 
 const addFeedback = async (req, res) => {
@@ -27,8 +28,17 @@ const addFeedback = async (req, res) => {
         return res.status(500).json(error)
     }
 
-    return res.status(200).json({ "message" : "feedback added", feedback })
+
+    let students = await Student.find({"batch":req.body.batch})
+    // console.log(students)
+    return res.status(200).json({ "message" : "feedback added", feedback , students})
+    // res.status(200).json({ "message" : "feedback added", feedback })
+
+
+
 }
+
+
 
 
 module.exports = { addFeedback }

@@ -8,6 +8,11 @@ const jwt = require('jsonwebtoken')
     collection in the database
 */
 const addStudents = async (req, res) => {
+    filter = {
+        batch: req.body.batch,
+        degree: req.body.degree,
+        section: req.body.section
+    }
     Student.insertMany(req.body, (error, docs) => {
         if (error) {
             console.log(error);
