@@ -17,6 +17,7 @@ const feedbackSchema = mongoose.Schema({
         type : String, 
         required : true
     },  
+    "isLive" : { type : Boolean, default : false },
     "subjects" : [
         {
             "subjectCode" : {
@@ -34,6 +35,11 @@ const feedbackSchema = mongoose.Schema({
         }
     ]
 })
+
+// feedbackSchema.methods.addFeedbackToStudents = () => {
+// }
+
+// feedbackSchema.queue('addFeedbackToStudents')
 
 const Feedback = mongoose.model('Feedback', feedbackSchema)
 

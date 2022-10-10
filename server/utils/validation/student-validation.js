@@ -1,15 +1,5 @@
 const ajvInstance = require('./ajv-instance');
 
-
-const feedbacksSchema = {
-    type: 'object',
-    properties: {
-        semester: { type: 'string', minLength: 1, maxLength: 1 },
-        isFeedbackSubmitted: { type: 'boolean' }
-    },
-    required: [ 'semester' ]
-}
-
 const subjectSchema = {
     type: 'object',
     properties: {
@@ -28,11 +18,14 @@ const studentSchema = {
     properties: {
       name: { type: 'string', minLength: 4 },
       regNo: { type: 'number'},
+      dob: { 
+            type: "string",
+            pattern: "([0-2]{1}[0-9]{1}|3[0-1]{1})[-](0[1-9]|1[0-2])[-]([0-9]{4})"
+       },
       batch: { type: 'number'},
       degree: { type: 'string' }, // minLength: 1, maxLength: 10
       section: { type: 'string', minLength: 1, maxLength: 1 },
       password: { type: 'string', minLength: 5, maxLength: 10 },
-      feedbacks : { type: 'array', items: feedbacksSchema },
       subjects : { 
           type: 'object',
           properties: {
@@ -42,7 +35,7 @@ const studentSchema = {
           required: ['include']
         }
     },
-    required: ['name', 'regNo', 'batch', 'degree', 'section'],
+    required: ['name', 'regNo', 'dob', 'batch', 'degree', 'section'],
   };
 
 
@@ -52,7 +45,7 @@ const studentsSchema = {
     items: studentSchema
 }
 
-module.exports = ajvInstance.compile(studentsSchema);
+module.exports = ajvInstance.compile(studentSchema);
 
 
 // countryCode: {

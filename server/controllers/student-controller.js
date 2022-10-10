@@ -1,6 +1,6 @@
 require('dotenv').config()
 const {Student} = require("../models/Student")
-const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt');
 
 
 /* 
@@ -8,18 +8,45 @@ const jwt = require('jsonwebtoken')
     collection in the database
 */
 const addStudents = async (req, res) => {
-    filter = {
+    const filter = {
         batch: req.body.batch,
         degree: req.body.degree,
         section: req.body.section
     }
-    Student.insertMany(req.body, (error, docs) => {
-        if (error) {
-            console.log(error);
-            return res.status(500).json({ error });
-        }
-        return res.status(200).json({ message: `${docs.length } students added successfully`, docs });
-    })
+    const { regNo, dob } = req.body
+    // Student.insertMany(req.body, (error, docs) => {
+    //     if (error) {
+    //         console.log(error);
+    //         return res.status(500).json({ error });
+    //     }
+    //     return res.status(200).json({ message: `${docs.length } students added successfully`, docs });
+    // })
+
+    let student
+
+    try {
+        student = await Student.findOne({"regNo": regNo})
+        if(student) { return res.status(409).json({"message":"student already exists"}) }
+
+    } catch (error) {
+        console.log(error)
+    }
+    let hashPassword
+
+    try {
+        hashPassword = await bcrypt.hash(req.body.password, 10)
+    } catch (error) {
+        return res.status(409).json({message: "need password"})
+    }
+    
+    try {
+        student = await Student({...req.body, password: hashPassword}).save()
+        return res.status(200).json(student)
+    } catch (error) {
+        console.log(error)
+    }
+
+   
 }
 
 /*  
@@ -61,7 +88,7 @@ const deleteStudents = async (req, res) => {
     // see if the register number already exists
     let existingStudent
     try {
-        existingStudent = await Student.findOneAndDelete({"regNo" : regNo})
+        existingStudent = await Student.find({"regNo" : regNo})
     } catch (error) {
         console.log(error)
         return res.status(500).json({"message" : "Internal Server Error"})
@@ -69,7 +96,14 @@ const deleteStudents = async (req, res) => {
     if(!existingStudent) {
         return res.status(404).json({"message" : "Student does'nt exists"})
     }
-    return res.status(200).json({"message" : "Student Deleted"})
+
+    try {
+        await Student.deleteOne({"regNo" : regNo})
+        return res.status(200).json({"message" : "Student Deleted"})
+    } catch (error) {
+        console.log(error)
+    }
+
 }
 
 module.exports = {  addStudents, getStudents, updateStudents, deleteStudents }

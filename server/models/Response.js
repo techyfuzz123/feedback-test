@@ -59,4 +59,37 @@ const responseSchema = mongoose.Schema({
 
 const Response = mongoose.model('Response', responseSchema)
 
+
+
+
+
+
+// const a = {
+//     "batch": 2020,
+//     "degree": "BE-CSE",
+//     "section": "C",
+//     "semester": "II",
+//     "subjects"
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = { Response }

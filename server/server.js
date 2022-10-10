@@ -7,6 +7,7 @@ require('dotenv').config()
 const connection = require('./db')
 const student_routes = require('./routes/student-routes')
 const feedback_routes = require('./routes/feedback-routes')
+const auth_routes = require('./routes/auth-routes.js')
 
 // connecting to database
 connection()
@@ -23,6 +24,7 @@ app.use(express.json())
 // set routes
 app.use('/api/student', student_routes)
 app.use('/api/feedback', feedback_routes)
+app.use('/api/auth', auth_routes)
 
 // listening to port
 try {
