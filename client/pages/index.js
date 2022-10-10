@@ -1,17 +1,18 @@
-import Head from 'next/head'
+import Head from "next/head";
 
 const Home = () => {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
+    <>
       <Head>
         <title>Client</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>Home</h1>
+      <div className="flex min-h-screen flex-col items-center justify-center py-2">
+        <h1>submit feedback</h1>
+      </div>
+    </>
+  );
+};
 
-    </div>
-  )
-}
-
-export default Home
+export default Home;
