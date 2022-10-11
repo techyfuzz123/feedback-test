@@ -9,14 +9,38 @@ const studentSchema = mongoose.Schema ({
     "section" : { type : String, required : true, trim : true },
     "password" : { type : String },
     "isFeedbackSubmitted" : {
-        "I": { type : Boolean, default : false },
-        "II": { type : Boolean, default : false },
-        "III": { type : Boolean, default : false },
-        "IV": { type : Boolean, default : false },
-        "V": { type : Boolean, default : false },
-        "VI": { type : Boolean, default : false },
-        "VII": { type : Boolean, default : false },
-        "VIII": { type : Boolean, default : false }
+        "I": { 
+            "feedback1" :{ type : Boolean, default : false },
+            "feedback2" :{ type : Boolean, default : false }
+         },
+        "II": { 
+            "feedback1" :{ type : Boolean, default : false },
+            "feedback2" :{ type : Boolean, default : false }
+         },
+        "III": { 
+            "feedback1" :{ type : Boolean, default : false },
+            "feedback2" :{ type : Boolean, default : false }
+         },
+        "IV": { 
+            "feedback1" :{ type : Boolean, default : false },
+            "feedback2" :{ type : Boolean, default : false }
+         },
+        "V": { 
+            "feedback1" :{ type : Boolean, default : false },
+            "feedback2" :{ type : Boolean, default : false }
+         },
+        "VI": { 
+            "feedback1" :{ type : Boolean, default : false },
+            "feedback2" :{ type : Boolean, default : false }
+         },
+        "VII": { 
+            "feedback1" :{ type : Boolean, default : false },
+            "feedback2" :{ type : Boolean, default : false }
+         },
+        "VIII": { 
+            "feedback1" :{ type : Boolean, default : false },
+            "feedback2" :{ type : Boolean, default : false }
+         },
     },
     "subjects" : {
         "include" : [

@@ -16,7 +16,11 @@ const feedbackSchema = mongoose.Schema({
     "semester" : {
         type : String, 
         required : true
-    },  
+    }, 
+    "feedbackNo" : {
+        type : Number, 
+        required : true
+    }, 
     "isLive" : { type : Boolean, default : false },
     "subjects" : [
         {
