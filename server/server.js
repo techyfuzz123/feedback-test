@@ -16,10 +16,10 @@ connection();
 // Variables
 const PORT = process.env.PORT || 8080;
 const corsOptions = {
-  origin: process.env.FRONT_URL,
+  origin: `${process.env.FRONT_URL}`,
   optionsSuccessStatus: 200, // For legacy browser support
   credentials: true,
-  //  methods: "GET, PUT, POST, DELETE",
+  methods: "GET, PUT, POST, DELETE",
 };
 
 // middlewares
