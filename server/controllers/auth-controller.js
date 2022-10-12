@@ -47,26 +47,28 @@ const studentLogin = async (req, res) => {
         path: "/",
         expires: new Date(Date.now() + (15 * 60 * 1000)), // 15 minutes , (60 * 1000) = 1 min
         httpOnly: true,
-        sameSite: "lax",
+        
+        // sameSite: "lax",
+        // SameSite=SameSiteMode.None,
     });
 
     let liveFeedback;
     let isFeedbackSubmitted;
-    const filter = {
+    const feedbackFilter = {
         "batch" : student.batch,
         "degree" : student.degree,
         "section" : student.section,
-        "isLive" : true
+        "isLive" : true 
     }
 
     try {
-        liveFeedback = await Feedback.findOne(filter)
-        isFeedbackSubmitted = student.isFeedbackSubmitted[liveFeedback.semester]
+        liveFeedback = await Feedback.findOne(feedbackFilter)
+        isFeedbackSubmitted = student.isFeedbackSubmitted[liveFeedback.semester][liveFeedback.feedbackNo]
     } catch (error) {
         return new Error(error);
     }
 
-    if(isFeedbackSubmitted) { return res.status(204).json({message: "No feedback to Submit"}) }
+    if(isFeedbackSubmitted) { return res.status(200).json({message: "No feedback to Submit"}) }
 
     let subs = [...liveFeedback.subjects, ...student.subjects.include]
 
@@ -91,6 +93,7 @@ const studentLogin = async (req, res) => {
         degree : liveFeedback.degree,
         section : liveFeedback.section,
         semester : liveFeedback.semester,
+        feedbackNo : liveFeedback.feedbackNo,
         subjects : subjects
     }
 

@@ -20,11 +20,11 @@ const feedbackSchema = {
       degree: { type: 'string', minLength: 5, maxLength: 10 },
       section: { type: 'string', minLength: 1, maxLength: 1 },
       semster: { type: 'string', minLength: 1, maxLength: 2 },
-      feedbackNo: { type: 'number' },
+      feedbackNo: { type: 'string', enum: ["I", "II"] },
       isLive: { type: 'boolean' },
       subjects : { type: 'array', items: subjectSchema }
     },
-    required: ['batch', 'isLive','degree', 'section', 'semester', 'feedbackNo'],
+    required: ['batch','degree', 'section', 'semester', 'feedbackNo'],
   };
 
 

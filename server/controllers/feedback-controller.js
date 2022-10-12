@@ -6,7 +6,8 @@ const addFeedback = async (req, res) => {
         "batch" : req.body[0].batch,
         "degree" : req.body[0].degree,
         "section" : req.body[0].section,
-        "semester" : req.body[0].semester
+        "semester" : req.body[0].semester,
+        "feedbackNo" : req.body[0].feedbackNo
     }
 
     let feedback;

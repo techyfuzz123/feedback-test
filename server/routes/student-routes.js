@@ -6,7 +6,7 @@ const { validateData } = require('../utils/middlewares')
 
 // set routes
 router.post('/', validateData(studentValidationSchema), addStudents)
-router.get('/', getStudents)
+router.post('/g', getStudents)
 router.put('/', updateStudents) // not working
 router.delete('/', deleteStudents)
 

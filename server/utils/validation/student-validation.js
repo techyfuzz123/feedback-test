@@ -20,7 +20,7 @@ const studentSchema = {
       regNo: { type: 'number'},
       dob: { 
             type: "string",
-            pattern: "([0-2]{1}[0-9]{1}|3[0-1]{1})[-](0[1-9]|1[0-2])[-]([0-9]{4})"
+            pattern: "([0-2]{1}[0-9]{1}|3[0-1]{1})[/](0[1-9]|1[0-2])[/]([0-9]{4})"
        },
       batch: { type: 'number'},
       degree: { type: 'string' }, // minLength: 1, maxLength: 10

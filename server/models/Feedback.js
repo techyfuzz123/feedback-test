@@ -18,7 +18,7 @@ const feedbackSchema = mongoose.Schema({
         required : true
     }, 
     "feedbackNo" : {
-        type : Number, 
+        type : String, 
         required : true
     }, 
     "isLive" : { type : Boolean, default : false },

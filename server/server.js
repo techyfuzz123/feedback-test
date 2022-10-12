@@ -14,10 +14,17 @@ const response_routes = require('./routes/response-routes')
 connection()
 
 // Variables
-const PORT = process.env.PORT || 8080        
+const PORT = process.env.PORT || 8080       
+const corsOptions = {
+    origin: 'http://192.168.0.109:3000',
+    optionsSuccessStatus: 200, // For legacy browser support
+    credentials :  true,
+    // methods: "GET, PUT, POST, DELETE"
+}
+
 
 // middlewares
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(cookieParser())
 app.use(morgan('dev'))
 app.use(express.json())
