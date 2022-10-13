@@ -19,6 +19,7 @@ const Login = () => {
       <Head>
         <title>Client</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" /> 
       </Head>
       <div className="flex bg-gray-50 mx-auto min-h-screen flex-col items-center justify-center py-2">
         <section className=" min-h-screen flex items-center justify-center">
