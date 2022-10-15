@@ -12,7 +12,6 @@
   # a base has not been set. This sample publishes the directory
   # located at the absolute path "root/project/build-output"
 
-  publish = ".next"
 
   # Default build command.
   command = "npm run build"
