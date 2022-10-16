@@ -1,7 +1,7 @@
 base = "client/"
-publish = "out"
+publish = "out/"
 
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "out/index.html"
   status = 200
