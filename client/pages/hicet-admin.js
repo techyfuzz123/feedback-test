@@ -14,12 +14,12 @@ const Admin = () => {
           <div className="bg-gray-100 flex rounded-2xl shadow-lg max-w-3xl p-5 items-center">
             {/* image */}
             <div className="md:block hidden w-1/2">
-              <Image
+              {/* <Image
                 className="rounded-2xl"
                 width="510"
                 height="685"
                 src="/img2.svg"
-              />
+              /> */}
             </div>
 
             {/* form  */}

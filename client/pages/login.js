@@ -19,7 +19,6 @@ const Login = () => {
       <Head>
         <title>Client</title>
         <link rel="icon" href="/favicon.ico" />
-        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" /> 
       </Head>
       <div className="flex bg-gray-50 mx-auto min-h-screen flex-col items-center justify-center py-2">
         <section className=" min-h-screen flex items-center justify-center">
@@ -27,12 +26,12 @@ const Login = () => {
           <div className="bg-gray-100 flex rounded-2xl shadow-lg max-w-3xl p-5 items-center">
             {/* image */}
             <div className="md:block hidden w-1/2">
-              <Image
+              {/* <Image
                 className="rounded-2xl"
                 width="510"
                 height="685"
                 src="/img2.svg"
-              />
+              /> */}
             </div>
 
             {/* form  */}
