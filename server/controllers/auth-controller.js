@@ -2,9 +2,9 @@ const { Student } = require("../models/Student");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Feedback } = require("../models/Feedback");
-require('dotenv').config()
+require("dotenv").config();
 
-const JWT_SECRET_KEY = process.env.JWT
+const JWT_SECRET_KEY = process.env.JWT;
 
 const studentLogin = async (req, res) => {
   const { regNo, dob, password } = req.body;
@@ -35,7 +35,7 @@ const studentLogin = async (req, res) => {
   }
 
   // Generating Token
-  const token = jwt.sign({ id: student._id }, JWT_SECRET_KEY, {
+  const token = jwt.sign("token", JWT_SECRET_KEY, {
     expiresIn: "900s",
   });
 
@@ -72,6 +72,7 @@ const studentLogin = async (req, res) => {
         liveFeedback.feedbackNo
       ];
   } catch (error) {
+    console.log(error);
     return new Error(error);
   }
 
@@ -187,28 +188,29 @@ const studentLogin = async (req, res) => {
   return res.status(200).json({ message: "Successfully Logged In", feedback });
 };
 
-
 const studentLogout = async (req, res) => {
-    const cookies = req.headers.cookie;
-    let prevToken = cookies 
-    if(prevToken) { prevToken = prevToken.split("=")[1] }
-    console.log(prevToken)
-    if (!prevToken) {
-      return res.status(400).json({ message: "Couldn't find token" });
-    }
+  const cookies = req.headers.cookie;
+  let prevToken = cookies;
+  if (prevToken) {
+    prevToken = prevToken.split("=")[1];
+  }
+  console.log(prevToken);
+  if (!prevToken) {
+    return res.status(400).json({ message: "Couldn't find token" });
+  }
 
-    // verifying the token
-    jwt.verify(String(prevToken), JWT_SECRET_KEY, (err, student) => {
-      if (err) {
-        console.log(err);
-        return res.status(403).json({ message: "Authentication failed" });
-      }
-      res.clearCookie(`token`); // ${student.id}
-      req.cookies[`token`] = "";
-      return res
-        .status(200)
-        .json({ message: "Successfully Logged Out", student });
-    });
+  // verifying the token
+  jwt.verify(String(prevToken), JWT_SECRET_KEY, (err, student) => {
+    if (err) {
+      console.log(err);
+      return res.status(403).json({ message: "Authentication failed" });
+    }
+    res.clearCookie(`token`); // ${student.id}
+    req.cookies[`token`] = "";
+    return res
+      .status(200)
+      .json({ message: "Successfully Logged Out", student });
+  });
 };
 
 module.exports = { studentLogin, studentLogout };
