@@ -34,15 +34,16 @@ const studentLogin = async (req, res) => {
     return res.status(400).json({ message: "Invalid Credential" });
   }
 
+
   // Generating Token
-  const token = jwt.sign("token", JWT_SECRET_KEY, {
-    expiresIn: "900s",
+  const token = jwt.sign({id:student._id}, JWT_SECRET_KEY, {
+    expiresIn: "900s"
   });
 
   // console.log("Generated Token\n", token);
 
-  if (req.cookies[`${student._id}`]) {
-    req.cookies[`${student._id}`] = "";
+  if (req.cookies[`token`]) {
+    req.cookies[`token`] = "";
   }
 
   // Adding token to cookie
@@ -51,7 +52,6 @@ const studentLogin = async (req, res) => {
     path: "/",
     expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
     httpOnly: true,
-
     // sameSite: "lax",
     // SameSite=SameSiteMode.None,
   });
