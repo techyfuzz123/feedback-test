@@ -52,6 +52,7 @@ const studentLogin = async (req, res) => {
     path: "/",
     expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
     httpOnly: true,
+    secure: true,
     // sameSite: "lax",
     // SameSite=SameSiteMode.None,
   });
