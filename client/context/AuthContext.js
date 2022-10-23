@@ -6,7 +6,7 @@ export const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
-  const login1 = async (regNo, dob, password) => {
+  const login = async (regNo, dob, password) => {
     setLoading(true);
 
     const body = {
@@ -31,7 +31,7 @@ export const AuthContextProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const login = async (regNo, dob, password) => {
+  const login1 = async (regNo, dob, password) => {
     setLoading(true);
 
     const body = {
