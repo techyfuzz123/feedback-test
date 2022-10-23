@@ -16,18 +16,65 @@ export const AuthContextProvider = ({ children }) => {
     };
 
     let data;
-    let success = false;
-    const response = await instance
+    await instance
       .post(`/auth/login`, body)
       .then((res) => {
         data = res.data;
         if (res.status == 200) {
-          success = true;
           sessionStorage.setItem("user", JSON.stringify(data));
         }
       })
       .catch((err) => {
-        console.log(err.response);
+        let error = err.response.data.message;
+        console.log(error);
+      });
+    setLoading(false);
+  };
+
+  const userLogin = async (userName, password) => {
+    setLoading(true);
+
+    const body = {
+      userName: userName,
+      password: password,
+    };
+
+    let data;
+    await instance
+      .post(`/auth/user/login`, body)
+      .then((res) => {
+        data = res.data;
+        if (res.status == 200) {
+          sessionStorage.setItem("user", JSON.stringify(data));
+        }
+      })
+      .catch((err) => {
+        let error = err.response.data.message;
+        console.log(error);
+      });
+    setLoading(false);
+  };
+
+  const userLogout = async (userName, password) => {
+    setLoading(true);
+
+    const body = {
+      userName: userName,
+      password: password,
+    };
+
+    let data;
+    await instance
+      .post(`/auth/user/login`, body)
+      .then((res) => {
+        data = res.data;
+        if (res.status == 200) {
+          sessionStorage.setItem("user", JSON.stringify(data));
+        }
+      })
+      .catch((err) => {
+        let error = err.response.data.message;
+        console.log(error);
       });
     setLoading(false);
   };
@@ -52,10 +99,11 @@ export const AuthContextProvider = ({ children }) => {
   const value = {
     login,
     logout,
+    userLogin,
+    userLogout,
   };
 
   return (
-    // TODO: ...state, dispatch
     <AuthContext.Provider value={value}>
       {!loading && children}
     </AuthContext.Provider>

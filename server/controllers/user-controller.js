@@ -1,31 +1,23 @@
 require("dotenv").config();
-const { Student } = require("../models/Student");
+const { User } = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const JWT_SECRET_KEY = process.env.JWT;
 
 /* 
-    This Controller can add students to the students 
+    This Controller can add user to the users 
     collection in the database
 */
-const addStudents = async (req, res) => {
+const addUser = async (req, res) => {
+  const { userName, password } = req.body;
 
-  const { regNo, dob } = req.body;
-  // Student.insertMany(req.body, (error, docs) => {
-  //     if (error) {
-  //         console.log(error);
-  //         return res.status(500).json({ error });
-  //     }
-  //     return res.status(200).json({ message: `${docs.length } students added successfully`, docs });
-  // })
-
-  let student;
+  let user;
 
   try {
-    student = await Student.findOne({ regNo: regNo });
-    if (student) {
-      return res.status(409).json({ message: "student already exists" });
+    user = await User.findOne({ userName: userName });
+    if (user) {
+      return res.status(409).json({ message: "user already exists" });
     }
   } catch (error) {
     console.log(error);
@@ -33,24 +25,24 @@ const addStudents = async (req, res) => {
   let hashPassword;
 
   try {
-    hashPassword = await bcrypt.hash(req.body.password, 10);
+    hashPassword = await bcrypt.hash(password, 10);
   } catch (error) {
     return res.status(409).json({ message: "need password" });
   }
 
   try {
-    student = await Student({ ...req.body, password: hashPassword }).save();
-    return res.status(200).json(student);
+    user = await User({ ...req.body, password: hashPassword }).save();
+    return res.status(200).json(user);
   } catch (error) {
     console.log(error);
   }
 };
 
 /*  
-    This Controller will send the data of the student whose register
-    number is provided from the client
+    This Controller will send the data of the user whose user
+    name is provided from the client
 */
-const getStudent = async (req, res) => {
+const getUser = async (req, res) => {
   const cookies = req.headers.cookie;
   let prevToken = cookies;
   if (prevToken) {
@@ -67,10 +59,10 @@ const getStudent = async (req, res) => {
       console.log(err);
       return res.status(403).json({ message: "Authentication failed" });
     }
-    
-    body={
-        _id: student.id
-    }
+
+    body = {
+      _id: student.id,
+    };
 
     let feedback = await Student.find(body);
 
@@ -78,19 +70,11 @@ const getStudent = async (req, res) => {
   });
 };
 
-const getStudents = async (req, res) => {
-  let students = await Student.find(req.body);
-
-  return res
-    .status(200)
-    .json({ strength: students.length, students: students });
-};
-
 /* 
-    this Controller can add students to the students 
+    this Controller can update user to the users 
     collection in the database
 */
-const updateStudents = async (req, res) => {
+const updateUser = async (req, res) => {
   let filter = {
     batch: req.body[0].batch,
     degree: req.body[0].degree,
@@ -102,16 +86,16 @@ const updateStudents = async (req, res) => {
 };
 
 /* 
-    This Controller will delete the particular student
+    This Controller will delete the particular user
 */
-const deleteStudents = async (req, res) => {
+const deleteUser = async (req, res) => {
   const { regNo } = req.body;
 
   if (!regNo) {
     return res.status(400).json({ message: "need regNo" });
   }
 
-  // see if the register number already exists
+  // see if the userName already exists
   let existingStudent;
   try {
     existingStudent = await Student.find({ regNo: regNo });
@@ -132,9 +116,8 @@ const deleteStudents = async (req, res) => {
 };
 
 module.exports = {
-  addStudents,
-  getStudent,
-  getStudents,
-  updateStudents,
-  deleteStudents,
+  addUser,
+  getUser,
+  updateUser,
+  deleteUser,
 };

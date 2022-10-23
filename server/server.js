@@ -9,6 +9,7 @@ const student_routes = require("./routes/student-routes");
 const feedback_routes = require("./routes/feedback-routes");
 const auth_routes = require("./routes/auth-routes");
 const response_routes = require("./routes/response-routes");
+const user_routes = require("./routes/user-routes");
 
 // connecting to database
 connection();
@@ -33,6 +34,8 @@ app.use("/api/student", student_routes);
 app.use("/api/feedback", feedback_routes);
 app.use("/api/auth", auth_routes);
 app.use("/api/response", response_routes);
+app.use("/api/user", user_routes);
+
 
 // listening to port
 try {

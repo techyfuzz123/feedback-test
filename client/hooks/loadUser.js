@@ -1,4 +1,3 @@
-import { useState } from "react";
 import useSessionStorage from "./useSessionStorage";
 
 export const loadUser = () => {
