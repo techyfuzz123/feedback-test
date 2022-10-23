@@ -40,7 +40,8 @@ export const AuthContextProvider = ({ children }) => {
       password: password,
     };
 
-    let url = "http://192.168.0.109:5000/api";
+    let url =
+      process.env.NEXT_PUBLIC_BASE_URL || "http://192.168.0.109:5000/api";
     const r = await fetch(url + "/auth/login", {
       method: "POST",
       body: JSON.stringify(body),
