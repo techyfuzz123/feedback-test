@@ -6,7 +6,7 @@ export const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
-  const login = async (regNo, dob, password) => {
+  const login1 = async (regNo, dob, password) => {
     setLoading(true);
 
     const body = {
@@ -28,6 +28,41 @@ export const AuthContextProvider = ({ children }) => {
         let error = err.response.data.message;
         console.log(error);
       });
+    setLoading(false);
+  };
+
+  const login = async (regNo, dob, password) => {
+    setLoading(true);
+
+    const body = {
+      regNo: regNo,
+      dob: dob,
+      password: password,
+    };
+
+    let url = "http://192.168.0.109:5000/api";
+    const r = await fetch(url + "/auth/login", {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }).then(
+      function (response) {
+        response.status; //=> number 100–599
+        response.statusText; //=> String
+        response.headers; //=> Headers
+        response.url; //=> String
+
+        return response.text();
+      },
+      function (error) {
+        error.message; //=> String
+      }
+    );
+    console.log(JSON.parse(r));
+    sessionStorage.setItem("user", r);
     setLoading(false);
   };
 
