@@ -1,5 +1,5 @@
 const { Student } = require("../models/Student");
-const { User } = require("../models/User")
+const { User } = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Feedback } = require("../models/Feedback");
@@ -15,7 +15,7 @@ const studentLogin = async (req, res) => {
   if (!regNo || !dob || !password) {
     return res
       .status(401)
-      .json({ message: "need register number, date of birth and password" });
+      .json({ eMessage: "need register number, date of birth and password" });
   }
 
   // * find the student if available
@@ -26,7 +26,7 @@ const studentLogin = async (req, res) => {
     return new Error(err);
   }
   if (!student) {
-    return res.status(404).json({ message: "user not found" });
+    return res.status(404).json({ eMessage: "user not found" });
   }
 
   // * Check if the dob and password are correct
@@ -34,7 +34,7 @@ const studentLogin = async (req, res) => {
   const isPasswordCorrect = bcrypt.compareSync(password, student.password);
 
   if (!isPasswordCorrect || !isDobCorrect) {
-    return res.status(400).json({ message: "Invalid Credential" });
+    return res.status(400).json({ eMessage: "Invalid Credential" });
   }
 
   // * Generating Token
@@ -54,9 +54,18 @@ const studentLogin = async (req, res) => {
     path: "/",
     expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
     httpOnly: true,
-    secure: true,
+    // secure: true,
     // sameSite: "lax",
   });
+
+  // data that has to be sent minimum
+  let userData = {
+    name: student.name,
+    regNo: student.regNo,
+    batch: student.batch,
+    degree: student.degree,
+    section: student.section,
+  };
 
   let liveFeedback;
   let isFeedbackSubmitted;
@@ -71,7 +80,9 @@ const studentLogin = async (req, res) => {
   try {
     liveFeedback = await Feedback.findOne(feedbackFilter);
     if (!liveFeedback) {
-      return res.status(200).json({ feedback: "No feedback to Submit" });
+      return res
+        .status(200)
+        .json({ ...userData, message: "No feedback to Submit" });
     }
     isFeedbackSubmitted =
       student.isFeedbackSubmitted[liveFeedback.semester][
@@ -83,7 +94,9 @@ const studentLogin = async (req, res) => {
 
   // * Checking if the student have submitted the alive feedback
   if (isFeedbackSubmitted) {
-    return res.status(200).json({ feedback: "No feedback to Submit" });
+    return res
+      .status(200)
+      .json({ ...userData, message: "No feedback to Submit" });
   }
 
   // * combining the subjects and electives from feedback and student
@@ -103,18 +116,13 @@ const studentLogin = async (req, res) => {
   }
 
   // * Defining the data which has to be return to the user
-  let userData = {
-    name: student.name,
-    regNo: student.regNo,
-    batch: liveFeedback.batch,
-    degree: liveFeedback.degree,
-    section: liveFeedback.section,
+  let feedback = {
     semester: liveFeedback.semester,
     feedbackNo: liveFeedback.feedbackNo,
     subjects: subjects,
   };
 
-  return res.status(200).json({ userData });
+  return res.status(200).json({ ...userData, ...feedback });
 };
 
 const studentLogout = async (req, res) => {
@@ -125,14 +133,14 @@ const studentLogout = async (req, res) => {
     prevToken = prevToken.split("=")[1];
   }
   if (!prevToken) {
-    return res.status(400).json({ message: "Couldn't find token" });
+    return res.status(400).json({ eMessage: "Couldn't find token" });
   }
 
   // * Verifying the token and deleting it
   jwt.verify(String(prevToken), JWT_SECRET_KEY, (err, data) => {
     if (err) {
       console.log(err);
-      return res.status(403).json({ message: "Authentication failed" });
+      return res.status(403).json({ eMessage: "Authentication failed" });
     }
     res.clearCookie(`${data.regNo}`);
     req.cookies[`${data.regNo}`] = "";
@@ -145,7 +153,7 @@ const userLogin = async (req, res) => {
 
   // * checking if all three values are available
   if (!userName || !password) {
-    return res.status(401).json({ message: "need userName and password" });
+    return res.status(401).json({ eMessage: "need userName and password" });
   }
 
   // * find the student if available
@@ -156,14 +164,14 @@ const userLogin = async (req, res) => {
     return new Error(err);
   }
   if (!user) {
-    return res.status(404).json({ message: "user not found" });
+    return res.status(404).json({ eMessage: "user not found" });
   }
 
   // * Check if the password are correct
   const isPasswordCorrect = bcrypt.compareSync(password, user.password);
 
   if (!isPasswordCorrect) {
-    return res.status(400).json({ message: "Invalid Credential" });
+    return res.status(400).json({ eMessage: "Invalid Credential" });
   }
 
   // * Generating Token
@@ -183,17 +191,17 @@ const userLogin = async (req, res) => {
     path: "/",
     expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
     httpOnly: true,
-    secure: true,
+    // secure: true,
     // sameSite: "lax",
   });
 
   // * Defining the data which has to be return to the user
   let userData = {
     userName: user.userName,
-    role: user.role
+    role: user.role,
   };
 
-  return res.status(200).json({ userData });
+  return res.status(200).json({ ...userData });
 };
 
 const userLogout = async (req, res) => {

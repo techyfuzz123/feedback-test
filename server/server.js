@@ -26,7 +26,7 @@ const corsOptions = {
 // middlewares
 app.use(cors(corsOptions));
 app.use(cookieParser());
-app.use(morgan("common"));
+app.use(morgan("dev"));
 app.use(express.json());
 
 // set routes

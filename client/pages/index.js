@@ -1,13 +1,10 @@
-import { useAuthContext } from "../hooks/useAuthContext";
 import { useEffect, useState } from "react";
 import { fetchUser } from "../hooks/fetchUser";
 import Login from "../components/Login";
 import StudentDashboard from "../components/StudentDashboard";
 import UserDashboard from "../components/UserDashboard";
-import { useAuth } from "../context/AuthContext";
 
 const Home = () => {
-  const { logout, loading } = useAuth();
   const [user, setUser] = useState();
 
   // * Checking if User exits
@@ -27,8 +24,8 @@ const Home = () => {
     <>
       {!user && <Login />}
       
-      {user && user.userData.regNo && <StudentDashboard user={user.userData} />}
-      {user && user.userData.role && <UserDashboard user={user.userData} />}
+      {user && user.regNo && <StudentDashboard user={user} />}
+      {user && user.role && <UserDashboard user={user} />}
     </>
   );
 };

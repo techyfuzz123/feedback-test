@@ -25,7 +25,7 @@ export const AuthContextProvider = ({ children }) => {
       password: password,
     };
 
-    let response = { message: "no value received" };
+    let response = { emessage: "no value received" };
 
     response = await fetch(url + "/auth/login", {
       method: "POST",
@@ -50,7 +50,7 @@ export const AuthContextProvider = ({ children }) => {
         }
         return data;
       });
-    if (!response["message"]) {
+    if (!response["eMessage"]) {
       sessionStorage.setItem("user", JSON.stringify(response));
       sessionStorage.setItem("setupTime", now);
     }
