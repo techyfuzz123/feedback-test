@@ -71,7 +71,7 @@ const studentLogin = async (req, res) => {
   try {
     liveFeedback = await Feedback.findOne(feedbackFilter);
     if (!liveFeedback) {
-      return res.status(200).json({ message: "No feedback to Submit" });
+      return res.status(200).json({ feedback: "No feedback to Submit" });
     }
     isFeedbackSubmitted =
       student.isFeedbackSubmitted[liveFeedback.semester][
@@ -83,7 +83,7 @@ const studentLogin = async (req, res) => {
 
   // * Checking if the student have submitted the alive feedback
   if (isFeedbackSubmitted) {
-    return res.status(200).json({ message: "No feedback to Submit" });
+    return res.status(200).json({ feedback: "No feedback to Submit" });
   }
 
   // * combining the subjects and electives from feedback and student
