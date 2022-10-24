@@ -21,6 +21,7 @@ const corsOptions = {
   optionsSuccessStatus: 200, // For legacy browser support
   credentials: true,
   methods: "GET, PUT, POST, DELETE",
+  contentType: "application/json",
 };
 
 // middlewares

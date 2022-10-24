@@ -45,17 +45,17 @@ const studentLogin = async (req, res) => {
   // console.log("Generated Token\n", token);
 
   // * removing old token if it exists
-  if (req.cookies[`${student.regNo}`]) {
-    req.cookies[`${student.regNo}`] = "";
-  }
+  // if (req.cookies["token"]) {
+  //   req.cookies["token"] = "";
+  // }
 
   // * Adding token to cookie
-  res.cookie(String(student.regNo), token, {
+  res.cookie("token", token, {
     path: "/",
-    expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
+    // expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
     httpOnly: true,
-    // secure: true,
-    // sameSite: "lax",
+    secure: true,
+    sameSite: "none",
   });
 
   // data that has to be sent minimum
@@ -127,25 +127,33 @@ const studentLogin = async (req, res) => {
 
 const studentLogout = async (req, res) => {
   // * Checking if token exists and Getting the token from cookie
-  const cookies = req.headers.cookie;
-  let prevToken = cookies;
-  if (prevToken) {
-    prevToken = prevToken.split("=")[1];
-  }
-  if (!prevToken) {
-    return res.status(400).json({ eMessage: "Couldn't find token" });
-  }
+  // const cookies = req.cookie;
+  // let prevToken = cookies;
+  // if (prevToken) {
+  //   prevToken = prevToken.split("=")[1];
+  // }
+  // if (!prevToken) {
+  //   return res.status(400).json({ eMessage: "Couldn't find token" });
+  // }
 
-  // * Verifying the token and deleting it
-  jwt.verify(String(prevToken), JWT_SECRET_KEY, (err, data) => {
-    if (err) {
-      console.log(err);
-      return res.status(403).json({ eMessage: "Authentication failed" });
-    }
-    res.clearCookie(`${data.regNo}`);
-    req.cookies[`${data.regNo}`] = "";
-    return res.status(200).json({ message: "Successfully Logged Out" });
-  });
+  // // * Verifying the token and deleting it
+  // jwt.verify(String(prevToken), JWT_SECRET_KEY, (err, data) => {
+  //   if (err) {
+  //     console.log(err);
+  //     return res.status(403).json({ eMessage: "Authentication failed" });
+  //   }
+  //   res.clearCookie(`${data.regNo}`);
+  //   req.cookies[`${data.regNo}`] = "";
+  //   return res.status(200).json({ message: "Successfully Logged Out" });
+  // });
+  res
+    .cookie("token", "", {
+      httpOnly: true,
+      expires: new Date(0),
+      secure: true,
+      sameSite: "none",
+    })
+    .send();
 };
 
 const userLogin = async (req, res) => {
