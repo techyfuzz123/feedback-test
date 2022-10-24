@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { User } = require("../models/User");
+const { User } = require("../models/User")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -10,7 +10,7 @@ const JWT_SECRET_KEY = process.env.JWT;
     collection in the database
 */
 const addUser = async (req, res) => {
-  const { userName, password } = req.body;
+  const { userName, password, role } = req.body;
 
   let user;
 

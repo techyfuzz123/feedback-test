@@ -1,5 +1,5 @@
 const { Student } = require("../models/Student");
-const { User } = require("../models/User");
+const { User } = require("../models/User")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Feedback } = require("../models/Feedback");
@@ -54,7 +54,7 @@ const studentLogin = async (req, res) => {
     path: "/",
     expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
     httpOnly: true,
-    // secure: true,
+    secure: true,
     // sameSite: "lax",
   });
 
@@ -183,15 +183,14 @@ const userLogin = async (req, res) => {
     path: "/",
     expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
     httpOnly: true,
-    // secure: true,
+    secure: true,
     // sameSite: "lax",
   });
 
   // * Defining the data which has to be return to the user
   let userData = {
     userName: user.userName,
-    role : 'admin',
-    a : 'a'
+    role: user.role
   };
 
   return res.status(200).json({ userData });

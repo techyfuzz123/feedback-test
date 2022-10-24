@@ -1,18 +1,24 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { useAuthContext } from "../hooks/useAuthContext";
-import { loadUser } from "../hooks/loadUser";
+import { useAuth } from "../context/AuthContext";
+import { fetchUser } from "../hooks/fetchUser";
 import { useRouter } from "next/router";
 
 const UserLogin = () => {
   const [userName, setUserName] = useState("admin");
   const [password, setPassword] = useState("hicet");
   const [error, setError] = useState("");
-  const { userLogin } = useAuthContext();
   const router = useRouter();
 
+  const { userLogin, errorMsg } = useAuth();
+
+  const handlelogin = async () => {
+    await userLogin(userName, password);
+  };
+
   useEffect(() => {
-    const user = loadUser();
+    setError(errorMsg);
+    const user = fetchUser();
     if (user) {
       router.push("/");
     }
@@ -30,7 +36,7 @@ const UserLogin = () => {
       setError("password must be between 5 to 10 characters");
       return;
     }
-    await userLogin(userName, password);
+    handlelogin();
   };
 
   return (

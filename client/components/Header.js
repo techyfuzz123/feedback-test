@@ -7,6 +7,7 @@ const Header = () => {
       <Head>
         <title>Feedback</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta width="device-width" height="device-height"/>
       </Head>
     </div>
   );

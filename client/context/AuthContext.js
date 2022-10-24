@@ -1,10 +1,20 @@
-import { createContext, useState } from "react";
-import instance from "../utils/axios-instance";
+import { createContext, useContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext();
 
+export function useAuth() {
+  return useContext(AuthContext);
+}
+
 export const AuthContextProvider = ({ children }) => {
+  const [errorMsg, setErrorMsg] = useState(null);
   const [loading, setLoading] = useState(false);
+  const url = process.env.NEXT_PUBLIC_BASE_URL;
+  const now = new Date().getTime();
+
+  useEffect(() => {
+    return setErrorMsg(errorMsg);
+  }, [errorMsg]);
 
   const login = async (regNo, dob, password) => {
     setLoading(true);
@@ -15,55 +25,57 @@ export const AuthContextProvider = ({ children }) => {
       password: password,
     };
 
-    let data;
-    await instance
-      .post(`/auth/login`, body)
-      .then((res) => {
-        data = res.data;
-        if (res.status == 200) {
-          sessionStorage.setItem("user", JSON.stringify(data));
-        }
-      })
-      .catch((err) => {
-        let error = err.response.data.message;
-        console.log(error);
-      });
-    setLoading(false);
-  };
+    let response = { message: "no value received" };
 
-  const login1 = async (regNo, dob, password) => {
-    setLoading(true);
-
-    const body = {
-      regNo: regNo,
-      dob: dob,
-      password: password,
-    };
-
-    let url =
-      process.env.NEXT_PUBLIC_BASE_URL || "http://192.168.0.109:5000/api";
-    const r = await fetch(url + "/auth/login", {
+    response = await fetch(url + "/auth/login", {
       method: "POST",
       body: JSON.stringify(body),
       headers: {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    }).then(
-      function (response) {
-        response.status; //=> number 100–599
-        response.statusText; //=> String
-        response.headers; //=> Headers
-        response.url; //=> String
+    })
+      .then(async function (res) {
+        const status = res.status;
+        const value = {
+          status,
+          data: await res.json(),
+        };
+        return value;
+      })
+      .then(function ({ data, status }) {
+        if (status != 200) {
+          setErrorMsg(data.message);
+          return data;
+        }
+        return data;
+      });
+    if (!response["message"]) {
+      sessionStorage.setItem("user", JSON.stringify(response));
+      sessionStorage.setItem("setupTime", now);
+    }
 
-        return response.text();
+    setLoading(false);
+  };
+
+  const logout = async () => {
+    setLoading(true);
+
+    await fetch(url + "/auth/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-      function (error) {
-        error.message; //=> String
-      }
-    );
-    console.log(JSON.parse(r));
-    sessionStorage.setItem("user", r);
+      credentials: "include",
+    })
+      .then(async function (res) {
+        sessionStorage.removeItem("user");
+        sessionStorage.removeItem("setupTime");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     setLoading(false);
   };
 
@@ -75,64 +87,61 @@ export const AuthContextProvider = ({ children }) => {
       password: password,
     };
 
-    let data;
-    await instance
-      .post(`/auth/user/login`, body)
-      .then((res) => {
-        data = res.data;
-        if (res.status == 200) {
-          sessionStorage.setItem("user", JSON.stringify(data));
-        }
+    let response = { message: "no value received" };
+
+    response = await fetch(url + "/auth/user/login", {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then(async function (res) {
+        const status = res.status;
+        const value = {
+          status,
+          data: await res.json(),
+        };
+        return value;
       })
-      .catch((err) => {
-        let error = err.response.data.message;
-        console.log(error);
+      .then(function ({ data, status }) {
+        if (status != 200) {
+          setErrorMsg(data.message);
+          return data;
+        }
+        return data;
       });
+    if (!response["message"]) {
+      sessionStorage.setItem("user", JSON.stringify(response));
+      sessionStorage.setItem("setupTime", now);
+    }
+
     setLoading(false);
   };
 
-  const userLogout = async (userName, password) => {
+  const userLogout = async () => {
     setLoading(true);
 
-    const body = {
-      userName: userName,
-      password: password,
-    };
-
-    let data;
-    await instance
-      .post(`/auth/user/login`, body)
-      .then((res) => {
-        data = res.data;
-        if (res.status == 200) {
-          sessionStorage.setItem("user", JSON.stringify(data));
-        }
+    await fetch(url + "/auth/user/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then(async function (res) {
+        sessionStorage.removeItem("user");
+        sessionStorage.removeItem("setupTime");
       })
       .catch((err) => {
-        let error = err.response.data.message;
-        console.log(error);
-      });
-    setLoading(false);
-  };
-
-  const logout = async () => {
-    setLoading(true);
-    let success = false;
-    const response = await instance
-      .post(`/auth/logout`)
-      .then((res) => {
-        if (res.status == 200) {
-          success = true;
-          sessionStorage.removeItem("user");
-        }
-      })
-      .catch((err) => {
-        console.log(err.response.status);
+        console.log(err);
       });
     setLoading(false);
   };
 
   const value = {
+    errorMsg,
     login,
     logout,
     userLogin,

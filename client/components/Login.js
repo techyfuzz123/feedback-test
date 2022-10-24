@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 import { useAuthContext } from "../hooks/useAuthContext";
 
 const Login = () => {
@@ -7,13 +8,20 @@ const Login = () => {
   const [dob, setDob] = useState("07/03/2003");
   const [password, setPassword] = useState("hicet");
   const [error, setError] = useState("");
-  const { login } = useAuthContext();
+  const { login, errorMsg } = useAuth();
 
+  const handlelogin = async () => {
+    setError('')
+    await login(regNo, dob, password);
+  };
+  useEffect(() => {
+    setError(errorMsg);
+  }, [errorMsg]);
 
   // * Validating and submiting the data
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setError("");
     if (!regNo || !dob || !password) {
       setError("all fields should be filled");
       return;
@@ -32,12 +40,12 @@ const Login = () => {
       setError("password must be between 5 to 10 characters");
       return;
     }
-    await login(regNo, dob, password);
+    handlelogin();
   };
 
   return (
     <>
-      <div className="flex min-h-screen py-2 items-center max-w-sm md:max-w-3xl justify-center">
+      <div className="flex max-h-screen items-center max-w-sm md:max-w-3xl justify-center">
         <div className="flex items-center bg-gray-100 rounded-2xl shadow-lg">
           {/* image */}
           <div className="md:block hidden py-3 pl-3 w-1/2">
@@ -55,7 +63,7 @@ const Login = () => {
               Student Login
             </h2>
 
-            <form onSubmit={handleSubmit} className="text-gray-800">
+            <div className="text-gray-800">
               {error && <div className="text-red-500 pt-2">{error}</div>}
 
               <div>
@@ -103,10 +111,13 @@ const Login = () => {
                 />
               </div>
 
-              <button className="bg-[#002D74] mt-7 w-full rounded-xl text-white py-2.5 hover:scale-105 duration-300">
+              <button
+                onClick={handleSubmit}
+                className="bg-[#002D74] mt-7 w-full rounded-xl text-white py-2.5 hover:scale-105 duration-300"
+              >
                 Login
               </button>
-            </form>
+            </div>
           </div>
         </div>
       </div>

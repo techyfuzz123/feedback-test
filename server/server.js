@@ -26,7 +26,7 @@ const corsOptions = {
 // middlewares
 app.use(cors(corsOptions));
 app.use(cookieParser());
-app.use(morgan("dev"));
+app.use(morgan("common"));
 app.use(express.json());
 
 // set routes
@@ -35,7 +35,6 @@ app.use("/api/feedback", feedback_routes);
 app.use("/api/auth", auth_routes);
 app.use("/api/response", response_routes);
 app.use("/api/user", user_routes);
-
 
 // listening to port
 try {
