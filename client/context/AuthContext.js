@@ -16,6 +16,35 @@ export const AuthContextProvider = ({ children }) => {
     return setErrorMsg(errorMsg);
   }, [errorMsg]);
 
+const loggedIn = async (regNo, dob, password) => {
+  setLoading(true);
+
+  let response = { emessage: "no value received" };
+
+  response = await fetch(url + "/auth/loggedIn", {
+    method: "GET",
+    credentials: "include",
+  })
+    .then(async function (res) {
+      const status = res.status;
+      const value = {
+        status,
+        data: await res.json(),
+      };
+      return value;
+    })
+    .then(function ({ data, status }) {
+      if (status != 200) {
+        setErrorMsg(data.message);
+        return data;
+      }
+      return data;
+    });
+    console.log(response);
+
+  setLoading(false);
+};
+
   const login = async (regNo, dob, password) => {
     setLoading(true);
 
@@ -143,6 +172,7 @@ export const AuthContextProvider = ({ children }) => {
   const value = {
     errorMsg,
     login,
+    loggedIn,
     logout,
     userLogin,
     userLogout,
