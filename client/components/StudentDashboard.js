@@ -135,7 +135,7 @@ const StudentDashboard = ({ user }) => {
                   <tbody className="">
                     {user.subjects.map((subject, sNo) => {
                       return (
-                        <tr className="border border-b-2 border-gray-200">
+                        <tr key={sNo+1} className="border border-b-2 border-gray-200">
                           <td className="border border-b-2 border-gray-200">
                             {sNo + 1}
                           </td>
