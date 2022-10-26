@@ -1,4 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import useSessionStorage from "../hooks/useSessionStorage";
+
+const fetchUser = () => {
+  const userData = useSessionStorage("user");
+  const user = JSON.parse(userData);
+  return user;
+};
 
 export const AuthContext = createContext();
 
@@ -12,38 +19,46 @@ export const AuthContextProvider = ({ children }) => {
   const url = process.env.NEXT_PUBLIC_BASE_URL;
   const now = new Date().getTime();
 
-  useEffect(() => {
-    return setErrorMsg(errorMsg);
-  }, [errorMsg]);
+  // useEffect(() => {
+  //   setErrorMsg(errorMsg);
+  // }, [errorMsg]);
 
-const loggedIn = async (regNo, dob, password) => {
-  setLoading(true);
+  const fetchUser = () => {
+    setLoading(true);
+    const userData = useSessionStorage("user");
+    const user = JSON.parse(userData);
+    setLoading(false);
+    return user;
+  };
 
-  let response = { emessage: "no value received" };
+  const loggedIn = async () => {
+    setLoading(true);
 
-  response = await fetch(url + "/auth/loggedIn", {
-    method: "GET",
-    credentials: "include",
-  })
-    .then(async function (res) {
-      const status = res.status;
-      const value = {
-        status,
-        data: await res.json(),
-      };
-      return value;
+    let response = { eMessage: "no value received" };
+
+    response = await fetch(url + "/auth/loggedIn", {
+      method: "GET",
+      credentials: "include",
     })
-    .then(function ({ data, status }) {
-      if (status != 200) {
-        setErrorMsg(data.message);
+      .then(async function (res) {
+        const status = res.status;
+        const value = {
+          status,
+          data: await res.json(),
+        };
+        return value;
+      })
+      .then(function ({ data, status }) {
+        if (status != 200) {
+          setErrorMsg(data.message);
+          return data;
+        }
         return data;
-      }
-      return data;
-    });
+      });
     console.log(response);
 
-  setLoading(false);
-};
+    setLoading(false);
+  };
 
   const login = async (regNo, dob, password) => {
     setLoading(true);
@@ -54,7 +69,7 @@ const loggedIn = async (regNo, dob, password) => {
       password: password,
     };
 
-    let response = { emessage: "no value received" };
+    let response = { eMessage: "no value received" };
 
     response = await fetch(url + "/auth/login", {
       method: "POST",
@@ -74,7 +89,7 @@ const loggedIn = async (regNo, dob, password) => {
       })
       .then(function ({ data, status }) {
         if (status != 200) {
-          setErrorMsg(data.message);
+          setErrorMsg(data.eMessage);
           return data;
         }
         return data;
@@ -116,7 +131,7 @@ const loggedIn = async (regNo, dob, password) => {
       password: password,
     };
 
-    let response = { message: "no value received" };
+    let response = { eMessage: "no value received" };
 
     response = await fetch(url + "/auth/user/login", {
       method: "POST",
@@ -136,12 +151,12 @@ const loggedIn = async (regNo, dob, password) => {
       })
       .then(function ({ data, status }) {
         if (status != 200) {
-          setErrorMsg(data.message);
+          setErrorMsg(data.eMessage);
           return data;
         }
         return data;
       });
-    if (!response["message"]) {
+    if (!response["eMessage"]) {
       sessionStorage.setItem("user", JSON.stringify(response));
       sessionStorage.setItem("setupTime", now);
     }
@@ -173,6 +188,7 @@ const loggedIn = async (regNo, dob, password) => {
     errorMsg,
     login,
     loggedIn,
+    fetchUser,
     logout,
     userLogin,
     userLogout,
@@ -180,6 +196,15 @@ const loggedIn = async (regNo, dob, password) => {
 
   return (
     <AuthContext.Provider value={value}>
+      {loading && (
+        <div
+          role="status"
+          className="flex  flex-col items-center justify-center min-h-screen"
+        >
+          <div className=""></div>
+          <span className="">Loading...</span>
+        </div>
+      )}
       {!loading && children}
     </AuthContext.Provider>
   );

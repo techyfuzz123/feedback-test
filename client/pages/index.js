@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { fetchUser } from "../hooks/fetchUser";
 import Login from "../components/Login";
 import StudentDashboard from "../components/StudentDashboard";
 import UserDashboard from "../components/UserDashboard";
+import { useAuth } from "../context/AuthContext";
+
 
 const Home = () => {
   const [user, setUser] = useState();
+  const {fetchUser} = useAuth()
 
   // * Checking if User exits
   useEffect(() => {

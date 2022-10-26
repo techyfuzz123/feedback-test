@@ -1,17 +1,16 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useAuthContext } from "../hooks/useAuthContext";
 
 const Login = () => {
-  const [regNo, setRegNo] = useState(222);
+  const [regNo, setRegNo] = useState(22222);
   const [dob, setDob] = useState("07/03/2003");
   const [password, setPassword] = useState("hicet");
   const [error, setError] = useState("");
   const { login, errorMsg } = useAuth();
 
   const handlelogin = async () => {
-    setError('')
+    setError("");
     await login(regNo, dob, password);
   };
   useEffect(() => {
@@ -44,9 +43,9 @@ const Login = () => {
   };
 
   return (
-    <>
+    <div className="flex items-center justify-center min-h-screen">
       <div className="flex max-h-screen items-center max-w-sm md:max-w-3xl justify-center">
-        <div className="flex items-center bg-gray-100 rounded-2xl shadow-lg">
+        <div className="flex items-center bg-gray-300 rounded-2xl shadow-lg">
           {/* image */}
           <div className="md:block hidden py-3 pl-3 w-1/2">
             <Image
@@ -69,13 +68,15 @@ const Login = () => {
               <div>
                 <p className="mt-5 mb-1">Register Number</p>
                 <input
-                  className="p-2 w-full rounded-lg border"
+                  className="p-2 w-full outline-none rounded-lg border"
                   type="text"
                   name="regNo"
                   value={regNo}
                   placeholder="123"
-                  onChange={(e) => {
+                  onClick={(e) => {
                     setError("");
+                  }}
+                  onChange={(e) => {
                     setRegNo(e.target.value);
                   }}
                 />
@@ -84,11 +85,14 @@ const Login = () => {
               <div>
                 <p className="mt-5 mb-1">Date of Birth</p>
                 <input
-                  className="p-2 w-full rounded-lg border"
+                  className="p-2 w-full outline-none rounded-lg border"
                   type="text"
                   name="dob"
                   value={dob}
                   placeholder="dd/mm/yyyy"
+                  onClick={(e) => {
+                    setError("");
+                  }}
                   onChange={(e) => {
                     setError("");
                     setDob(e.target.value);
@@ -99,11 +103,14 @@ const Login = () => {
               <div>
                 <p className="mt-5 mb-1">Password</p>
                 <input
-                  className="p-2 rounded-lg w-full border"
+                  className="p-2 rounded-lg outline-none w-full border"
                   type="password"
                   name="password"
                   placeholder="abc"
                   value={password}
+                  onClick={(e) => {
+                    setError("");
+                  }}
                   onChange={(e) => {
                     setError("");
                     setPassword(e.target.value);
@@ -121,7 +128,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

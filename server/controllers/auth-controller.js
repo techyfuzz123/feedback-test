@@ -190,17 +190,17 @@ const userLogin = async (req, res) => {
   // console.log("Generated Token\n", token);
 
   // * removing old token if it exists
-  if (req.cookies[`${user._id}`]) {
-    req.cookies[`${user._id}`] = "";
-  }
+  // if (req.cookies[`token`]) {
+  //   req.cookies[`token`] = "";
+  // }
 
   // * Adding token to cookie
   res.cookie(String(user._id), token, {
     path: "/",
-    expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
+    // expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
     httpOnly: true,
-    // secure: true,
-    // sameSite: "lax",
+    secure: true,
+    sameSite: "lax",
   });
 
   // * Defining the data which has to be return to the user
@@ -214,25 +214,33 @@ const userLogin = async (req, res) => {
 
 const userLogout = async (req, res) => {
   // * Checking if token exists and Getting the token from cookie
-  const cookies = req.headers.cookie;
-  let prevToken = cookies;
-  if (prevToken) {
-    prevToken = prevToken.split("=")[1];
-  }
-  if (!prevToken) {
-    return res.status(400).json({ message: "Couldn't find token" });
-  }
+  // const cookies = req.headers.cookie;
+  // let prevToken = cookies;
+  // if (prevToken) {
+  //   prevToken = prevToken.split("=")[1];
+  // }
+  // if (!prevToken) {
+  //   return res.status(400).json({ message: "Couldn't find token" });
+  // }
 
-  // * Verifying the token and deleting it
-  jwt.verify(String(prevToken), JWT_SECRET_KEY, (err, data) => {
-    if (err) {
-      console.log(err);
-      return res.status(403).json({ message: "Authentication failed" });
-    }
-    res.clearCookie(`${data.id}`);
-    req.cookies[`${data.id}`] = "";
-    return res.status(200).json({ message: "Successfully Logged Out" });
-  });
+  // // * Verifying the token and deleting it
+  // jwt.verify(String(prevToken), JWT_SECRET_KEY, (err, data) => {
+  //   if (err) {
+  //     console.log(err);
+  //     return res.status(403).json({ message: "Authentication failed" });
+  //   }
+  //   res.clearCookie(`${data.id}`);
+  //   req.cookies[`${data.id}`] = "";
+  //   return res.status(200).json({ message: "Successfully Logged Out" });
+  // });
+  res
+    .cookie("token", "", {
+      httpOnly: true,
+      expires: new Date(0),
+      secure: true,
+      sameSite: "none",
+    })
+    .send();
 };
 
 module.exports = { studentLogin, studentLogout, userLogin, userLogout };

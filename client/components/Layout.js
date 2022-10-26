@@ -5,7 +5,7 @@ const Layout = (props) => {
   const { children } = props;
   return (
     // bg-slate-900
-    <div className="flex  text-stone-400 flex-col min-h-screen items-center justify-center py-2">
+    <div className="container h-screen  mx-auto text-stone-800 ">
       <Header />
       <main>{children}</main>
       {/* <Footer /> */}
