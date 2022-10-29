@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { fetchUser } from "../hooks/fetchUser";
 import { useRouter } from "next/router";
 
 const UserLogin = () => {
@@ -10,7 +9,7 @@ const UserLogin = () => {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const { userLogin, errorMsg } = useAuth();
+  const { userLogin, errorMsg, fetchUser } = useAuth();
 
   const handlelogin = async () => {
     await userLogin(userName, password);
