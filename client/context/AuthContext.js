@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 import useSessionStorage from "../hooks/useSessionStorage";
 
@@ -14,15 +15,18 @@ export function useAuth() {
 }
 
 export const AuthContextProvider = ({ children }) => {
-  const [errorMsg, setErrorMsg] = useState(null);
+  const router = useRouter();
+  const [studentErrorMsg, setstudentErrorMsg] = useState(null);
+  const [facultyErrorMsg, setfacultyErrorMsg] = useState(null);
   const [loading, setLoading] = useState(false);
   const url = process.env.NEXT_PUBLIC_BASE_URL;
   const now = new Date().getTime();
 
-  // useEffect(() => {
-  //   setErrorMsg(errorMsg);
-  // }, [errorMsg]);
+  useEffect(() => {
+    setstudentErrorMsg(studentErrorMsg);
+  }, [studentErrorMsg]);
 
+  // * to fetch the detail of student from session storage
   const fetchUser = () => {
     setLoading(true);
     const userData = useSessionStorage("user");
@@ -50,7 +54,7 @@ export const AuthContextProvider = ({ children }) => {
       })
       .then(function ({ data, status }) {
         if (status != 200) {
-          setErrorMsg(data.message);
+          setstudentErrorMsg(data.message);
           return data;
         }
         return data;
@@ -60,7 +64,8 @@ export const AuthContextProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const login = async (regNo, dob, password) => {
+  // * function that is used to login for students
+  const studentLogin = async (regNo, dob, password) => {
     setLoading(true);
 
     const body = {
@@ -69,7 +74,7 @@ export const AuthContextProvider = ({ children }) => {
       password: password,
     };
 
-    let response = { eMessage: "no value received" };
+    let response = { eMessage: "no value received", path: "student" };
 
     response = await fetch(url + "/auth/login", {
       method: "POST",
@@ -89,7 +94,7 @@ export const AuthContextProvider = ({ children }) => {
       })
       .then(function ({ data, status }) {
         if (status != 200) {
-          setErrorMsg(data.eMessage);
+          setstudentErrorMsg(data);
           return data;
         }
         return data;
@@ -99,14 +104,17 @@ export const AuthContextProvider = ({ children }) => {
       sessionStorage.setItem("setupTime", now);
     }
 
+    router.push("/");
+
     setLoading(false);
   };
 
-  const logout = async () => {
+  // * function that is used to logout for students
+  const studentLogout = async () => {
     setLoading(true);
 
     await fetch(url + "/auth/logout", {
-      method: "POST",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
@@ -123,7 +131,8 @@ export const AuthContextProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const userLogin = async (userName, password) => {
+  // * function that is used to login for faculty
+  const facultyLogin = async (userName, password) => {
     setLoading(true);
 
     const body = {
@@ -133,7 +142,7 @@ export const AuthContextProvider = ({ children }) => {
 
     let response = { eMessage: "no value received" };
 
-    response = await fetch(url + "/auth/user/login", {
+    response = await fetch(url + "/auth/staff/login", {
       method: "POST",
       body: JSON.stringify(body),
       headers: {
@@ -151,7 +160,7 @@ export const AuthContextProvider = ({ children }) => {
       })
       .then(function ({ data, status }) {
         if (status != 200) {
-          setErrorMsg(data.eMessage);
+          setfacultyErrorMsg(data.eMessage);
           return data;
         }
         return data;
@@ -164,11 +173,12 @@ export const AuthContextProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const userLogout = async () => {
+  // * function that is used to logout for students
+  const facultyLogout = async () => {
     setLoading(true);
 
-    await fetch(url + "/auth/user/logout", {
-      method: "POST",
+    await fetch(url + "/auth/faculty/logout", {
+      method: "get",
       headers: {
         "Content-Type": "application/json",
       },
@@ -185,13 +195,14 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const value = {
-    errorMsg,
-    login,
+    studentErrorMsg,
+    facultyErrorMsg,
+    studentLogin,
     loggedIn,
     fetchUser,
-    logout,
-    userLogin,
-    userLogout,
+    studentLogout,
+    facultyLogin,
+    facultyLogout,
   };
 
   return (

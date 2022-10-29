@@ -1,21 +1,20 @@
 require("dotenv").config();
-const { User } = require("../models/User")
+const { Staff } = require("../models/Staff");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const JWT_SECRET_KEY = process.env.JWT;
-
 /* 
     This Controller can add user to the users 
     collection in the database
 */
-const addUser = async (req, res) => {
-  const { userName, password, role } = req.body;
+const addStaff = async (req, res) => {
+  const { userName, password } = req.body;
 
   let user;
 
   try {
-    user = await User.findOne({ userName: userName });
+    user = await Staff.findOne({ userName: userName });
     if (user) {
       return res.status(409).json({ message: "user already exists" });
     }
@@ -31,10 +30,11 @@ const addUser = async (req, res) => {
   }
 
   try {
-    user = await User({ ...req.body, password: hashPassword }).save();
+    user = await Staff({ ...req.body, password: hashPassword }).save();
     return res.status(200).json(user);
   } catch (error) {
     console.log(error);
+    return res.status(400).json(error)
   }
 };
 
@@ -116,7 +116,7 @@ const deleteUser = async (req, res) => {
 };
 
 module.exports = {
-  addUser,
+  addStaff,
   getUser,
   updateUser,
   deleteUser,

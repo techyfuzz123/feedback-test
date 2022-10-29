@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 const StudentDashboard = ({ user }) => {
-  const { logout, loggedIn } = useAuth();
-
-  if (loggedIn) {
+  const { studentLogout, loggedIn } = useAuth();
+  
+  if (user) {
     return (
       <>
         {/* whole dashboard */}
@@ -135,7 +135,10 @@ const StudentDashboard = ({ user }) => {
                   <tbody className="">
                     {user.subjects.map((subject, sNo) => {
                       return (
-                        <tr key={sNo+1} className="border border-b-2 border-gray-200">
+                        <tr
+                          key={sNo + 1}
+                          className="border border-b-2 border-gray-200"
+                        >
                           <td className="border border-b-2 border-gray-200">
                             {sNo + 1}
                           </td>
@@ -166,26 +169,7 @@ const StudentDashboard = ({ user }) => {
                         </tr>
                       );
                     })}
-                    {/* <tr className="">
-                  <td className="">1</td>
-                  <td className="">Dr.D.Satheesh Kumar</td>
-                  <td className="">Internet and Web Technology</td>
-                  <td className="">
-                    <input className="" />
-                  </td>
-                  <td className="">
-                    <input className="" />
-                  </td>
-                  <td className="">
-                    <input className="" />
-                  </td>
-                  <td className="">
-                    <input className="" />
-                  </td>
-                  <td className="">
-                    <input className="" />
-                  </td>
-                </tr> */}
+
                   </tbody>
                 </table>
               )}
@@ -198,7 +182,7 @@ const StudentDashboard = ({ user }) => {
                 Submit
               </button>
               <button
-                onClick={logout}
+                onClick={studentLogout}
                 className="bg-green-500 shadow-lg text-white font-bold px-12 py-3 rounded-xl"
               >
                 Logout

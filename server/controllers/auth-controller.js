@@ -1,5 +1,5 @@
 const { Student } = require("../models/Student");
-const { User } = require("../models/User");
+const { Staff } = require("../models/Staff");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Feedback } = require("../models/Feedback");
@@ -13,9 +13,10 @@ const studentLogin = async (req, res) => {
 
   // * checking if all three values are available
   if (!regNo || !dob || !password) {
-    return res
-      .status(401)
-      .json({ eMessage: "need register number, date of birth and password" });
+    return res.status(401).json({
+      eMessage: "need register number, date of birth and password",
+      path: "student",
+    });
   }
 
   // * find the student if available
@@ -26,7 +27,9 @@ const studentLogin = async (req, res) => {
     return new Error(err);
   }
   if (!student) {
-    return res.status(404).json({ eMessage: "user not found" });
+    return res
+      .status(404)
+      .json({ eMessage: "user not found", path: "student" });
   }
 
   // * Check if the dob and password are correct
@@ -34,20 +37,15 @@ const studentLogin = async (req, res) => {
   const isPasswordCorrect = bcrypt.compareSync(password, student.password);
 
   if (!isPasswordCorrect || !isDobCorrect) {
-    return res.status(400).json({ eMessage: "Invalid Credential" });
+    return res
+      .status(400)
+      .json({ eMessage: "Invalid Credential", path: "student" });
   }
 
   // * Generating Token
   const token = jwt.sign({ regNo: student.regNo }, JWT_SECRET_KEY, {
     expiresIn: "900s",
   });
-
-  // console.log("Generated Token\n", token);
-
-  // * removing old token if it exists
-  // if (req.cookies["token"]) {
-  //   req.cookies["token"] = "";
-  // }
 
   // * Adding token to cookie
   res.cookie("token", token, {
@@ -58,8 +56,8 @@ const studentLogin = async (req, res) => {
     sameSite: "none",
   });
 
-  // data that has to be sent minimum
-  let userData = {
+  // * data that has to be sent minimum
+  let studentData = {
     name: student.name,
     regNo: student.regNo,
     batch: student.batch,
@@ -82,7 +80,7 @@ const studentLogin = async (req, res) => {
     if (!liveFeedback) {
       return res
         .status(200)
-        .json({ ...userData, message: "No feedback to Submit" });
+        .json({ ...studentData, message: "No feedback to Submit" });
     }
     isFeedbackSubmitted =
       student.isFeedbackSubmitted[liveFeedback.semester][
@@ -96,7 +94,7 @@ const studentLogin = async (req, res) => {
   if (isFeedbackSubmitted) {
     return res
       .status(200)
-      .json({ ...userData, message: "No feedback to Submit" });
+      .json({ ...studentData, message: "No feedback to Submit" });
   }
 
   // * combining the subjects and electives from feedback and student
@@ -122,30 +120,12 @@ const studentLogin = async (req, res) => {
     subjects: subjects,
   };
 
-  return res.status(200).json({ ...userData, ...feedback });
+  return res.status(200).json({ ...studentData, ...feedback });
 };
 
+// * this function will run when a student tries to logout
 const studentLogout = async (req, res) => {
   // * Checking if token exists and Getting the token from cookie
-  // const cookies = req.cookie;
-  // let prevToken = cookies;
-  // if (prevToken) {
-  //   prevToken = prevToken.split("=")[1];
-  // }
-  // if (!prevToken) {
-  //   return res.status(400).json({ eMessage: "Couldn't find token" });
-  // }
-
-  // // * Verifying the token and deleting it
-  // jwt.verify(String(prevToken), JWT_SECRET_KEY, (err, data) => {
-  //   if (err) {
-  //     console.log(err);
-  //     return res.status(403).json({ eMessage: "Authentication failed" });
-  //   }
-  //   res.clearCookie(`${data.regNo}`);
-  //   req.cookies[`${data.regNo}`] = "";
-  //   return res.status(200).json({ message: "Successfully Logged Out" });
-  // });
   res
     .cookie("token", "", {
       httpOnly: true,
@@ -153,49 +133,52 @@ const studentLogout = async (req, res) => {
       secure: true,
       sameSite: "none",
     })
-    .send();
+    .json({ message: "logged out" });
 };
 
-const userLogin = async (req, res) => {
+const staffLogin = async (req, res) => {
   const { userName, password } = req.body;
 
   // * checking if all three values are available
   if (!userName || !password) {
-    return res.status(401).json({ eMessage: "need userName and password" });
+    return res
+      .status(401)
+      .json({ eMessage: "need userName and password", path: "staff" });
   }
 
   // * find the student if available
-  let user;
+  let staff;
   try {
-    user = await User.findOne({ userName: userName });
+    staff = await Staff.findOne({ userName: userName });
   } catch (err) {
     return new Error(err);
   }
-  if (!user) {
-    return res.status(404).json({ eMessage: "user not found" });
+  if (!staff) {
+    return res.status(404).json({ eMessage: "user not found", path: "staff" });
   }
 
   // * Check if the password are correct
-  const isPasswordCorrect = bcrypt.compareSync(password, user.password);
+  const isPasswordCorrect = bcrypt.compareSync(password, staff.password);
 
   if (!isPasswordCorrect) {
-    return res.status(400).json({ eMessage: "Invalid Credential" });
+    return res
+      .status(400)
+      .json({ eMessage: "Invalid Credential", path: "staff" });
   }
 
   // * Generating Token
-  const token = jwt.sign({ id: user._id }, JWT_SECRET_KEY, {
+  const token = jwt.sign({ id: staff._id }, JWT_SECRET_KEY, {
     expiresIn: "900s",
   });
 
-  // console.log("Generated Token\n", token);
 
   // * removing old token if it exists
-  // if (req.cookies[`token`]) {
-  //   req.cookies[`token`] = "";
-  // }
+  if (req.cookies[`token`]) {
+    req.cookies[`token`] = "";
+  }
 
   // * Adding token to cookie
-  res.cookie(String(user._id), token, {
+  res.cookie(String(staff._id), token, {
     path: "/",
     // expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
     httpOnly: true,
@@ -205,34 +188,19 @@ const userLogin = async (req, res) => {
 
   // * Defining the data which has to be return to the user
   let userData = {
-    userName: user.userName,
-    role: user.role,
+    userName: staff.userName,
+    role: staff.role,
+    batch: staff.batch,
+    degree: staff.degree,
+    section: staff.section,
   };
 
   return res.status(200).json({ ...userData });
 };
 
-const userLogout = async (req, res) => {
+const staffLogout = async (req, res) => {
   // * Checking if token exists and Getting the token from cookie
-  // const cookies = req.headers.cookie;
-  // let prevToken = cookies;
-  // if (prevToken) {
-  //   prevToken = prevToken.split("=")[1];
-  // }
-  // if (!prevToken) {
-  //   return res.status(400).json({ message: "Couldn't find token" });
-  // }
 
-  // // * Verifying the token and deleting it
-  // jwt.verify(String(prevToken), JWT_SECRET_KEY, (err, data) => {
-  //   if (err) {
-  //     console.log(err);
-  //     return res.status(403).json({ message: "Authentication failed" });
-  //   }
-  //   res.clearCookie(`${data.id}`);
-  //   req.cookies[`${data.id}`] = "";
-  //   return res.status(200).json({ message: "Successfully Logged Out" });
-  // });
   res
     .cookie("token", "", {
       httpOnly: true,
@@ -240,7 +208,7 @@ const userLogout = async (req, res) => {
       secure: true,
       sameSite: "none",
     })
-    .send();
+    .json({ message: "logged out" });
 };
 
-module.exports = { studentLogin, studentLogout, userLogin, userLogout };
+module.exports = { studentLogin, studentLogout, staffLogin, staffLogout };

@@ -9,7 +9,7 @@ const student_routes = require("./routes/student-routes");
 const feedback_routes = require("./routes/feedback-routes");
 const auth_routes = require("./routes/auth-routes");
 const response_routes = require("./routes/response-routes");
-const user_routes = require("./routes/user-routes");
+const staff_routes = require("./routes/staff-routes");
 
 // connecting to database
 connection();
@@ -27,6 +27,15 @@ const corsOptions = {
 // middlewares
 app.use(cors(corsOptions));
 app.use(cookieParser());
+
+morgan.token("date", function () {
+  var p = new Date()
+    .toString()
+    .replace(/[A-Z]{3}\+/, "+")
+    .split(/ /);
+  return p[2] + "/" + p[1] + "/" + p[3] + ":" + p[4] + " " + p[5];
+});
+
 app.use(morgan("common"));
 app.use(express.json());
 
@@ -35,7 +44,7 @@ app.use("/api/student", student_routes);
 app.use("/api/feedback", feedback_routes);
 app.use("/api/auth", auth_routes);
 app.use("/api/response", response_routes);
-app.use("/api/user", user_routes);
+app.use("/api/staff", staff_routes);
 
 // listening to port
 try {
@@ -45,3 +54,6 @@ try {
 } catch (error) {
   console.log(error);
 }
+
+// backup cmd
+// mongodump --uri='mongodb://feedback:feedback@206.189.138.16:27017/feedback' --gzip --archive=/data/backup/backup.gz

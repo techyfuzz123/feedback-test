@@ -1,69 +1,96 @@
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
-  const [regNo, setRegNo] = useState(22222);
+  // Student
+  const [regNo, setRegNo] = useState(222);
   const [dob, setDob] = useState("07/03/2003");
-  const [password, setPassword] = useState("hicet");
-  const [error, setError] = useState("");
-  const { login, errorMsg } = useAuth();
+  const [studentPassword, setStudentPassword] = useState("hicet");
+  const [studentError, setStudentError] = useState("");
+  const { studentLogin, facultyLogin, facultyErrorMsg, studentErrorMsg } =
+    useAuth();
 
-  const handlelogin = async () => {
-    setError("");
-    await login(regNo, dob, password);
-  };
+  // Faculty
+  const [userName, setUserName] = useState("abcd");
+  const [facultyPassword, setFacultyPassword] = useState("hicet");
+  const [facultyError, setFacultyError] = useState("");
+
   useEffect(() => {
-    setError(errorMsg);
-  }, [errorMsg]);
+    setStudentError(studentErrorMsg);
+    setFacultyError(facultyErrorMsg);
+  }, []);
 
   // * Validating and submiting the data
-  const handleSubmit = async (e) => {
+  const studentHandleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    if (!regNo || !dob || !password) {
-      setError("all fields should be filled");
+    setStudentError("");
+    if (!regNo || !dob || !studentPassword) {
+      setStudentError("all fields should be filled");
       return;
     }
     if (!Number(regNo)) {
-      setError("register number should be numerical value");
+      setStudentError("register number should be numerical value");
       return;
     }
     if (
       !/([0-2]{1}[0-9]{1}|3[0-1]{1})[/](0[1-9]|1[0-2])[/]([0-9]{4})/.test(dob)
     ) {
-      setError("date should be in the format dd/mm/yyyy");
+      setStudentError("date should be in the format dd/mm/yyyy");
       return;
     }
-    if (password.length >= 10 || password.length < 5) {
-      setError("password must be between 5 to 10 characters");
+    if (studentPassword.length >= 10 || studentPassword.length < 5) {
+      setStudentError("password must be between 5 to 10 characters");
       return;
     }
-    handlelogin();
+    setStudentError("");
+    await studentLogin(regNo, dob, studentPassword);
+  };
+  const facultyHandleSubmit = async (e) => {
+    e.preventDefault();
+    setFacultyError("");
+    if (!userName || !facultyPassword) {
+      setFacultyError("all fields should be filled");
+      return;
+    }
+    if (facultyPassword.length >= 10 || facultyPassword.length < 5) {
+      setFacultyError("password must be between 5 to 10 characters");
+      return;
+    }
+    setFacultyError("");
+    await facultyLogin(userName, facultyPassword);
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="flex max-h-screen items-center max-w-sm md:max-w-3xl justify-center">
-        <div className="flex items-center bg-gray-300 rounded-2xl shadow-lg">
+    <div className="flex items-center justify-center min-h-screen min-w-1/2">
+      <div
+        className="flex flex-col m-10 md:flex-row md:max-h-screen items-center 
+      max-w-sm md:max-w-3xl justify-center"
+      >
+        {/* student form */}
+        <div
+          className="flex items-center bg-gray-300 rounded-2xl shadow-lg
+         mb-10 md:mr-10"
+        >
           {/* image */}
-          <div className="md:block hidden py-3 pl-3 w-1/2">
+          {/* <div className="md:block hidden py-3 pl-3 w-1/2">
             <Image
               className="rounded-2xl"
               width="510"
               height="685"
               src="/img2.svg"
             />
-          </div>
+          </div> */}
 
-          {/* form  */}
-          <div className="md:w-1/2  p-8 md:px-10">
+          {/* Student form  */}
+          <div className=" p-8 md:px-10">
             <h2 className="font-bold text-2xl  text-[#002D74]">
               Student Login
             </h2>
 
             <div className="text-gray-800">
-              {error && <div className="text-red-500 pt-2">{error}</div>}
+              {studentError && (
+                <div className="text-red-500 pt-2">{studentError}</div>
+              )}
 
               <div>
                 <p className="mt-5 mb-1">Register Number</p>
@@ -74,7 +101,7 @@ const Login = () => {
                   value={regNo}
                   placeholder="123"
                   onClick={(e) => {
-                    setError("");
+                    setStudentError("");
                   }}
                   onChange={(e) => {
                     setRegNo(e.target.value);
@@ -91,10 +118,10 @@ const Login = () => {
                   value={dob}
                   placeholder="dd/mm/yyyy"
                   onClick={(e) => {
-                    setError("");
+                    setStudentError("");
                   }}
                   onChange={(e) => {
-                    setError("");
+                    setStudentError("");
                     setDob(e.target.value);
                   }}
                 />
@@ -107,20 +134,78 @@ const Login = () => {
                   type="password"
                   name="password"
                   placeholder="abc"
-                  value={password}
+                  value={studentPassword}
                   onClick={(e) => {
-                    setError("");
+                    setStudentError("");
                   }}
                   onChange={(e) => {
-                    setError("");
-                    setPassword(e.target.value);
+                    setStudentError("");
+                    setStudentPassword(e.target.value);
                   }}
                 />
               </div>
 
               <button
-                onClick={handleSubmit}
-                className="bg-[#002D74] mt-7 w-full rounded-xl text-white py-2.5 hover:scale-105 duration-300"
+                onClick={studentHandleSubmit}
+                className="bg-[#002D74] mt-7 w-full rounded-xl text-white
+                 py-2.5 hover:scale-105 duration-300"
+              >
+                Login
+              </button>
+            </div>
+          </div>
+        </div>
+        {/* Faculty form  */}
+        <div className="flex items-center bg-gray-300 rounded-2xl shadow-lg ">
+          <div className=" p-8 md:px-10">
+            <h2 className="font-bold text-2xl  text-[#002D74]">
+              Faculty Login
+            </h2>
+
+            <div className="text-gray-800">
+              {facultyError && (
+                <div className="text-red-500 pt-2">{facultyError}</div>
+              )}
+
+              <div>
+                <p className="mt-5 mb-1">User Name</p>
+                <input
+                  className="p-2 w-full outline-none rounded-lg border"
+                  type="text"
+                  name="regNo"
+                  value={userName}
+                  placeholder="123"
+                  onClick={(e) => {
+                    setFacultyError("");
+                  }}
+                  onChange={(e) => {
+                    setUserName(e.target.value);
+                  }}
+                />
+              </div>
+
+              <div>
+                <p className="mt-5 mb-1">Password</p>
+                <input
+                  className="p-2 rounded-lg outline-none w-full border"
+                  type="password"
+                  name="password"
+                  placeholder="abc"
+                  value={facultyPassword}
+                  onClick={(e) => {
+                    setFacultyError("");
+                  }}
+                  onChange={(e) => {
+                    setFacultyError("");
+                    setFacultyPassword(e.target.value);
+                  }}
+                />
+              </div>
+
+              <button
+                onClick={facultyHandleSubmit}
+                className="bg-[#002D74] mt-7 w-full rounded-xl text-white
+                 py-2.5 hover:scale-105 duration-300"
               >
                 Login
               </button>

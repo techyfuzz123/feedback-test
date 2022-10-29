@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js |  tee log.txt",
-    "start": "node server.js | tee log.txt"
+    "dev": "nodemon server.js |  tee -a log.txt",
+    "start": "node server.js | tee -a log.txt"
   },
   "keywords": [],
-  "author": "",
+  "author": "Sumesh R",
   "license": "ISC",
   "dependencies": {
     "ajv": "^8.11.0",

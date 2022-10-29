@@ -1,21 +1,20 @@
 const router = require("express").Router();
-require('dotenv').config()
-const jwt = require('jsonwebtoken')
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
 const {
   studentLogin,
   studentLogout,
-  userLogin,
-  userLogout,
+  staffLogin,
+  staffLogout,
 } = require("../controllers/auth-controller.js");
 
 router.post("/login", studentLogin);
-router.post("/logout", studentLogout);
-router.post("/user/login", userLogin);
-router.post("/user/logout", userLogout);
+router.get("/logout", studentLogout);
+router.post("/staff/login", staffLogin);
+router.get("/staff/logout", staffLogout);
 router.get("/loggedIn", (req, res) => {
   try {
-    const token = req.cookies['token'];
-    console.log(token);
+    const token = req.cookies["token"];
     if (!token) return res.json(false);
 
     jwt.verify(token, process.env.JWT);
