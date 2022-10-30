@@ -2,17 +2,20 @@ import { useState } from "react";
 import Feedbacks from "./facultyComponents/Feedbacks";
 import Dashboard from "./facultyComponents/Dashboard";
 import Accounts from "./facultyComponents/Accounts";
+import { useAuth } from "../context/AuthContext";
 
 const FacultyDashboard = ({ user }) => {
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState("Feedbacks");
+  const { facultyLogout } = useAuth();
   const Menus = [
     { title: "Dashboard", src: "Chart_fill" },
     { title: "Feedbacks", src: "Chat" },
     { title: "Accounts", src: "User" },
     { title: "Analytics", src: "Chart" },
-    { title: "Files", src: "Folder", gap: true },
+    { title: "Files", src: "Folder" },
     { title: "Setting", src: "Setting" },
+    { title: "Logout", src: "Setting", gap: true },
   ];
 
   return (
@@ -48,6 +51,9 @@ const FacultyDashboard = ({ user }) => {
           {Menus.map((Menu, index) => (
             <li
               onClick={(e) => {
+                if(Menu.title === "Logout"){
+                  facultyLogout()
+                }
                 setCurrent(Menu.title);
               }}
               key={index}

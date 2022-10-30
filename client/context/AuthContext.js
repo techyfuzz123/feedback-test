@@ -108,7 +108,7 @@ export const AuthContextProvider = ({ children }) => {
     setLoading(true);
 
     await fetch(url + "/auth/student/logout", {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -172,7 +172,7 @@ export const AuthContextProvider = ({ children }) => {
     setLoading(true);
 
     await fetch(url + "/auth/staff/logout", {
-      method: "get",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },

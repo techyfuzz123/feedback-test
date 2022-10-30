@@ -9,9 +9,9 @@ const {
 } = require("../controllers/auth-controller.js");
 
 router.post("/student/login", studentLogin);
-router.get("/student/logout", studentLogout);
+router.post("/student/logout", studentLogout);
 router.post("/staff/login", staffLogin);
-router.get("/staff/logout", staffLogout);
+router.post("/staff/logout", staffLogout);
 router.get("/loggedIn", (req, res) => {
   try {
     const token = req.cookies["token"];
