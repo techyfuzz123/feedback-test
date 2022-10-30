@@ -1,25 +1,31 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-
-
+import { useRouter } from "next/router";
 
 const Login = () => {
+
+  const router = useRouter()
+  const { fetchUser } = useAuth();
+
+  // Faculty
+  const [userName, setUserName] = useState("");
+  const [facultyPassword, setFacultyPassword] = useState("hicet");
+  const [facultyError, setFacultyError] = useState("");
+
   // Student
   const [regNo, setRegNo] = useState(222);
   const [dob, setDob] = useState("07/03/2003");
   const [studentPassword, setStudentPassword] = useState("hicet");
   const [studentError, setStudentError] = useState("");
-  const { studentLogin, facultyLogin, facultyErrorMsg, studentErrorMsg } =
-    useAuth();
-
-  // Faculty
-  const [userName, setUserName] = useState("abcd");
-  const [facultyPassword, setFacultyPassword] = useState("hicet");
-  const [facultyError, setFacultyError] = useState("");
+  const { studentLogin,facultyLogin, errorMsg } = useAuth();
+  console.log(errorMsg);
 
   useEffect(() => {
-    setStudentError(studentErrorMsg);
-    setFacultyError(facultyErrorMsg);
+
+    // if(errorMsg.path == "student")
+    //   setStudentError(errorMsg.eMessage);
+    // else
+    //   setFacultyError(errorMsg.eMessage)
   }, []);
 
   // * Validating and submiting the data
@@ -59,20 +65,17 @@ const Login = () => {
       return;
     }
     setFacultyError("");
-    await facultyLogin(userName, facultyPassword);
+    await facultyLogin(regNo, dob, facultyPassword);
   };
 
   return (
-    <div className="container flex items-center justify-center mx-auto min-h-screen min-w-1/2">
+    <div className="flex items-center justify-center min-h-screen min-w-1/2">
       <div
         className="flex flex-col m-10 md:flex-row md:max-h-screen items-center 
       max-w-sm md:max-w-3xl justify-center"
       >
         {/* student form */}
-        <div
-          className="flex items-center bg-gray-300 rounded-2xl shadow-lg
-         mb-10 md:mr-10"
-        >
+        <div className="flex items-center bg-gray-300 rounded-2xl shadow-lg mb-10 md:mr-10">
           {/* image */}
           {/* <div className="md:block hidden py-3 pl-3 w-1/2">
             <Image
@@ -85,7 +88,9 @@ const Login = () => {
 
           {/* Student form  */}
           <div className=" p-8 md:px-10">
-            <h2 className="font-bold text-2xl text-[#002D74]">Student Login</h2>
+            <h2 className="font-bold text-2xl  text-[#002D74]">
+              Student Login
+            </h2>
 
             <div className="text-gray-800">
               {studentError && (
@@ -147,8 +152,7 @@ const Login = () => {
 
               <button
                 onClick={studentHandleSubmit}
-                className="bg-[#002D74] mt-7 w-full rounded-xl text-white
-                 py-2.5 hover:scale-105 duration-300"
+                className="bg-[#002D74] mt-7 w-full rounded-xl text-white py-2.5 hover:scale-105 duration-300"
               >
                 Login
               </button>
@@ -176,7 +180,7 @@ const Login = () => {
                   value={userName}
                   placeholder="123"
                   onClick={(e) => {
-                    setFacultyError("");
+                    setStudentError("");
                   }}
                   onChange={(e) => {
                     setUserName(e.target.value);
@@ -204,8 +208,7 @@ const Login = () => {
 
               <button
                 onClick={facultyHandleSubmit}
-                className="bg-[#002D74] mt-7 w-full rounded-xl text-white
-                 py-2.5 hover:scale-105 duration-300"
+                className="bg-[#002D74] mt-7 w-full rounded-xl text-white py-2.5 hover:scale-105 duration-300"
               >
                 Login
               </button>

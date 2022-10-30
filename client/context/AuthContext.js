@@ -2,11 +2,6 @@ import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 import useSessionStorage from "../hooks/useSessionStorage";
 
-const fetchUser = () => {
-  const userData = useSessionStorage("user");
-  const user = JSON.parse(userData);
-  return user;
-};
 
 export const AuthContext = createContext();
 
@@ -59,7 +54,6 @@ export const AuthContextProvider = ({ children }) => {
         }
         return data;
       });
-    console.log(response);
 
     setLoading(false);
   };
@@ -76,7 +70,7 @@ export const AuthContextProvider = ({ children }) => {
 
     let response = { eMessage: "no value received", path: "student" };
 
-    response = await fetch(url + "/auth/login", {
+    response = await fetch(url + "/auth/student/login", {
       method: "POST",
       body: JSON.stringify(body),
       headers: {
@@ -94,7 +88,7 @@ export const AuthContextProvider = ({ children }) => {
       })
       .then(function ({ data, status }) {
         if (status != 200) {
-          setstudentErrorMsg(data);
+          setstudentErrorMsg(data.eMessage);
           return data;
         }
         return data;
@@ -113,7 +107,7 @@ export const AuthContextProvider = ({ children }) => {
   const studentLogout = async () => {
     setLoading(true);
 
-    await fetch(url + "/auth/logout", {
+    await fetch(url + "/auth/student/logout", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -177,7 +171,7 @@ export const AuthContextProvider = ({ children }) => {
   const facultyLogout = async () => {
     setLoading(true);
 
-    await fetch(url + "/auth/faculty/logout", {
+    await fetch(url + "/auth/staff/logout", {
       method: "get",
       headers: {
         "Content-Type": "application/json",

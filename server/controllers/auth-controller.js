@@ -178,12 +178,12 @@ const staffLogin = async (req, res) => {
   }
 
   // * Adding token to cookie
-  res.cookie(String(staff._id), token, {
+  res.cookie('token', token, {
     path: "/",
-    // expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
+    expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
     httpOnly: true,
-    secure: true,
-    sameSite: "lax",
+    // secure: true,
+    sameSite: "none",
   });
 
   // * Defining the data which has to be return to the user
@@ -195,7 +195,13 @@ const staffLogin = async (req, res) => {
     section: staff.section,
   };
 
-  return res.status(200).json({ ...userData });
+  const feedbacks = await Feedback.find({
+    batch: staff.batch,
+    degree: staff.degree,
+    section: staff.section,
+  });
+
+  return res.status(200).json({ ...userData, feedbacks });
 };
 
 const staffLogout = async (req, res) => {
@@ -205,7 +211,7 @@ const staffLogout = async (req, res) => {
     .cookie("token", "", {
       httpOnly: true,
       expires: new Date(0),
-      secure: true,
+      // secure: true,
       sameSite: "none",
     })
     .json({ message: "logged out" });

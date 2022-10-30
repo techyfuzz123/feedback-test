@@ -17,17 +17,17 @@ const Home = () => {
   // * render Login Component if user does'nt exists
   if (!user) return <Login />;
 
-  // if (user.regNo) return <StudentDashboard user={user} />;
+  if (user.regNo) return <StudentDashboard user={user} />;
 
-  // if (user.role == "ADMIN") return <AdminDashboard user={user} />;
+  if (user.role == "ADMIN") return <AdminDashboard user={user} />;
+  if (user.role == "ADVISOR") return <FacultyDashboard user={user} />;
 
   // * render this Component for anything else
   return (
     <>
-      {user && user.regNo && <StudentDashboard user={user} />}
-      {user && user.role == "ADMIN" && <AdminDashboard user={user} />}
-      {user && user.role == "ADVISOR" && <FacultyDashboard user={user} />}
-      <div>errorCode : 101</div>
+      {user && user.role != "ADMIN" && user.role != "ADVISOR" && (
+        <div>errorCode : 101, {user.role}</div>
+      )}
     </>
   );
 };
