@@ -182,7 +182,7 @@ const staffLogin = async (req, res) => {
     path: "/",
     expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
     httpOnly: true,
-    // secure: true,
+    secure: true,
     sameSite: "none",
   });
 
@@ -211,7 +211,7 @@ const staffLogout = async (req, res) => {
     .cookie("token", "", {
       httpOnly: true,
       expires: new Date(0),
-      // secure: true,
+      secure: true,
       sameSite: "none",
     })
     .json({ message: "logged out" });
