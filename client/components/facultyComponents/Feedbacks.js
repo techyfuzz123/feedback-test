@@ -2,64 +2,66 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import { GlobalFilter } from "../GlobalFilter";
 
-const Feedbacks = () => {
+const Feedbacks = ({ feedbacks }) => {
   const [products, setProducts] = useState([]);
-  const [feedbacks, setFeedbacks] = useState([]);
+  const [feedback, setFeedback] = useState([]);
   const url = process.env.NEXT_PUBLIC_BASE_URL;
 
+  const f = {};
+
   const fetchProducts = async () => {
-    const response = await fetch("https://fakestoreapi.com/products").then(
-      async function (res) {
-        return res.json();
-      }
-    );
+    // const response = await fetch("https://fakestoreapi.com/products").then(
+    //   async function (res) {
+    //     return res.json();
+    //   }
+    // );
 
-    const response2 = await fetch(url + "/staff/feedbacks").then(
-      async function (res) {
-        return res.json();
-      }
-    );
+    // const response2 = await fetch(url + "/staff/feedbacks").then(
+    //   async function (res) {
+    //     return res.json();
+    //   }
+    // );
 
-    if (response) {
-      const products = response;
+    // if (response) {
+    //   const products = response;
 
-      console.log("Products: ", products);
-      setProducts(products);
-    }
-    if (response2) {
-      const feedbacks = response;
+    //   console.log("Products: ", products);
+    //   setProducts(products);
+    // }
+    if (feedbacks) {
+      // const feedbacks = response2;
 
       console.log("feedbacks: ", feedbacks);
-      setFeedbacks(feedbacks);
+      setFeedback(feedbacks);
     }
   };
 
-  const productsData = useMemo(() => [...products], [products]);
-  const feedbacksData = useMemo(() => [...feedbacks], [feedbacks]);
+  // const productsData = useMemo(() => [...products], [products]);
+  const feedbacksData = useMemo(() => [...feedback], [feedback]);
 
-  const productsColumns = useMemo(
-    () =>
-      products[0]
-        ? Object.keys(products[0])
-            .filter((key) => key !== "rating")
-            .map((key) => {
-              if (key === "image")
-                return {
-                  Header: key,
-                  accessor: key,
-                  Cell: ({ value }) => <img src={value} />,
-                  maxWidth: 70,
-                };
+  // const productsColumns = useMemo(
+  //   () =>
+  //     products[0]
+  //       ? Object.keys(products[0])
+  //           .filter((key) => key !== "rating")
+  //           .map((key) => {
+  //             if (key === "image")
+  //               return {
+  //                 Header: key,
+  //                 accessor: key,
+  //                 Cell: ({ value }) => <img src={value} />,
+  //                 maxWidth: 70,
+  //               };
 
-              return { Header: key, accessor: key };
-            })
-        : [],
-    [products]
-  );
+  //             return { Header: key, accessor: key };
+  //           })
+  //       : [],
+  //   [products]
+  // );
   const feedbacksColumns = useMemo(
     () =>
-      feedbacks[0]
-        ? Object.keys(feedbacks[0])
+      feedback[0]
+        ? Object.keys(feedback[0])
             .filter((key) => key !== "rating")
             .map((key) => {
               if (key === "image")
@@ -73,7 +75,7 @@ const Feedbacks = () => {
               return { Header: key, accessor: key };
             })
         : [],
-    [products]
+    [feedback]
   );
 
   const tableHooks = (hooks) => {
@@ -119,13 +121,14 @@ const Feedbacks = () => {
   const isEven = (idx) => idx % 2 === 0;
   return (
     <div className="flex flex-col items-center w-full pt-8">
-      {/* basic details of feedbacks */}
-      <div className="w-full flex justify-center">
+      <>
+        {/* basic details of feedbacks */}
+
+        <div className="w-full flex justify-center">
         <div
           className="flex flex-col md:flex-row items-center
          w-10/12 justify-between"
         >
-          {/* batch  */}
           <div className="flex items-center mb-4 md:mb-0">
             <label htmlFor="batch" className="mr-3">
               Batch:
@@ -141,7 +144,6 @@ const Feedbacks = () => {
             />
           </div>
 
-          {/* class  */}
           <div className="flex items-center">
             <label htmlFor="Dept_&_sec" className="mr-3">
               Class:{" "}
@@ -158,8 +160,9 @@ const Feedbacks = () => {
           </div>
         </div>
       </div>
-      {/* feedbacks */}
-      {/* <div className="w-full  flex justify-center">
+
+        {/* feedbacks */}
+        {/* <div className="w-full  flex justify-center">
         <table className="divide-y m-10 w-3/4 divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -226,6 +229,7 @@ const Feedbacks = () => {
           </tbody>
         </table>
       </div> */}
+      </>
       <div className=" w-10/12 flex flex-row justify-between items-center">
         <GlobalFilter
           preGlobalFilteredRows={preGlobalFilteredRows}

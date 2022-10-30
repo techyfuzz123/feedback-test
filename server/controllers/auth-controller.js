@@ -199,7 +199,8 @@ const staffLogin = async (req, res) => {
     batch: staff.batch,
     degree: staff.degree,
     section: staff.section,
-  });
+  }, "-subjects");
+  console.log(feedbacks);
 
   return res.status(200).json({ ...userData, feedbacks });
 };
