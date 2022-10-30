@@ -246,10 +246,11 @@ const Feedbacks = () => {
           {...getTableProps()}
         >
           <thead className="bg-gray-50">
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
+            {headerGroups.map((headerGroup, idx) => (
+              <tr key={idx} {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column, idx) => (
                   <th
+                    key={idx}
                     scope="col"
                     className="px-8 py-3 text-center text-xs font-medium
                 text-gray-500 uppercase"
@@ -271,11 +272,13 @@ const Feedbacks = () => {
 
               return (
                 <tr
+                  key={idx}
                   {...row.getRowProps()}
                   className={isEven(idx) ? "bg-green-400 bg-opacity-30" : ""}
                 >
                   {row.cells.map((cell, idx) => (
                     <td
+                      key={idx}
                       className="px-6 py-4 text-center"
                       {...cell.getCellProps()}
                     >
