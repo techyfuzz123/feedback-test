@@ -39,20 +39,20 @@ const getFeedbackForAdvisor = async (req, res) => {
     section: req.section,
   };
 
-  let feedback;
+  let feedbacks;
 
   try {
-    feedback = await Feedback.find(filter);
+    feedbacks = await Feedback.find(filter);
   } catch (error) {
     console.log(error);
     return res.status(500).json(error);
   }
 
-  if (!feedback) {
+  if (!feedbacks) {
     return res.status(409).json({ message: "no feedbacks" });
   }
 
-  res.status(200).json({ feedback });
+  res.status(200).json({ feedbacks });
 };
 
 module.exports = { addFeedback, getFeedbackForAdvisor };

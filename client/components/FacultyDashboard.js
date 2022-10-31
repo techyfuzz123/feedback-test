@@ -71,11 +71,11 @@ const FacultyDashboard = ({ user }) => {
             </li>
           ))}
         </ul>
-      </aside>
+      </aside>  
       {/* components */}
       <div className={`flex w-full h-screen `}>
         {current === "Dashboard" && <Dashboard />}
-        {current === "Feedbacks" && <Feedbacks feedbacks={user.feedbacks} />}
+        {current === "Feedbacks" && <Feedbacks user={user} />}
         {current === "Accounts" && <Accounts />}
       </div>
     </div>

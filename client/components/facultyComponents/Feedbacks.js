@@ -2,25 +2,27 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import { GlobalFilter } from "../GlobalFilter";
 
-const Feedbacks = ({ feedbacks }) => {
+const Feedbacks = ({ user }) => {
   const [products, setProducts] = useState([]);
-  const [feedback, setFeedback] = useState([]);
+  const [feedbacks, setFeedbacks] = useState([]);
   const url = process.env.NEXT_PUBLIC_BASE_URL;
 
-  const f = {};
 
   const fetchProducts = async () => {
-    // const response = await fetch("https://fakestoreapi.com/products").then(
+    // const response2 = await fetch("https://fakestoreapi.com/products").then(
     //   async function (res) {
     //     return res.json();
     //   }
     // );
 
-    // const response2 = await fetch(url + "/staff/feedbacks").then(
-    //   async function (res) {
-    //     return res.json();
-    //   }
-    // );
+    const response2 = await fetch(url + "/staff/feedbacks", {
+      method: "GET",
+      credentials: "include",
+    }).then(
+      async function (res) {
+        return res.json();
+      }
+    );
 
     // if (response) {
     //   const products = response;
@@ -28,17 +30,15 @@ const Feedbacks = ({ feedbacks }) => {
     //   console.log("Products: ", products);
     //   setProducts(products);
     // }
-    if (feedbacks) {
-      // const feedbacks = response2;
-
-      console.log("feedbacks: ", feedbacks);
-      setFeedback(feedbacks);
+    if (response2) {
+      const feedbacks = response2.feedbacks;
+      setFeedbacks(feedbacks);
     }
   };
 
   // const productsData = useMemo(() => [...products], [products]);
-  const feedbacksData = useMemo(() => [...feedback], [feedback]);
-
+  const feedbacksData = useMemo(() => [...feedbacks], [feedbacks]);
+console.log(feedbacks[0])
   // const productsColumns = useMemo(
   //   () =>
   //     products[0]
@@ -60,22 +60,23 @@ const Feedbacks = ({ feedbacks }) => {
   // );
   const feedbacksColumns = useMemo(
     () =>
-      feedback[0]
-        ? Object.keys(feedback[0])
-            .filter((key) => key !== "rating")
+      feedbacks[0]
+        ? Object.keys(feedbacks[0])
+            .filter((key) => key !== "subjects")
+            .filter((key) => key !== "_id")
             .map((key) => {
-              if (key === "image")
-                return {
-                  Header: key,
-                  accessor: key,
-                  Cell: ({ value }) => <img src={value} />,
-                  maxWidth: 70,
-                };
+              // if (key === "image")
+              //   return {
+              //     Header: key,
+              //     accessor: key,
+              //     Cell: ({ value }) => <img src={value} />,
+              //     maxWidth: 70,
+              //   };
 
               return { Header: key, accessor: key };
             })
         : [],
-    [feedback]
+    [feedbacks]
   );
 
   const tableHooks = (hooks) => {
@@ -132,14 +133,14 @@ const Feedbacks = ({ feedbacks }) => {
           <div className="flex items-center mb-4 md:mb-0">
             <label htmlFor="batch" className="mr-3">
               Batch:
-            </label>
+              </label>
             <input
               className="outline-none py-1 px-2 rounded bg-white
                 cursor-not-allowed"
               type="text"
               name="batch"
               id="batch"
-              value={feedbacks[0].batch}
+              value={user.batch}
               readOnly
             />
           </div>
@@ -154,7 +155,7 @@ const Feedbacks = ({ feedbacks }) => {
               type="text"
               name="Dept_&_sec"
               id="Dept_&_sec"
-              value={`${feedbacks[0].degree} - ${feedbacks[0].section}`}
+              value={`${user.degree} - ${user.section}`}
               readOnly
             />
           </div>
@@ -280,9 +281,9 @@ const Feedbacks = ({ feedbacks }) => {
                   {...row.getRowProps()}
                   className={isEven(idx) ? "bg-green-400 bg-opacity-30" : ""}
                 >
-                  {row.cells.map((cell, idx) => (
+                  {row.cells.map((cell, id) => (
                     <td
-                      key={idx}
+                      key={id}
                       className="px-6 py-4 text-center"
                       {...cell.getCellProps()}
                     >
