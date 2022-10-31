@@ -65,6 +65,7 @@ const verifytoken = (req, res, next) => {
 //middleware function to check if the incoming request in authenticated:
 const checkStaff = async (req, res, next) => {
   const token = req.cookies["token"];
+  console.log(token);
   //send error message if no token is found:
   if (!token) {
     return res.status(401).json({ error: "Access denied, token missing!" });
@@ -74,8 +75,8 @@ const checkStaff = async (req, res, next) => {
       //  token and attach it to the request object.
       const payload = jwt.verify(token, JWT_SECRET_KEY);
       const staff = await Staff.findOne({ _id: payload.id });
-      req.batch = staff.batch
-      req.degree = staff.degree
+      req.batch = staff.batch;
+      req.degree = staff.degree;
       req.section = staff.section;
       next();
     } catch (error) {
