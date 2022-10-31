@@ -48,7 +48,6 @@ const getUser = async (req, res) => {
   if (prevToken) {
     prevToken = prevToken.split("=")[1];
   }
-  console.log(prevToken);
   if (!prevToken) {
     return res.status(400).json({ message: "Couldn't find token" });
   }

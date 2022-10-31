@@ -3,61 +3,35 @@ import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import { GlobalFilter } from "../GlobalFilter";
 
 const Feedbacks = ({ user }) => {
-  const [products, setProducts] = useState([]);
   const [feedbacks, setFeedbacks] = useState([]);
   const url = process.env.NEXT_PUBLIC_BASE_URL;
 
-
-  const fetchProducts = async () => {
-    // const response2 = await fetch("https://fakestoreapi.com/products").then(
-    //   async function (res) {
-    //     return res.json();
-    //   }
-    // );
-
-    const response2 = await fetch(url + "/staff/feedbacks", {
+  const fetchFeedbacks = async () => {
+    const response = await fetch(url + "/staff/feedbacks", {
       method: "GET",
       credentials: "include",
-    }).then(
-      async function (res) {
+    })
+      .then(async function (res) {
         return res.json();
-      }
-    );
+      })
+      .then(function (data) {
+        data.feedbacks.map((feedback) => {
+          if (feedback.isLive) {
+            feedback.isLive = "Active";
+          } else {
+            feedback.isLive = "InActive";
+          }
+        });
+        return data.feedbacks;
+      });
 
-    // if (response) {
-    //   const products = response;
-
-    //   console.log("Products: ", products);
-    //   setProducts(products);
-    // }
-    if (response2) {
-      const feedbacks = response2.feedbacks;
+    if (response) {
+      const feedbacks = response;
       setFeedbacks(feedbacks);
     }
   };
 
-  // const productsData = useMemo(() => [...products], [products]);
   const feedbacksData = useMemo(() => [...feedbacks], [feedbacks]);
-console.log(feedbacks[0])
-  // const productsColumns = useMemo(
-  //   () =>
-  //     products[0]
-  //       ? Object.keys(products[0])
-  //           .filter((key) => key !== "rating")
-  //           .map((key) => {
-  //             if (key === "image")
-  //               return {
-  //                 Header: key,
-  //                 accessor: key,
-  //                 Cell: ({ value }) => <img src={value} />,
-  //                 maxWidth: 70,
-  //               };
-
-  //             return { Header: key, accessor: key };
-  //           })
-  //       : [],
-  //   [products]
-  // );
   const feedbacksColumns = useMemo(
     () =>
       feedbacks[0]
@@ -116,16 +90,22 @@ console.log(feedbacks[0])
   } = tableInstance;
 
   useEffect(() => {
-    fetchProducts();
+    fetchFeedbacks();
   }, []);
 
   const isEven = (idx) => idx % 2 === 0;
+
   return (
     <div className="flex flex-col items-center w-full pt-8">
-      <>
-        {/* basic details of feedbacks */}
-
-        <div className="w-full flex justify-center">
+      <h1
+        className="text-3xl flex justify-start w-10/12 mb-5 font-semibold
+      text-dark-purple
+      "
+      >
+        Feedbacks
+      </h1>
+      {/* basic details of feedbacks */}
+      <div className="w-full flex justify-center">
         <div
           className="flex flex-col md:flex-row items-center
          w-10/12 justify-between"
@@ -133,7 +113,7 @@ console.log(feedbacks[0])
           <div className="flex items-center mb-4 md:mb-0">
             <label htmlFor="batch" className="mr-3">
               Batch:
-              </label>
+            </label>
             <input
               className="outline-none py-1 px-2 rounded bg-white
                 cursor-not-allowed"
@@ -162,75 +142,7 @@ console.log(feedbacks[0])
         </div>
       </div>
 
-        {/* feedbacks */}
-        {/* <div className="w-full  flex justify-center">
-        <table className="divide-y m-10 w-3/4 divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                className="px-6 py-3 text-center text-xs font-medium
-                text-gray-500 uppercase tracking-wider"
-              >
-                semester
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-center text-xs font-medium
-                text-gray-500 uppercase tracking-wider"
-              >
-                feedback NO
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-center text-xs font-medium 
-                text-gray-500 uppercase tracking-wider"
-              >
-                Status
-              </th>
-              <th scope="col" className="relative px-6 py-3">
-                <span className="sr-only">Edit</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {feedbacks.map((feedback) => (
-              <tr key={feedback._id}>
-                <td className="px-6 py-4 text-center">
-                  <div className="text-sm font-medium text-gray-900">
-                    {feedback.semester}
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-center">
-                  <div className="text-sm font-medium text-gray-900">
-                    {feedback.feedbackNo ? feedback.feedbackNo : "-"}
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-center">
-                  <span
-                    className="px-2 inline-flex text-xs justify-center
-                      font-semibold rounded-full"
-                  >
-                    {feedback.isLive ? (
-                      <span className="bg-green-100 text-green-800">
-                        Active
-                      </span>
-                    ) : (
-                      <span className="bg-red-100 text-red-800">InActive</span>
-                    )}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                  <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                    Edit
-                  </a>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div> */}
-      </>
+      {/* feedbacks */}
       <div className=" w-10/12 flex flex-row justify-between items-center">
         <GlobalFilter
           preGlobalFilteredRows={preGlobalFilteredRows}
@@ -279,15 +191,31 @@ console.log(feedbacks[0])
                 <tr
                   key={idx}
                   {...row.getRowProps()}
-                  className={isEven(idx) ? "bg-green-400 bg-opacity-30" : ""}
+                  className={
+                    isEven(idx)
+                      ? "bg-dark-purple bg-opacity-30"
+                      : "bg-light-white bg-opacity-30"
+                  }
                 >
                   {row.cells.map((cell, id) => (
                     <td
                       key={id}
-                      className="px-6 py-4 text-center"
+                      className={`px-6 py-4 text-center`}
                       {...cell.getCellProps()}
                     >
-                      {cell.render("Cell")}
+                      {cell.column.Header === "isLive" ? (
+                        <span
+                          className={`${
+                            cell.value === "Active"
+                              ? "rounded p-0.5 bg-green-100 text-green-800"
+                              : "rounded p-0.5 bg-red-100 text-red-800"
+                          }`}
+                        >
+                          {cell.render("Cell")}
+                        </span>
+                      ) : (
+                        <span className={``}>{cell.render("Cell")}</span>
+                      )}
                     </td>
                   ))}
                 </tr>

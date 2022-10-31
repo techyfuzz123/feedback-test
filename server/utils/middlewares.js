@@ -65,7 +65,6 @@ const verifytoken = (req, res, next) => {
 //middleware function to check if the incoming request in authenticated:
 const checkStaff = async (req, res, next) => {
   const token = req.cookies["token"];
-  console.log(token);
   //send error message if no token is found:
   if (!token) {
     return res.status(401).json({ error: "Access denied, token missing!" });
