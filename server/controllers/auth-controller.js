@@ -7,6 +7,11 @@ require("dotenv").config();
 
 const JWT_SECRET_KEY = process.env.JWT;
 
+const secureAndSameSite = {
+  // secure: true,
+  // sameSite: "none",
+};
+
 // * this function will run when a student tries to login
 const studentLogin = async (req, res) => {
   const { regNo, dob, password } = req.body;
@@ -43,17 +48,16 @@ const studentLogin = async (req, res) => {
   }
 
   // * Generating Token
-  const token = jwt.sign({ regNo: student.regNo }, JWT_SECRET_KEY, {
+  const token = jwt.sign({ id: student.regNo }, JWT_SECRET_KEY, {
     expiresIn: "900s",
   });
 
   // * Adding token to cookie
   res.cookie("token", token, {
     path: "/",
-    // expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
+    expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
     httpOnly: true,
-    secure: true,
-    sameSite: "none",
+    ...secureAndSameSite,
   });
 
   // * data that has to be sent minimum
@@ -130,8 +134,7 @@ const studentLogout = async (req, res) => {
     .cookie("token", "", {
       httpOnly: true,
       expires: new Date(0),
-      secure: true,
-      sameSite: "none",
+      ...secureAndSameSite,
     })
     .json({ message: "logged out" });
 };
@@ -167,10 +170,9 @@ const staffLogin = async (req, res) => {
   }
 
   // * Generating Token
-  const token = jwt.sign({ id: staff._id }, JWT_SECRET_KEY, {
+  const token = jwt.sign({ id: String(staff.userName) }, JWT_SECRET_KEY, {
     expiresIn: "900s",
   });
-
 
   // * removing old token if it exists
   if (req.cookies[`token`]) {
@@ -178,12 +180,11 @@ const staffLogin = async (req, res) => {
   }
 
   // * Adding token to cookie
-  res.cookie('token', token, {
+  res.cookie("token", token, {
     path: "/",
     expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes , (60 * 1000) = 1 min
     httpOnly: true,
-    secure: true,
-    sameSite: "none",
+    ...secureAndSameSite,
   });
 
   // * Defining the data which has to be return to the user
@@ -195,14 +196,7 @@ const staffLogin = async (req, res) => {
     section: staff.section,
   };
 
-  const feedbacks = await Feedback.find({
-    batch: staff.batch,
-    degree: staff.degree,
-    section: staff.section,
-  }, "-subjects");
-  console.log(feedbacks);
-
-  return res.status(200).json({ ...userData, feedbacks });
+  return res.status(200).json({ ...userData });
 };
 
 const staffLogout = async (req, res) => {
@@ -212,8 +206,7 @@ const staffLogout = async (req, res) => {
     .cookie("token", "", {
       httpOnly: true,
       expires: new Date(0),
-      secure: true,
-      sameSite: "none",
+      ...secureAndSameSite,
     })
     .json({ message: "logged out" });
 };

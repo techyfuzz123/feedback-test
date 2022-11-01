@@ -6,12 +6,12 @@ const {
   deleteUser,
 } = require("../controllers/staff-controller.js");
 const userValidationSchema = require("../utils/validation/staff-validation");
-const { validateData, checkStaff } = require("../utils/middlewares");
+const { validateData, checkStaffAuth } = require("../utils/middlewares");
 const {
-  getFeedbackForAdvisor,
+  getFeedbacksForAdvisor,
 } = require("../controllers/feedback-controller.js");
 
 router.post("/", validateData(userValidationSchema), addStaff);
-router.get("/feedbacks", checkStaff, getFeedbackForAdvisor);
+router.get("/feedbacks", checkStaffAuth, getFeedbacksForAdvisor);
 
 module.exports = router;

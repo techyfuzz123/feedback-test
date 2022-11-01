@@ -17,7 +17,7 @@ const Home = () => {
   // * render Login Component if user does'nt exists
   if (!user) return <Login />;
 
-  if (user.regNo) return <StudentDashboard user={user} />;
+  if (user.regNo) return <StudentDashboard  />;
 
   if (user.role == "ADMIN") return <AdminDashboard user={user} />;
   if (user.role == "ADVISOR") return <FacultyDashboard user={user} />;

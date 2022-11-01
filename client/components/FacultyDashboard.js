@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 
 const FacultyDashboard = ({ user }) => {
   const [open, setOpen] = useState(false);
-  const [current, setCurrent] = useState("Feedbacks");
+  const [current, setCurrent] = useState("Accounts");
   const { facultyLogout } = useAuth();
   const Menus = [
     { title: "Dashboard", src: "Chart_fill" },

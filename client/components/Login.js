@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
-
-
 const Login = () => {
   // Student
   const [regNo, setRegNo] = useState(222);
@@ -70,7 +68,7 @@ const Login = () => {
       >
         {/* student form */}
         <div
-          className="flex items-center bg-gray-300 rounded-2xl shadow-lg
+          className="flex items-center bg-gray-400 rounded-2xl shadow-lg
          mb-10 md:mr-10"
         >
           {/* image */}
@@ -156,7 +154,7 @@ const Login = () => {
           </div>
         </div>
         {/* Faculty form  */}
-        <div className="flex items-center bg-gray-300 rounded-2xl shadow-lg ">
+        <div className="flex items-center bg-gray-400 rounded-2xl shadow-lg ">
           <div className=" p-8 md:px-10">
             <h2 className="font-bold text-2xl  text-[#002D74]">
               Faculty Login

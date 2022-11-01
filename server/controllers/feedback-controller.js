@@ -32,7 +32,7 @@ const addFeedback = async (req, res) => {
   res.status(200).json({ message: "feedback added successfully" });
 };
 
-const getFeedbackForAdvisor = async (req, res) => {
+const getFeedbacksForAdvisor = async (req, res) => {
   const filter = {
     batch: req.batch,
     degree: req.degree,
@@ -55,4 +55,28 @@ const getFeedbackForAdvisor = async (req, res) => {
   res.status(200).json({ feedbacks });
 };
 
-module.exports = { addFeedback, getFeedbackForAdvisor };
+const getFeedbackForStudent = async (req, res) => {
+  const filter = {
+    batch: req.batch,
+    degree: req.degree,
+    section: req.section,
+    isLive: true
+  };
+
+  let feedback;
+
+  try {
+    feedback = await Feedback.findOne(filter);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+
+  if (!feedback) {
+    return res.status(409).json({ message: "no feedback to submit" });
+  }
+
+  res.status(200).json({ feedback });
+};
+
+module.exports = { addFeedback, getFeedbacksForAdvisor, getFeedbackForStudent };

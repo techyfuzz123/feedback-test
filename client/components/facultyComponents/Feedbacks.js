@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import { GlobalFilter } from "../GlobalFilter";
 
-const Feedbacks = ({ user }) => {
+const Feedback = ({ user }) => {
   const [feedbacks, setFeedbacks] = useState([]);
   const url = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -12,9 +12,14 @@ const Feedbacks = ({ user }) => {
       credentials: "include",
     })
       .then(async function (res) {
-        return res.json();
+        const value = {
+          status: res.status,
+          data: await res.json(),
+        };
+        return value;
       })
-      .then(function (data) {
+      .then(function ({ status, data }) {
+        if (status === 401) return "not 200 status";
         data.feedbacks.map((feedback) => {
           if (feedback.isLive) {
             feedback.isLive = "Active";
@@ -39,14 +44,22 @@ const Feedbacks = ({ user }) => {
             .filter((key) => key !== "subjects")
             .filter((key) => key !== "_id")
             .map((key) => {
-              // if (key === "image")
-              //   return {
-              //     Header: key,
-              //     accessor: key,
-              //     Cell: ({ value }) => <img src={value} />,
-              //     maxWidth: 70,
-              //   };
-
+              if (key === "isLive")
+                return {
+                  Header: key,
+                  accessor: key,
+                  Cell: ({ value }) => (
+                    <span
+                      className={`${
+                        value === "Active"
+                          ? "rounded p-0.5 bg-green-100 text-green-800"
+                          : "rounded p-0.5 bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {value}
+                    </span>
+                  ),
+                };
               return { Header: key, accessor: key };
             })
         : [],
@@ -60,7 +73,7 @@ const Feedbacks = ({ user }) => {
         id: "Edit",
         Header: "Edit",
         Cell: ({ row }) => (
-          <button onClick={() => alert("Editing: " + row.values.price)}>
+          <button onClick={() => alert(row.values.isLive)}>
             Edit
           </button>
         ),
@@ -203,19 +216,7 @@ const Feedbacks = ({ user }) => {
                       className={`px-6 py-4 text-center`}
                       {...cell.getCellProps()}
                     >
-                      {cell.column.Header === "isLive" ? (
-                        <span
-                          className={`${
-                            cell.value === "Active"
-                              ? "rounded p-0.5 bg-green-100 text-green-800"
-                              : "rounded p-0.5 bg-red-100 text-red-800"
-                          }`}
-                        >
-                          {cell.render("Cell")}
-                        </span>
-                      ) : (
-                        <span className={``}>{cell.render("Cell")}</span>
-                      )}
+                      {cell.render("Cell")}
                     </td>
                   ))}
                 </tr>
@@ -228,4 +229,4 @@ const Feedbacks = ({ user }) => {
   );
 };
 
-export default Feedbacks;
+export default Feedback;

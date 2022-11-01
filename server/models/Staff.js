@@ -7,11 +7,11 @@ const staffSchema = mongoose.Schema(
     role: { type: String, required: true, trim: true },
     batch: { type: Number, required: true, trim: true },
     degree: { type: String, required: true, trim: true },
-    section: { type: String, required: true, trim: true }
+    section: { type: String, required: true, trim: true },
   },
-  { versionKey: false }
+  { versionKey: false, strict: true, strictQuery: false }
 );
 
 const Staff = mongoose.model("Staff", staffSchema);
 
-module.exports = {Staff} ;
+module.exports = { Staff };
