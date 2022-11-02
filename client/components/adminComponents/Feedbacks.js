@@ -2,12 +2,12 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import { GlobalFilter } from "../GlobalFilter";
 
-const Feedbacks = ({ user }) => {
+const Feedbacks = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const url = process.env.NEXT_PUBLIC_BASE_URL;
 
   const fetchFeedbacks = async () => {
-    const response = await fetch(url + "/staff/feedbacks", {
+    const response = await fetch(url + "/staff/a/feedbacks", {
       method: "GET",
       credentials: "include",
     })
@@ -72,9 +72,7 @@ const Feedbacks = ({ user }) => {
         id: "Edit",
         Header: "Edit",
         Cell: ({ row }) => (
-          <button onClick={() => alert(row.values.isLive)}>
-            Edit
-          </button>
+          <button onClick={() => alert(row.values.isLive)}>Edit</button>
         ),
       },
     ]);
@@ -116,43 +114,7 @@ const Feedbacks = ({ user }) => {
       >
         Feedbacks
       </h1>
-      {/* basic details of feedbacks */}
-      <div className="w-full flex justify-center">
-        <div
-          className="flex flex-col md:flex-row items-center
-         w-10/12 justify-between"
-        >
-          <div className="flex items-center mb-4 md:mb-0">
-            <label htmlFor="batch" className="mr-3">
-              Batch:
-            </label>
-            <input
-              className="outline-none py-1 px-2 rounded bg-white
-                cursor-not-allowed"
-              type="text"
-              name="batch"
-              id="batch"
-              value={user.batch}
-              readOnly
-            />
-          </div>
 
-          <div className="flex items-center">
-            <label htmlFor="Dept_&_sec" className="mr-3">
-              Class:{" "}
-            </label>
-            <input
-              className="outline-none px-2 py-1 rounded bg-white 
-               cursor-not-allowed"
-              type="text"
-              name="Dept_&_sec"
-              id="Dept_&_sec"
-              value={`${user.degree} - ${user.section}`}
-              readOnly
-            />
-          </div>
-        </div>
-      </div>
 
       {/* feedbacks */}
       <div className=" w-10/12 flex flex-row justify-between items-center">

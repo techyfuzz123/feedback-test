@@ -10,7 +10,6 @@ const JWT_SECRET_KEY = process.env.JWT;
     collection in the database
 */
 const addStudents = async (req, res) => {
-
   const { regNo, dob } = req.body;
   // Student.insertMany(req.body, (error, docs) => {
   //     if (error) {
@@ -67,10 +66,10 @@ const getStudent = async (req, res) => {
       console.log(err);
       return res.status(403).json({ message: "Authentication failed" });
     }
-    
-    body={
-        _id: student.id
-    }
+
+    body = {
+      _id: student.id,
+    };
 
     let feedback = await Student.find(body);
 
@@ -131,10 +130,52 @@ const deleteStudents = async (req, res) => {
   }
 };
 
+const getStudentsForAdvisor = async (req, res) => {
+  const filter = {
+    batch: req.batch,
+    degree: req.degree,
+    section: req.section,
+  };
+
+  let students;
+
+  try {
+    students = await Student.find(filter, "regNo name -_id");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+
+  if (!students[0]) {
+    return res.status(409).json({ message: "no students" });
+  }
+  res.status(200).json([...students]);
+};
+
+const getStudentsForAdmin = async (req, res) => {
+
+
+  let students;
+
+  try {
+    students = await Student.find({}, "regNo name batch degree section -_id");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+
+  if (!students[0]) {
+    return res.status(409).json({ message: "no students" });
+  }
+  res.status(200).json([...students]);
+};
+
 module.exports = {
   addStudents,
   getStudent,
   getStudents,
   updateStudents,
   deleteStudents,
+  getStudentsForAdvisor,
+  getStudentsForAdmin,
 };

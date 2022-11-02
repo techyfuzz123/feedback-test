@@ -1,31 +1,30 @@
 import { useState } from "react";
-import Inbox from "./adminComponents/Inbox";
-import Dashboard from "./adminComponents/Dashboard";
-import Accounts from "./adminComponents/Accounts";
-import Search from "./adminComponents/Search";
+import Feedbacks from "./Feedbacks";
+import Dashboard from "./Dashboard";
+import Account from "./Account";
+import Students from "./Students";
+import { useAuth } from "../../context/AuthContext";
+import { useRouter } from "next/router";
 
 const FacultyDashboard = ({ user }) => {
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState("Dashboard");
+  const { facultyLogout } = useAuth();
+  const router = useRouter()
   const Menus = [
     { title: "Dashboard", src: "Chart_fill" },
-    { title: "Inbox", src: "Chat" },
-    { title: "Accounts", src: "User" },
-    { title: "Search", src: "Search" },
-    { title: "Analytics", src: "Chart" },
-    { title: "Files ", src: "Folder", gap: true },
-    { title: "Setting", src: "Setting" },
+    { title: "Feedbacks", src: "Chat" },
+    { title: "Students", src: "User" },
+    { title: "Account", src: "User" },
+    { title: "Logout", src: "Setting", gap: true },
   ];
 
-  const src = "component/facultyComponents";
-
   return (
-    <div className="flex">
+    <div className="flex overflow-auto">
       {/* sideNavBar */}
-      <div
-        className={` ${
-          open ? "w-72" : "w-20 "
-        } bg-dark-purple h-screen p-5 z-20  pt-6 relative duration-300`}
+      <aside
+        className={`${open ? "w-72" : "w-20"}
+         bg-dark-purple h-screen p-5 pt-6 sticky  top-0 duration-300`}
       >
         <img
           src="/control.png"
@@ -33,10 +32,10 @@ const FacultyDashboard = ({ user }) => {
            border-2 rounded-full  ${!open && "rotate-180"}`}
           onClick={() => setOpen(!open)}
         />
-        <div className="flex gap-x-4 items-center">
+        <div className="flex  gap-x-4 items-center">
           <img
             src="/logo.png"
-            className={`cursor-pointer duration-500 ${
+            className={`hidden md:block cursor-pointer  duration-500 ${
               open && "rotate-[360deg]"
             }`}
           />
@@ -45,7 +44,7 @@ const FacultyDashboard = ({ user }) => {
               !open && "scale-0"
             }`}
           >
-            Feedback Admin
+            Feedback Faculty
           </h1>
         </div>
         {/* menu */}
@@ -53,6 +52,10 @@ const FacultyDashboard = ({ user }) => {
           {Menus.map((Menu, index) => (
             <li
               onClick={(e) => {
+                if (Menu.title === "Logout") {
+                  facultyLogout();
+                  router.push("/");
+                }
                 setCurrent(Menu.title);
               }}
               key={index}
@@ -70,12 +73,14 @@ const FacultyDashboard = ({ user }) => {
             </li>
           ))}
         </ul>
-      </div>
+      </aside>
       {/* components */}
-      {current === "Dashboard" && <Dashboard />}
-      {current === "Inbox" && <Inbox />}
-      {current === "Accounts" && <Accounts />}
-      {current === "Search" && <Search />}
+      <div className={`flex w-full h-screen `}>
+        {current === "Dashboard" && <Dashboard user={user} />}
+        {current === "Feedbacks" && <Feedbacks user={user} />}
+        {current === "Students" && <Students user={user} />}
+        {current === "Account" && <Account />}
+      </div>
     </div>
   );
 };

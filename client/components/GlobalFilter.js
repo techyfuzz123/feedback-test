@@ -14,7 +14,7 @@ export function GlobalFilter({
   }, 300);
 
   return (
-    <div className="mt-10">
+    <div className="mt-5">
       <span className="mr-2">Search:</span>
       <input
         className="outline-none px-3 py-2 rounded-lg"

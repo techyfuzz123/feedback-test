@@ -2,12 +2,12 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import { GlobalFilter } from "../GlobalFilter";
 
-const Feedbacks = ({ user }) => {
-  const [feedbacks, setFeedbacks] = useState([]);
+const Students = () => {
+  const [students, setStudents] = useState([]);
   const url = process.env.NEXT_PUBLIC_BASE_URL;
 
   const fetchFeedbacks = async () => {
-    const response = await fetch(url + "/staff/feedbacks", {
+    const response = await fetch(url + "/staff/a/students", {
       method: "GET",
       credentials: "include",
     })
@@ -20,49 +20,40 @@ const Feedbacks = ({ user }) => {
       })
       .then(function ({ status, data }) {
         if (status === 401) return "not 200 status";
-        data.feedbacks.map((feedback) => {
-          if (feedback.isLive) {
-            feedback.isLive = "Active";
-          } else {
-            feedback.isLive = "InActive";
-          }
-        });
-        return data.feedbacks;
+        return data;
       });
 
     if (response) {
-      const feedbacks = response;
-      setFeedbacks(feedbacks);
+      const students = response;
+      setStudents(students);
     }
   };
 
-  const feedbacksData = useMemo(() => [...feedbacks], [feedbacks]);
-  const feedbacksColumns = useMemo(
-    () =>
-      feedbacks[0]
-        ? Object.keys(feedbacks[0])
-            // .filter((key) => key !== "subjects")
-            .map((key) => {
-              if (key === "isLive")
-                return {
-                  Header: key,
-                  accessor: key,
-                  Cell: ({ value }) => (
-                    <span
-                      className={`${
-                        value === "Active"
-                          ? "rounded p-0.5 bg-green-100 text-green-800"
-                          : "rounded p-0.5 bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {value}
-                    </span>
-                  ),
-                };
-              return { Header: key, accessor: key };
-            })
-        : [],
-    [feedbacks]
+  const studentsData = useMemo(() => [...students], [students]);
+  const studentsColumns = useMemo(
+    () => [
+      {
+        Header: "Register Number",
+        accessor: "regNo",
+      },
+      {
+        Header: "Student Name",
+        accessor: "name",
+      },
+      {
+        Header: "Batch",
+        accessor: "batch",
+      },
+      {
+        Header: "Degree",
+        accessor: "degree",
+      },
+      {
+        Header: "Section",
+        accessor: "section",
+      },
+    ],
+    [students]
   );
 
   const tableHooks = (hooks) => {
@@ -72,9 +63,7 @@ const Feedbacks = ({ user }) => {
         id: "Edit",
         Header: "Edit",
         Cell: ({ row }) => (
-          <button onClick={() => alert(row.values.isLive)}>
-            Edit
-          </button>
+          <button onClick={() => alert(row.values.regNo)}>Edit</button>
         ),
       },
     ]);
@@ -82,8 +71,8 @@ const Feedbacks = ({ user }) => {
 
   const tableInstance = useTable(
     {
-      columns: feedbacksColumns,
-      data: feedbacksData,
+      columns: studentsColumns,
+      data: studentsData,
     },
     useGlobalFilter,
     tableHooks,
@@ -114,64 +103,21 @@ const Feedbacks = ({ user }) => {
       text-dark-purple
       "
       >
-        Feedbacks
+        Students
       </h1>
-      {/* basic details of feedbacks */}
-      <div className="w-full flex justify-center">
-        <div
-          className="flex flex-col md:flex-row items-center
-         w-10/12 justify-between"
-        >
-          <div className="flex items-center mb-4 md:mb-0">
-            <label htmlFor="batch" className="mr-3">
-              Batch:
-            </label>
-            <input
-              className="outline-none py-1 px-2 rounded bg-white
-                cursor-not-allowed"
-              type="text"
-              name="batch"
-              id="batch"
-              value={user.batch}
-              readOnly
-            />
-          </div>
-
-          <div className="flex items-center">
-            <label htmlFor="Dept_&_sec" className="mr-3">
-              Class:{" "}
-            </label>
-            <input
-              className="outline-none px-2 py-1 rounded bg-white 
-               cursor-not-allowed"
-              type="text"
-              name="Dept_&_sec"
-              id="Dept_&_sec"
-              value={`${user.degree} - ${user.section}`}
-              readOnly
-            />
-          </div>
-        </div>
-      </div>
 
       {/* feedbacks */}
-      <div className=" w-10/12 flex flex-row justify-between items-center">
+      <div className=" w-9/12 flex flex-row justify-between items-center">
         <GlobalFilter
           preGlobalFilteredRows={preGlobalFilteredRows}
           setGlobalFilter={setGlobalFilter}
           globalFilter={state.globalFilter}
         />
-        <button
-          className="bg-blue-500 mt-10 hover:bg-blue-700 h-10
-         text-white font-bold py-2 px-4 rounded-full"
-        >
-          Add Feedback
-        </button>
       </div>
       {/* table */}
       <div className="w-full flex justify-center">
         <table
-          className="divide-y m-10 w-3/4 divide-gray-200"
+          className="divide-y mt-7 m-10 w-3/4 divide-gray-200"
           {...getTableProps()}
         >
           <thead className="bg-gray-50">
@@ -228,4 +174,4 @@ const Feedbacks = ({ user }) => {
   );
 };
 
-export default Feedbacks;
+export default Students;

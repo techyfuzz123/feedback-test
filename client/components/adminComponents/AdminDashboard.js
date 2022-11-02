@@ -1,25 +1,28 @@
 import { useState } from "react";
-import Feedbacks from "./facultyComponents/Feedbacks";
-import Dashboard from "./facultyComponents/Dashboard";
-import Accounts from "./facultyComponents/Accounts";
-import { useAuth } from "../context/AuthContext";
+import Feedbacks from "./Feedbacks";
+import Dashboard from "./Dashboard";
+import Account from "./Account";
+import Students from "./Students";
+import Advisors from "./Advisors";
+import { useAuth } from "../../context/AuthContext";
+import { useRouter } from "next/router";
 
-const FacultyDashboard = ({ user }) => {
+const AdminDashboard = ({user}) => {
   const [open, setOpen] = useState(false);
-  const [current, setCurrent] = useState("Accounts");
+  const [current, setCurrent] = useState("Dashboard");
   const { facultyLogout } = useAuth();
+  const router = useRouter();
   const Menus = [
     { title: "Dashboard", src: "Chart_fill" },
     { title: "Feedbacks", src: "Chat" },
-    { title: "Accounts", src: "User" },
-    { title: "Analytics", src: "Chart" },
-    { title: "Files", src: "Folder" },
-    { title: "Setting", src: "Setting" },
+    { title: "Students", src: "User" },
+    { title: "Advisors", src: "User" },
+    { title: "Account", src: "User" },
     { title: "Logout", src: "Setting", gap: true },
   ];
 
   return (
-    <div className="flex   overflow-auto">
+    <div className="flex overflow-auto">
       {/* sideNavBar */}
       <aside
         className={`${open ? "w-72" : "w-20"}
@@ -51,8 +54,9 @@ const FacultyDashboard = ({ user }) => {
           {Menus.map((Menu, index) => (
             <li
               onClick={(e) => {
-                if(Menu.title === "Logout"){
-                  facultyLogout()
+                if (Menu.title === "Logout") {
+                  facultyLogout();
+                  router.push("/");
                 }
                 setCurrent(Menu.title);
               }}
@@ -71,15 +75,17 @@ const FacultyDashboard = ({ user }) => {
             </li>
           ))}
         </ul>
-      </aside>  
+      </aside>
       {/* components */}
       <div className={`flex w-full h-screen `}>
-        {current === "Dashboard" && <Dashboard />}
+        {current === "Dashboard" && <Dashboard user={user} />}
         {current === "Feedbacks" && <Feedbacks user={user} />}
-        {current === "Accounts" && <Accounts />}
+        {current === "Students" && <Students user={user} />}
+        {current === "Advisors" && <Advisors user={user} />}
+        {current === "Account" && <Account />}
       </div>
     </div>
   );
 };
 
-export default FacultyDashboard;
+export default AdminDashboard;

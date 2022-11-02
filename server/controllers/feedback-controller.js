@@ -1,4 +1,5 @@
 const { Feedback } = require("../models/Feedback");
+const { Student } = require("../models/Student");
 
 const addFeedback = async (req, res) => {
   const filter = {
@@ -42,13 +43,31 @@ const getFeedbacksForAdvisor = async (req, res) => {
   let feedbacks;
 
   try {
-    feedbacks = await Feedback.find(filter);
+    feedbacks = await Feedback.find(filter, "-subjects -_id -__v");
   } catch (error) {
     console.log(error);
     return res.status(500).json(error);
   }
 
-  if (!feedbacks) {
+  if (!feedbacks[0]) {
+    return res.status(409).json({ message: "no feedbacks" });
+  }
+
+  res.status(200).json({ feedbacks });
+};
+
+const getFeedbacksForAdmin = async (req, res) => {
+
+  let feedbacks;
+
+  try {
+    feedbacks = await Feedback.find({}, "-subjects -_id -__v");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+
+  if (!feedbacks[0]) {
     return res.status(409).json({ message: "no feedbacks" });
   }
 
@@ -60,7 +79,7 @@ const getFeedbackForStudent = async (req, res) => {
     batch: req.batch,
     degree: req.degree,
     section: req.section,
-    isLive: true
+    isLive: true,
   };
 
   let feedback;
@@ -79,4 +98,9 @@ const getFeedbackForStudent = async (req, res) => {
   res.status(200).json({ feedback });
 };
 
-module.exports = { addFeedback, getFeedbacksForAdvisor, getFeedbackForStudent };
+module.exports = {
+  addFeedback,
+  getFeedbacksForAdvisor,
+  getFeedbackForStudent,
+  getFeedbacksForAdmin,
+};

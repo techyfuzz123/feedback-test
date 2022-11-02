@@ -2,6 +2,8 @@ require("dotenv").config();
 const { Staff } = require("../models/Staff");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { Student } = require("../models/Student");
+const { Feedback } = require("../models/Feedback");
 
 const JWT_SECRET_KEY = process.env.JWT;
 /* 
@@ -34,7 +36,7 @@ const addStaff = async (req, res) => {
     return res.status(200).json(user);
   } catch (error) {
     console.log(error);
-    return res.status(400).json(error)
+    return res.status(400).json(error);
   }
 };
 
@@ -114,9 +116,77 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const getDashboardDetailsForAdvisor = async (req, res) => {
+  const filter = {
+    batch: req.batch,
+    degree: req.degree,
+    section: req.section,
+  };
+
+  let students;
+  let feedback;
+
+  try {
+    feedback = await Feedback.findOne(
+      { ...filter, isLive: true },
+      "-subjects -_id -__v"
+    );
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+
+  if (!feedback) {
+    return res.status(409).json({ message: "no feedbacks" });
+  }
+
+  try {
+    students = await Student.find(
+      filter,
+      "isFeedbackSubmitted name regNo -_id"
+    );
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+  let feedbackNo = feedback.feedbackNo;
+  let semester = feedback.semester;
+
+  const notSubmittedStudents = students.map((student) => {
+    if (!student.isFeedbackSubmitted[semester][feedbackNo])
+      return {
+        name: student.name,
+        regNo: student.regNo,
+      };
+  });
+
+  if (!students[0]) {
+    return res.status(409).json({ message: "no students" });
+  }
+  res.status(200).json({ notSubmittedStudents, feedback });
+};
+
+const getAdvisorsForAdmin = async (req, res) => {
+  let staff;
+
+  try {
+    staff = await Staff.find({role: "ADVISOR"}, "-_id -password -role");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+
+  if (!staff[0]) {
+    return res.status(409).json({ message: "no staffs" });
+  }
+  res.status(200).json([...staff]);
+};
+
 module.exports = {
   addStaff,
   getUser,
   updateUser,
+  getDashboardDetailsForAdvisor,
   deleteUser,
+  getAdvisorsForAdmin,
 };

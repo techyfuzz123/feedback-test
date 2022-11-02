@@ -98,7 +98,7 @@ export const AuthContextProvider = ({ children }) => {
       sessionStorage.setItem("setupTime", now);
     }
 
-    router.push("/");
+    // router.push("/");
 
     setLoading(false);
   };
