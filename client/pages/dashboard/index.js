@@ -3,7 +3,7 @@ import AdminDashboard from "../../components/adminComponents/AdminDashboard";
 import { useAuth } from "../../context/AuthContext";
 import FacultyDashboard from "../../components/facultyComponents/FacultyDashboard";
 
-export default function dashboard() {
+export default function Dashboard() {
   const [user, setUser] = useState();
   const { fetchUser } = useAuth();
 
