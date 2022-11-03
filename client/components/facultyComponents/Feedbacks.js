@@ -1,11 +1,13 @@
+import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import { GlobalFilter } from "../GlobalFilter";
 
 const Feedbacks = () => {
   const [feedbacks, setFeedbacks] = useState([]);
-  const [details, setDetails] = useState({})
+  const [details, setDetails] = useState({});
   const url = process.env.NEXT_PUBLIC_BASE_URL;
+  const router = useRouter();
 
   const fetchFeedbacks = async () => {
     const response = await fetch(url + "/staff/feedbacks", {
@@ -33,9 +35,9 @@ const Feedbacks = () => {
 
     if (response) {
       const feedbacks = response;
-      const details = feedbacks[0]
+      const details = feedbacks[0];
       setFeedbacks(feedbacks);
-      setDetails(details)
+      setDetails(details);
     }
   };
 
@@ -74,8 +76,8 @@ const Feedbacks = () => {
       {
         id: "Edit",
         Header: "Edit",
-        Cell: ({ row }) => (
-          <button onClick={() => alert(row.values.isLive)}>
+        Cell: () => (
+          <button onClick={() => router.push("/dashboard/feedback")}>
             Edit
           </button>
         ),
@@ -123,7 +125,7 @@ const Feedbacks = () => {
       <div className="w-full flex justify-center">
         <div
           className="flex flex-col md:flex-row items-center
-         w-10/12 justify-between"
+         w-9/12 justify-between"
         >
           <div className="flex items-center mb-4 md:mb-0">
             <label htmlFor="batch" className="mr-3">
@@ -158,7 +160,7 @@ const Feedbacks = () => {
       </div>
 
       {/* feedbacks */}
-      <div className=" w-10/12 flex flex-row justify-between items-center">
+      <div className=" w-9/12 flex flex-row justify-between items-center">
         <GlobalFilter
           preGlobalFilteredRows={preGlobalFilteredRows}
           setGlobalFilter={setGlobalFilter}
