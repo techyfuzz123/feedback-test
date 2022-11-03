@@ -56,4 +56,6 @@ try {
 }
 
 // backup cmd
-// mongodump --uri='mongodb://feedback:feedback@206.189.138.16:27017/feedback' --gzip --archive=/data/backup/backup.gz
+// mongodump --uri='mongodb://username:password@localhost:27017/feedback' --gzip --archive=/data/backup/backup.gz
+// restore cmd
+// mongorestore mongodb://username:password@localhost:27017/feedback --gzip --archive=latest.gz --db feedback
