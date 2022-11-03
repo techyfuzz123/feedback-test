@@ -2,14 +2,13 @@ const { Student } = require("../models/Student");
 const { Staff } = require("../models/Staff");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Feedback } = require("../models/Feedback");
 require("dotenv").config();
 
 const JWT_SECRET_KEY = process.env.JWT;
 
 const secureAndSameSite = {
-  // secure: true,
-  // sameSite: "none",
+  secure: true,
+  sameSite: "none",
 };
 
 // * this function will run when a student tries to login

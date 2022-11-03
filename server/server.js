@@ -58,4 +58,4 @@ try {
 // backup cmd
 // mongodump --uri='mongodb://username:password@localhost:27017/feedback' --gzip --archive=/data/backup/backup.gz
 // restore cmd
-// mongorestore mongodb://username:password@localhost:27017/feedback --gzip --archive=latest.gz --db feedback
+// mongorestore mongodb://username:password@0.0.0.0:27017/feedback --gzip --archive=./temp.gz --authenticationDatabase=admin
