@@ -15,6 +15,7 @@ const {
 } = require("../utils/middlewares");
 const {
   getFeedbacksForAdvisor,
+  getFeedbackForAdvisor,
   getFeedbacksForAdmin,
 } = require("../controllers/feedback-controller.js");
 const {
@@ -24,6 +25,7 @@ const {
 
 router.post("/", validateData(userValidationSchema), addStaff);
 router.get("/feedbacks", checkStaffAuth, getFeedbacksForAdvisor);
+router.post("/feedback", checkStaffAuth, getFeedbackForAdvisor);
 router.get("/students", checkStaffAuth, getStudentsForAdvisor);
 router.get("/dashboard", checkStaffAuth, getDashboardDetailsForAdvisor);
 

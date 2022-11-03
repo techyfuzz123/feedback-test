@@ -1,5 +1,4 @@
 const { Feedback } = require("../models/Feedback");
-const { Student } = require("../models/Student");
 
 const addFeedback = async (req, res) => {
   const filter = {
@@ -56,6 +55,34 @@ const getFeedbacksForAdvisor = async (req, res) => {
   res.status(200).json({ feedbacks });
 };
 
+const getFeedbackForAdvisor = async (req, res) => {
+  const filter = {
+    batch: req.batch,
+    degree: req.degree,
+    section: req.section,
+    semester: req.body.semester,
+    feedbackNo: req.body.feedbackNo
+  };
+
+  let feedback;
+
+  console.log(req)
+
+  try {
+    feedback = await Feedback.findOne(filter, "-_id -__v");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+
+  if (!feedback) {
+    return res.status(409).json({ message: "feedback doesn't exists" });
+  }
+
+
+  res.status(200).json(feedback );
+};
+
 const getFeedbacksForAdmin = async (req, res) => {
 
   let feedbacks;
@@ -103,4 +130,5 @@ module.exports = {
   getFeedbacksForAdvisor,
   getFeedbackForStudent,
   getFeedbacksForAdmin,
+  getFeedbackForAdvisor
 };
