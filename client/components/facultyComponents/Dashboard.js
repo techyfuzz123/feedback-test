@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import { GlobalFilter } from "../GlobalFilter";
 // staff/dashboard
-export const Dashboard = ({ user }) => {
+export const Dashboard = () => {
   const [students, setStudents] = useState([]);
   const [liveFeedback, setLiveFeedback] = useState({});
   const url = process.env.NEXT_PUBLIC_BASE_URL;
@@ -27,7 +27,6 @@ export const Dashboard = ({ user }) => {
     if (response) {
       const students = response.notSubmittedStudents;
       const feedback = response.feedback;
-      console.log(students);
 
       setStudents(students);
       setLiveFeedback(feedback);

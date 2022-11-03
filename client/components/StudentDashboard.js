@@ -45,7 +45,9 @@ const StudentDashboard = () => {
     }
   };
 
-  const dropdown = ({ value, column, row, data }) => {
+  console.log(feedback);
+
+  const dropdown = ({  column, row, data }) => {
     const handleChange = (value) => {
       let newValues = subjects;
       newValues.map((subject) => {

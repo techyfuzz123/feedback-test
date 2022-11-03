@@ -2,8 +2,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import { GlobalFilter } from "../GlobalFilter";
 
-const Feedbacks = ({ user }) => {
+const Feedbacks = () => {
   const [feedbacks, setFeedbacks] = useState([]);
+  const [details, setDetails] = useState({})
   const url = process.env.NEXT_PUBLIC_BASE_URL;
 
   const fetchFeedbacks = async () => {
@@ -32,7 +33,9 @@ const Feedbacks = ({ user }) => {
 
     if (response) {
       const feedbacks = response;
+      const details = feedbacks[0]
       setFeedbacks(feedbacks);
+      setDetails(details)
     }
   };
 
@@ -126,13 +129,13 @@ const Feedbacks = ({ user }) => {
             <label htmlFor="batch" className="mr-3">
               Batch:
             </label>
-            <input
+            <textarea
               className="outline-none py-1 px-2 rounded bg-white
-                cursor-not-allowed"
-              type="text"
+                cursor-not-allowed resize-none"
+              rows={1}
               name="batch"
               id="batch"
-              value={user.batch}
+              value={details.batch}
               readOnly
             />
           </div>
@@ -141,13 +144,13 @@ const Feedbacks = ({ user }) => {
             <label htmlFor="Dept_&_sec" className="mr-3">
               Class:{" "}
             </label>
-            <input
-              className="outline-none px-2 py-1 rounded bg-white 
-               cursor-not-allowed"
-              type="text"
+            <textarea
+              className="outline-none py-1 px-2 rounded bg-white
+                cursor-not-allowed resize-none"
+              rows={1}
               name="Dept_&_sec"
               id="Dept_&_sec"
-              value={`${user.degree} - ${user.section}`}
+              value={`${details.degree} - ${details.section}`}
               readOnly
             />
           </div>

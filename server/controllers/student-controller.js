@@ -140,7 +140,10 @@ const getStudentsForAdvisor = async (req, res) => {
   let students;
 
   try {
-    students = await Student.find(filter, "regNo name -_id");
+    students = await Student.find(
+      filter,
+      "regNo name batch degree section -_id"
+    );
   } catch (error) {
     console.log(error);
     return res.status(500).json(error);
@@ -153,7 +156,6 @@ const getStudentsForAdvisor = async (req, res) => {
 };
 
 const getStudentsForAdmin = async (req, res) => {
-
 
   let students;
 

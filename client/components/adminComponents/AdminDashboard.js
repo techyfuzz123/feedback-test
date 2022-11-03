@@ -7,8 +7,8 @@ import Advisors from "./Advisors";
 import { useAuth } from "../../context/AuthContext";
 import { useRouter } from "next/router";
 
-const AdminDashboard = ({user}) => {
-  const [open, setOpen] = useState(false);
+const AdminDashboard = () => {
+  const [open, setOpen] = useState(true);
   const [current, setCurrent] = useState("Dashboard");
   const { facultyLogout } = useAuth();
   const router = useRouter();
@@ -46,7 +46,7 @@ const AdminDashboard = ({user}) => {
               !open && "scale-0"
             }`}
           >
-            Feedback Faculty
+            Feedback Admin
           </h1>
         </div>
         {/* menu */}
@@ -78,10 +78,10 @@ const AdminDashboard = ({user}) => {
       </aside>
       {/* components */}
       <div className={`flex w-full h-screen `}>
-        {current === "Dashboard" && <Dashboard user={user} />}
-        {current === "Feedbacks" && <Feedbacks user={user} />}
-        {current === "Students" && <Students user={user} />}
-        {current === "Advisors" && <Advisors user={user} />}
+        {current === "Dashboard" && <Dashboard  />}
+        {current === "Feedbacks" && <Feedbacks />}
+        {current === "Students" && <Students />}
+        {current === "Advisors" && <Advisors />}
         {current === "Account" && <Account />}
       </div>
     </div>

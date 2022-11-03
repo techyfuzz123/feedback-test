@@ -7,7 +7,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useRouter } from "next/router";
 
 const FacultyDashboard = ({ user }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [current, setCurrent] = useState("Dashboard");
   const { facultyLogout } = useAuth();
   const router = useRouter()

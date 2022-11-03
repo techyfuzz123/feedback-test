@@ -6,7 +6,7 @@ const Students = () => {
   const [students, setStudents] = useState([]);
   const url = process.env.NEXT_PUBLIC_BASE_URL;
 
-  const fetchFeedbacks = async () => {
+  const fetchStudents = async () => {
     const response = await fetch(url + "/staff/a/students", {
       method: "GET",
       credentials: "include",
@@ -91,7 +91,7 @@ const Students = () => {
   } = tableInstance;
 
   useEffect(() => {
-    fetchFeedbacks();
+    fetchStudents();
   }, []);
 
   const isEven = (idx) => idx % 2 === 0;
