@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useTable } from "react-table";
 import { useAuth } from "../context/AuthContext";
 
 const StudentDashboard = () => {
   const { studentLogout } = useAuth();
   const [subjects, setSubjects] = useState([]);
+  const [error, setError] = useState(null);
   const [feedback, setFeedback] = useState({
     batch: "",
     section: "",
@@ -33,7 +33,7 @@ const StudentDashboard = () => {
     if (response) {
       const subjects = response.subjects;
       subjects.map((subject) => {
-        (subject["subjectKnowledge"] = 1),
+        (subject["subjectKnowledge"] = -1),
           (subject["clearExplanation"] = -1),
           (subject["usageOfTeachingTools"] = -1),
           (subject["extraInput"] = -1),
@@ -45,110 +45,162 @@ const StudentDashboard = () => {
     }
   };
 
-  console.log(feedback);
-
-  const dropdown = ({  column, row, data }) => {
-    const handleChange = (value) => {
-      let newValues = subjects;
-      newValues.map((subject) => {
-        if (subject.subjectCode === data[row.index].subjectCode) {
-          subject[column.id] = Number(value);
-        }
-      });
-      setSubjects(newValues);
-      sessionStorage.setItem("subjects", JSON.stringify(subjects));
-    };
-    return (
-      <select
-        // value={value}
-        onChange={(e) => handleChange(e.target.value)}
-        className={`outline-none text-center bg-inherit`}
-      >
-        <option>{"select"}</option>
-        <option>0</option>
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-      </select>
-    );
-  };
-  const subjectsData = useMemo(() => [...subjects], [subjects]);
   const subjectsColumns = useMemo(
     () => [
       {
-        Header: "faculty",
-        accessor: "faculty",
+        heading: "faculty",
+        value: "faculty",
       },
       {
-        Header: "Name of the Subjects",
-        accessor: "subjectName",
+        heading: "Name of the Subjects",
+        value: "subjectName",
       },
       {
-        Header: "Subject Knowledge",
-        accessor: "subjectKnowledge",
-        Cell: dropdown,
+        heading: "Subject Knowledge",
+        value: "subjectKnowledge",
       },
       {
-        Header: "Clear Explanation",
-        accessor: "clearExplanation",
-        Cell: dropdown,
+        heading: "Clear Explanation",
+        value: "clearExplanation",
       },
       {
-        Header: "Usage of Teaching Tools",
-        accessor: "usageOfTeachingTools",
-        Cell: dropdown,
+        heading: "Usage of Teaching Tools",
+        value: "usageOfTeachingTools",
       },
       {
-        Header: "Extra Input",
-        accessor: "extraInput",
-        Cell: dropdown,
+        heading: "Extra Input",
+        value: "extraInput",
       },
       {
-        Header: "Teacher-Student Relationship",
-        accessor: "teacherStudentRelationship",
-        Cell: dropdown,
+        heading: "Teacher-Student Relationship",
+        value: "teacherStudentRelationship",
       },
     ],
     [subjects]
   );
 
-  const tableHooks = (hooks) => {
-    hooks.visibleColumns.push((columns) => [
-      ...columns,
-      // {
-      //   id: "",
-      //   Header: "Edit",
-      //   Cell: ({ row }) => (
-      //     <button onClick={() => alert(row.values.faculty)}>Edit</button>
-      //   ),
-      // },
-    ]);
-  };
-
-  const tableInstance = useTable(
-    {
-      columns: subjectsColumns,
-      data: subjectsData,
-    },
-    tableHooks
-  );
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    tableInstance;
-
   useEffect(() => {
     fetchSubjects();
   }, []);
 
-  const isEven = (idx) => idx % 2 === 0;
+  const Table2 = ({ data, column }) => {
+    return (
+      <table className="divide-y m-10 mt-2 w-3/4 divide-gray-200">
+        <thead className="bg-gray-50">
+          <tr>
+            {column.map((item, index) => (
+              <TableHeadItem key={index} item={item} />
+            ))}
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {data.map((item, index) => (
+            <TableRow item={item} key={index} id={index} column={column} />
+          ))}
+        </tbody>
+      </table>
+    );
+  };
+
+  const TableHeadItem = ({ item }) => (
+    <th
+      className="px-8 py-3 text-center text-xs font-medium
+  text-gray-500 uppercase"
+    >
+      {item.heading}
+    </th>
+  );
+
+  const headers = [
+    "subjectKnowledge",
+    "clearExplanation",
+    "usageOfTeachingTools",
+    "extraInput",
+    "teacherStudentRelationship",
+  ];
+
+  const TableRow = ({ item, column, id }) => {
+    const isEven = (id) => id % 2 === 0;
+    return (
+      <tr
+        className={
+          isEven(id)
+            ? "bg-dark-purple bg-opacity-30"
+            : "bg-light-white bg-opacity-30"
+        }
+      >
+        {column.map((columnItem, index) => {
+          // if (columnItem.value.includes(".")) {
+          //   const itemSplit = columnItem.value.split("."); //['address', 'city']
+          //   return <td key={index}>{item[itemSplit[0]][itemSplit[1]]}</td>;
+          // }
+
+          return (
+            <td className={`px-6 py-4 text-center outline-none`} key={index}>
+              {headers[index - 2] === columnItem.value ? (
+                <Dropdown id={id} columnItem={columnItem} rowItem={item} />
+              ) : (
+                item[`${columnItem.value}`]
+              )}
+            </td>
+          );
+        })}
+      </tr>
+    );
+  };
+
+  const submitData = async () => {
+    setError(null);
+    await subjects.map((subject) => {
+      headers.map((header) => {
+        if (subject[header] === -1) {
+          setError("fill all fields");
+        }
+      });
+      if (error) return;
+    });
+    if (error == null) {
+      console.log(error);
+      console.log(subjects);
+    }
+  };
+
+  const Dropdown = ({ id, columnItem, rowItem }) => {
+    const handleChange = (value) => {
+      const newValues = subjects.map((subject) => {
+        if (subject.subjectCode === rowItem.subjectCode) {
+          subject[columnItem.value] = value;
+        }
+        return subject;
+      });
+      setSubjects(newValues);
+    };
+    return (
+      <select
+        value={subjects[id][columnItem.value]}
+        onChange={(e) => handleChange(Number(e.target.value))}
+        className={`outline-none text-center bg-inherit`}
+      >
+        <option value={-1}>{"select"}</option>
+        <option value={0}>0</option>
+        <option value={1}>1</option>
+        <option value={2}>2</option>
+        <option value={3}>3</option>
+        <option value={4}>4</option>
+        <option value={5}>5</option>
+        {/* <option value={rowItem[columnItem.value]}>
+          {rowItem[columnItem.value]}
+        </option> */}
+      </select>
+    );
+  };
 
   return (
     <div className="flex flex-col items-center w-full pt-8">
+      {/* heading */}
       <div className="w-10/12 flex justify-between items-center">
         <h1
-          className="text-2xl md:text-3xl py-1.5 
+          className="text-2xl md:text-3xl py-1.5
            mb-5 font-semibold text-dark-purple
       "
         >
@@ -162,7 +214,6 @@ const StudentDashboard = () => {
           Logout
         </button>
       </div>
-
       {/* basic details of feedback */}
       <div className="w-full flex justify-center">
         <div
@@ -190,7 +241,7 @@ const StudentDashboard = () => {
               Class:{" "}
             </label>
             <input
-              className="outline-none px-2 py-1 rounded bg-white 
+              className="outline-none px-2 py-1 rounded bg-white
                cursor-not-allowed"
               type="text"
               name="Dept_&_sec"
@@ -206,7 +257,7 @@ const StudentDashboard = () => {
               Semester:{" "}
             </label>
             <input
-              className="outline-none px-2 py-1 rounded bg-white 
+              className="outline-none px-2 py-1 rounded bg-white
                cursor-not-allowed"
               type="text"
               name="Dept_&_sec"
@@ -218,61 +269,27 @@ const StudentDashboard = () => {
           </div>
         </div>
       </div>
-
+      {/* error */}
+      <div className="mt-8 w-9/12">
+        {error ? (
+          <span className="flex text-red-600 justify-start">{error}</span>
+        ) : (
+          ""
+        )}
+      </div>
       {/* table */}
       <div className="w-full flex justify-center">
-        <table
-          className="divide-y m-10 w-3/4 divide-gray-200"
-          {...getTableProps()}
+        <Table2 data={subjects} column={subjectsColumns} />
+      </div>
+      {/* submit button */}
+      <div className="flex w-9/12 justify-end">
+        <button
+          onClick={submitData}
+          className="bg-dark-purple bg-opacity-30 px-4 py-2 rounded-lg
+        text-white"
         >
-          <thead className="bg-gray-50">
-            {headerGroups.map((headerGroup, idx) => (
-              <tr key={idx} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column, idx) => (
-                  <th
-                    key={idx}
-                    scope="col"
-                    className="px-8 py-3 text-center text-xs font-medium
-                text-gray-500 uppercase"
-                    {...column.getHeaderProps()}
-                  >
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody
-            className="bg-white divide-y divide-gray-200"
-            {...getTableBodyProps()}
-          >
-            {rows.map((row, idx) => {
-              prepareRow(row);
-
-              return (
-                <tr
-                  key={idx}
-                  {...row.getRowProps()}
-                  className={
-                    isEven(idx)
-                      ? "bg-dark-purple bg-opacity-30"
-                      : "bg-light-white bg-opacity-30"
-                  }
-                >
-                  {row.cells.map((cell, id) => (
-                    <td
-                      key={id}
-                      className={`px-6 py-4 text-center outline-none`}
-                      {...cell.getCellProps()}
-                    >
-                      <span className={``}>{cell.render("Cell")}</span>
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+          Submit
+        </button>
       </div>
     </div>
   );
