@@ -5,11 +5,16 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const JWT_SECRET_KEY = process.env.JWT;
+const IS_PRODUCTION = process.env.IS_PRODUCTION;
 
-const secureAndSameSite = {
-  secure: true,
-  sameSite: "none",
-};
+let secureAndSameSite = {};
+
+if (IS_PRODUCTION) {
+  secureAndSameSite = {
+    secure: true,
+    sameSite: "none",
+  };
+}
 
 // * this function will run when a student tries to login
 const studentLogin = async (req, res) => {
