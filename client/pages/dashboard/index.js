@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import AdminDashboard from "../../components/adminComponents/AdminDashboard";
-import { useAuth } from "../../context/AuthContext";
-import FacultyDashboard from "../../components/facultyComponents/FacultyDashboard";
+import AdminDashboard from "@adminComponents/AdminDashboard";
+import { useAuth } from "@context/AuthContext";
+import FacultyDashboard from "@facultyComponents/FacultyDashboard";
 
 export default function Dashboard() {
   const [user, setUser] = useState();

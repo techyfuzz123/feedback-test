@@ -1,10 +1,10 @@
 import { useState } from "react";
-import Feedbacks from "./Feedbacks";
-import Dashboard from "./Dashboard";
-import Account from "./Account";
-import Students from "./Students";
-import Advisors from "./Advisors";
-import { useAuth } from "../../context/AuthContext";
+import Feedbacks from "@adminComponents/Feedbacks";
+import Dashboard from "@adminComponents/Dashboard";
+import Account from "@adminComponents/Account";
+import Students from "@adminComponents/Students";
+import Advisors from "@adminComponents/Advisors";
+import { useAuth } from "@context/AuthContext";
 import { useRouter } from "next/router";
 
 const AdminDashboard = () => {
@@ -78,7 +78,7 @@ const AdminDashboard = () => {
       </aside>
       {/* components */}
       <div className={`flex w-full h-screen `}>
-        {current === "Dashboard" && <Dashboard  />}
+        {current === "Dashboard" && <Dashboard />}
         {current === "Feedbacks" && <Feedbacks />}
         {current === "Students" && <Students />}
         {current === "Advisors" && <Advisors />}

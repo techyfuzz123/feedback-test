@@ -1,16 +1,16 @@
 import { useState } from "react";
-import Feedbacks from "./Feedbacks";
-import Dashboard from "./Dashboard";
-import Account from "./Account";
-import Students from "./Students";
-import { useAuth } from "../../context/AuthContext";
+import Feedbacks from "@facultyComponents/Feedbacks";
+import Dashboard from "@facultyComponents/Dashboard";
+import Account from "@facultyComponents/Account";
+import Students from "@facultyComponents/Students";
+import { useAuth } from "@context/AuthContext";
 import { useRouter } from "next/router";
 
 const FacultyDashboard = ({ user }) => {
   const [open, setOpen] = useState(true);
   const [current, setCurrent] = useState("Dashboard");
   const { facultyLogout } = useAuth();
-  const router = useRouter()
+  const router = useRouter();
   const Menus = [
     { title: "Dashboard", src: "Chart_fill" },
     { title: "Feedbacks", src: "Chat" },

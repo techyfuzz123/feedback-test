@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "@context/AuthContext";
 
 const StudentDashboard = () => {
   const { studentLogout } = useAuth();

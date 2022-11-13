@@ -1,6 +1,6 @@
-import "../styles/globals.css";
-import Layout from "../components/Layout";
-import { AuthContextProvider } from "../context/AuthContext";
+import "@styles/globals.css";
+import Layout from "@components/Layout";
+import { AuthContextProvider } from "@context/AuthContext";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 

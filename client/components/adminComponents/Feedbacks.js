@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
-import { GlobalFilter } from "../GlobalFilter";
+import { GlobalFilter } from "@components/GlobalFilter";
 
 const Feedbacks = () => {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -114,7 +114,6 @@ const Feedbacks = () => {
       >
         Feedbacks
       </h1>
-
 
       {/* feedbacks */}
       <div className=" w-10/12 flex flex-row justify-between items-center">

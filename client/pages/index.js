@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Login from "../components/Login";
-import StudentDashboard from "../components/StudentDashboard";
-import { useAuth } from "../context/AuthContext";
+import Login from "@components/Login";
+import StudentDashboard from "@components/StudentDashboard";
+import { useAuth } from "@context/AuthContext";
 
 const Home = () => {
   const [user, setUser] = useState();

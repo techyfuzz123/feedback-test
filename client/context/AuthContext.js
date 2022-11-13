@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
-import useSessionStorage from "../hooks/useSessionStorage";
-
+import useSessionStorage from "@hooks/useSessionStorage";
 
 export const AuthContext = createContext();
 

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
-import { GlobalFilter } from "../GlobalFilter";
+import { GlobalFilter } from "@components/GlobalFilter";
 
 const Feedbacks = () => {
   const [feedbacks, setFeedbacks] = useState([]);

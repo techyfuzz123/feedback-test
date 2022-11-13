@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "@context/AuthContext";
 import { useRouter } from "next/router";
 
 const UserLogin = () => {

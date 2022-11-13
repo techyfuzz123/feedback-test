@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import ReactTable from "../ReactTable";
+import ReactTable from "@components/ReactTable";
 // staff/dashboard
 export const Dashboard = () => {
   const [students, setStudents] = useState([]);

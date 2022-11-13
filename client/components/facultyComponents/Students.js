@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
-import { GlobalFilter } from "../GlobalFilter";
+import { GlobalFilter } from "@components/GlobalFilter";
 
 const Students = () => {
   const [students, setStudents] = useState([]);
-  const [details, setDetails] = useState({})
+  const [details, setDetails] = useState({});
   const url = process.env.NEXT_PUBLIC_BASE_URL;
 
   const fetchFeedbacks = async () => {
@@ -26,9 +26,9 @@ const Students = () => {
 
     if (response) {
       const students = response;
-      const details = students[0]
+      const details = students[0];
       setStudents(students);
-      setDetails(details)
+      setDetails(details);
     }
   };
 

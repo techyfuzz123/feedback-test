@@ -1,6 +1,6 @@
 import React from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
-import { GlobalFilter } from "./GlobalFilter";
+import { GlobalFilter } from "@components/GlobalFilter";
 
 const ReactTable = ({ columns, data,  noSearch,  }) => {
 

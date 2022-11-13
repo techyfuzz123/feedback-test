@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@adminComponents/*": ["components/adminComponents/*"],
+      "@facultyComponents/*": ["components/facultyComponents/*"],
+      "@context/*": ["context/*"],
+      "@hooks/*": ["hooks/*"],
+      "@styles/*": ["styles/*"]
+    }
+  }
+}
