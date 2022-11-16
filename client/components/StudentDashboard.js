@@ -3,10 +3,10 @@ import { useAuth } from "@context/AuthContext";
 
 const StudentDashboard = () => {
   const IS_DEVELOPMENT = process.env.NEXT_PUBLIC_IS_DEVELOPMENT;
-  console.log(IS_DEVELOPMENT);
   const { studentLogout } = useAuth();
   const [subjects, setSubjects] = useState([]);
-  let error = null;
+  const [loading, setLoading] = useState(false)
+  let [error, setError] = useState(null);
   const [feedback, setFeedback] = useState({
     batch: "",
     section: "",
@@ -151,7 +151,7 @@ const StudentDashboard = () => {
     );
   };
 
-  const checkData = () => {
+  const checkData = async () => {
     let unFilled = 0;
     subjects.map((subject) => {
       headers.map((header) => {
@@ -161,24 +161,73 @@ const StudentDashboard = () => {
         }
       });
     });
-    if (unFilled != 0) {
-      error = "fill all fields";
+    if (unFilled > 0) {
+      setError("fill all fields");
+      return 
     } else {
-      error = null;
+ setError(null)
     }
   };
 
-  const submitData = () => {
-    checkData();
-    if (!error) {
-      console.log(subjects);
+  const submitFeedback = async () => {
+    setLoading(true);
+
+      const body = subjects;
+
+      let response = { eMessage: "no value received", path: "addfeedback" };
+
+      response = await fetch(url + "/student/feedback", {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }).then(async function (res) {
+        const status = res.status;
+        const data = await res.json();
+        if (status != 200) {
+          setError(data.eMessage);
+          return data;
+        }
+        if (status === 200) {
+          setA(false);
+          return { Message: "feedbackSubmitted", path: "addfeedback" };
+        }
+        if (status === 409) {
+          return { eMessage: data.eMessage, path: "addfeedback" };
+        }
+      });
+
+      setLoading(false);
+      return response;
+  }
+
+  const submitData = async (e) => {
+    e.preventDefault()
+        let unFilled = 0;
+    await subjects.map((subject) => {
+      headers.map((header) => {
+        if (subject[header] === -1) {
+          unFilled = unFilled + 1;
+          return;
+        }
+      });
+    });
+    if (unFilled > 0) {
+      setError("fill all fields");
+      return 
+    } else {
+      setError(null)
+      await submitFeedback()
+      return
     }
   };
 
   const fillData = () => {
     const newValues = subjects.map((subject) => {
       headers.map((header) => {
-        subject[header] = 1;
+        subject[header] = 2;
       });
       return subject;
     });
@@ -209,15 +258,15 @@ const StudentDashboard = () => {
       <select
         value={subjects[id][columnItem.value]}
         onChange={(e) => handleChange(Number(e.target.value))}
+        onClick={()=> setError(null)}
         className={`outline-none text-center bg-inherit`}
       >
         <option value={-1}>{"select"}</option>
-        <option value={0}>0</option>
-        <option value={1}>1</option>
-        <option value={2}>2</option>
-        <option value={3}>3</option>
-        <option value={4}>4</option>
-        <option value={5}>5</option>
+        <option value={8}>Excellent</option>
+        <option value={6}>Good</option>
+        <option value={4}>Satisfactory</option>
+        <option value={2}>Not Satisfactory</option>
+        <option value={0}>Poor</option>
         {/* <option value={rowItem[columnItem.value]}>
           {rowItem[columnItem.value]}
         </option> */}
@@ -308,19 +357,22 @@ const StudentDashboard = () => {
         )}
       </div>
       {/* table */}
+      <form onSubmit={submitData} className="w-full">
+
       <div className="w-full flex justify-center">
         <Table data={subjects} column={subjectsColumns} />
       </div>
       {/* submit button */}
-      <div className="flex w-9/12 justify-end">
+      <div className="flex w-10/12 justify-end">
         <button
-          onClick={submitData}
+            type="submit"
           className="bg-dark-purple bg-opacity-30 px-4 py-2 rounded-lg
         text-white"
         >
           Submit
         </button>
       </div>
+      </form>
       {IS_DEVELOPMENT && (
         <>
           <div className="flex mt-3 w-9/12 justify-end">

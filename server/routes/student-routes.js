@@ -11,6 +11,7 @@ const studentValidationSchema = require("../utils/validation/student-validation"
 const { validateData, checkStudentAuth } = require("../utils/middlewares");
 const {
   getFeedbackForStudent,
+  submitFeedbackForStudent
 } = require("../controllers/feedback-controller");
 
 // set routes
@@ -20,5 +21,6 @@ router.get("/", getStudent);
 router.put("/", updateStudents); // not working
 router.delete("/", deleteStudents);
 router.get("/feedback", checkStudentAuth, getFeedbackForStudent);
+router.post("/feedback", checkStudentAuth, submitFeedbackForStudent)
 
 module.exports = router;

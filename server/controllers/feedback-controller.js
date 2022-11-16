@@ -125,10 +125,15 @@ const getFeedbackForStudent = async (req, res) => {
   res.status(200).json({ feedback });
 };
 
+const submitFeedbackForStudent = async (req, res) => {
+  console.log(req.body)
+}
+
 module.exports = {
   addFeedback,
   getFeedbacksForAdvisor,
   getFeedbackForStudent,
   getFeedbacksForAdmin,
-  getFeedbackForAdvisor
+  getFeedbackForAdvisor,
+  submitFeedbackForStudent
 };
