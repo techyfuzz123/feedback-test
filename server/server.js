@@ -50,15 +50,6 @@ morgan.token("date", function () {
 });
 
 app.use(morgan("common"));
-// app.use(express.json());
-app.use(bodyParser.json({ limit: "50mb" }));
-app.use(
-  bodyParser.urlencoded({
-    limit: "50mb",
-    extended: true,
-    parameterLimit: 50000,
-  })
-);
 
 // set routes
 app.use("/api/student", student_routes);
