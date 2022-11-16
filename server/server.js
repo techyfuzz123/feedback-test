@@ -10,7 +10,7 @@ const feedback_routes = require("./routes/feedback-routes");
 const auth_routes = require("./routes/auth-routes");
 const response_routes = require("./routes/response-routes");
 const staff_routes = require("./routes/staff-routes");
-// var bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 
 // const IS_DEVELOPMENT = process.env.IS_DEVELOPMENT;
 // if (IS_DEVELOPMENT) {
