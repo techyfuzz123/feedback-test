@@ -50,6 +50,7 @@ morgan.token("date", function () {
 });
 
 app.use(morgan("common"));
+app.use(express.json());
 
 // set routes
 app.use("/api/student", student_routes);
