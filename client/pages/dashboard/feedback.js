@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 
-const Feedbacks = () => {
+const Feedback = () => {
   const [subjects, setSubjects] = useState([]);
   const [details, setDetails] = useState({});
   const url = process.env.NEXT_PUBLIC_BASE_URL;
@@ -245,6 +245,6 @@ const Feedbacks = () => {
   );
 };
 
-export default Feedbacks;
+export default Feedback;
 
 

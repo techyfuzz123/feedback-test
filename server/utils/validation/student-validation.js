@@ -42,7 +42,7 @@ const studentsSchema = {
   items: studentSchema,
 };
 
-module.exports = ajvInstance.compile(studentSchema);
+module.exports = ajvInstance.compile(studentsSchema);
 
 // countryCode: {
 //     type: 'string',

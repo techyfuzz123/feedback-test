@@ -99,6 +99,7 @@ const checkStaffAuth = async (req, res, next) => {
         .json({ error: "Invalid token,please login again!" });
     } else {
       //catch other unprecedented errors
+      console.log("from checkAdminAuth"); 
       console.error(error);
       return res.status(400).json({ error });
     }
@@ -137,6 +138,7 @@ const checkAdminAuth = async (req, res, next) => {
         .json({ error: "Invalid token,please login again!" });
     } else {
       //catch other unprecedented errors
+      console.log('from checkAdminAuth');
       console.error(error);
       return res.status(400).json({ error });
     }

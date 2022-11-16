@@ -2,9 +2,11 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@context/AuthContext";
 
 const StudentDashboard = () => {
+  const IS_DEVELOPMENT = process.env.NEXT_PUBLIC_IS_DEVELOPMENT;
+  console.log(IS_DEVELOPMENT);
   const { studentLogout } = useAuth();
   const [subjects, setSubjects] = useState([]);
-  const [error, setError] = useState(null);
+  let error = null;
   const [feedback, setFeedback] = useState({
     batch: "",
     section: "",
@@ -83,7 +85,7 @@ const StudentDashboard = () => {
     fetchSubjects();
   }, []);
 
-  const Table2 = ({ data, column }) => {
+  const Table = ({ data, column }) => {
     return (
       <table className="divide-y m-10 mt-2 w-3/4 divide-gray-200">
         <thead className="bg-gray-50">
@@ -149,20 +151,48 @@ const StudentDashboard = () => {
     );
   };
 
-  const submitData = async () => {
-    setError(null);
-    await subjects.map((subject) => {
+  const checkData = () => {
+    let unFilled = 0;
+    subjects.map((subject) => {
       headers.map((header) => {
         if (subject[header] === -1) {
-          setError("fill all fields");
+          unFilled = unFilled + 1;
+          return;
         }
       });
-      if (error) return;
     });
-    if (error == null) {
-      console.log(error);
+    if (unFilled != 0) {
+      error = "fill all fields";
+    } else {
+      error = null;
+    }
+  };
+
+  const submitData = () => {
+    checkData();
+    if (!error) {
       console.log(subjects);
     }
+  };
+
+  const fillData = () => {
+    const newValues = subjects.map((subject) => {
+      headers.map((header) => {
+        subject[header] = 1;
+      });
+      return subject;
+    });
+    setSubjects(newValues);
+  };
+
+  const unFillData = () => {
+    const newValues = subjects.map((subject) => {
+      headers.map((header) => {
+        subject[header] = -1;
+      });
+      return subject;
+    });
+    setSubjects(newValues);
   };
 
   const Dropdown = ({ id, columnItem, rowItem }) => {
@@ -279,7 +309,7 @@ const StudentDashboard = () => {
       </div>
       {/* table */}
       <div className="w-full flex justify-center">
-        <Table2 data={subjects} column={subjectsColumns} />
+        <Table data={subjects} column={subjectsColumns} />
       </div>
       {/* submit button */}
       <div className="flex w-9/12 justify-end">
@@ -291,6 +321,28 @@ const StudentDashboard = () => {
           Submit
         </button>
       </div>
+      {IS_DEVELOPMENT && (
+        <>
+          <div className="flex mt-3 w-9/12 justify-end">
+            <button
+              onClick={fillData}
+              className="bg-dark-purple bg-opacity-30 px-4 py-2 rounded-lg
+          text-white"
+            >
+              fill
+            </button>
+          </div>
+          <div className="flex mt-3 w-9/12 justify-end">
+            <button
+              onClick={unFillData}
+              className="bg-dark-purple bg-opacity-30 px-4 py-2 rounded-lg
+          text-white"
+            >
+              unfill
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };

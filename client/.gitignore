@@ -12,6 +12,9 @@
 /.next/
 /out/
 
+# some is just a placeholder for model design
+/components/facultyComponents/Some.js
+
 # production
 /build
 

@@ -11,6 +11,19 @@ const auth_routes = require("./routes/auth-routes");
 const response_routes = require("./routes/response-routes");
 const staff_routes = require("./routes/staff-routes");
 
+const IS_DEVELOPMENT = process.env.IS_DEVELOPMENT;
+if (IS_DEVELOPMENT) {
+  var bodyParser = require("body-parser");
+  app.use(bodyParser.json({ limit: "50mb" }));
+  app.use(
+    bodyParser.urlencoded({
+      limit: "50mb",
+      extended: true,
+      parameterLimit: 50000,
+    })
+  );
+}
+
 // connecting to database
 connection();
 
@@ -37,7 +50,15 @@ morgan.token("date", function () {
 });
 
 app.use(morgan("common"));
-app.use(express.json());
+// app.use(express.json());
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+    parameterLimit: 50000,
+  })
+);
 
 // set routes
 app.use("/api/student", student_routes);

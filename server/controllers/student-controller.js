@@ -10,39 +10,44 @@ const JWT_SECRET_KEY = process.env.JWT;
     collection in the database
 */
 const addStudents = async (req, res) => {
-  const { regNo, dob } = req.body;
-  // Student.insertMany(req.body, (error, docs) => {
-  //     if (error) {
-  //         console.log(error);
-  //         return res.status(500).json({ error });
-  //     }
-  //     return res.status(200).json({ message: `${docs.length } students added successfully`, docs });
-  // })
-
-  let student;
-
-  try {
-    student = await Student.findOne({ regNo: regNo });
-    if (student) {
-      return res.status(409).json({ message: "student already exists" });
+  // const { regNo, dob } = req.body;
+  Student.insertMany(req.body, (error, docs) => {
+    if (error) {
+      if (error.code === 11000) {
+        return res.status(409).json({ eMessage: "Student Already Exists" });
+      }
+      console.log(error);
+      return res.status(500).json({ error });
     }
-  } catch (error) {
-    console.log(error);
-  }
-  let hashPassword;
+    return res
+      .status(200)
+      .json({ message: `${docs.length} students added successfully` });
+  });
 
-  try {
-    hashPassword = await bcrypt.hash(req.body.password, 10);
-  } catch (error) {
-    return res.status(409).json({ message: "need password" });
-  }
+  // let student;
 
-  try {
-    student = await Student({ ...req.body, password: hashPassword }).save();
-    return res.status(200).json(student);
-  } catch (error) {
-    console.log(error);
-  }
+  // try {
+  //   student = await Student.findOne({ regNo: regNo });
+  //   if (student) {
+  //     return res.status(409).json({ message: "student already exists" });
+  //   }
+  // } catch (error) {
+  //   console.log(error);
+  // }
+  // let hashPassword;
+
+  // try {
+  //   hashPassword = await bcrypt.hash(req.body.password, 10);
+  // } catch (error) {
+  //   return res.status(409).json({ message: "need password" });
+  // }
+
+  // try {
+  //   student = await Student({ ...req.body, password: hashPassword }).save();
+  //   return res.status(200).json(student);
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
 
 /*  
@@ -156,7 +161,6 @@ const getStudentsForAdvisor = async (req, res) => {
 };
 
 const getStudentsForAdmin = async (req, res) => {
-
   let students;
 
   try {

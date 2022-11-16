@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 import useSessionStorage from "@hooks/useSessionStorage";
 
@@ -9,7 +8,6 @@ export function useAuth() {
 }
 
 export const AuthContextProvider = ({ children }) => {
-  const router = useRouter();
   const [studentErrorMsg, setstudentErrorMsg] = useState(null);
   const [facultyErrorMsg, setfacultyErrorMsg] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -96,8 +94,6 @@ export const AuthContextProvider = ({ children }) => {
       sessionStorage.setItem("user", JSON.stringify(response));
       sessionStorage.setItem("setupTime", now);
     }
-
-    // router.push("/");
 
     setLoading(false);
   };
