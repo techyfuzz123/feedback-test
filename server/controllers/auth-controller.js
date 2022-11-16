@@ -9,7 +9,7 @@ const IS_DEVELOPMENT = process.env.IS_DEVELOPMENT;
 
 let secureAndSameSite = {};
 
-if (IS_DEVELOPMENT) {
+if (!IS_DEVELOPMENT) {
   secureAndSameSite = {
     secure: true,
     sameSite: "none",
