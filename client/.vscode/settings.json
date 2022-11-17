@@ -18,5 +18,12 @@
     "titleBar.inactiveBackground": "#1857a499",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
-  "peacock.color": "#1857a4"
+  "peacock.color": "#1857a4",
+  "files.associations": {
+    "*.env.development": "properties",
+    "*.env.production": "properties",
+    "*.env.development.local": "properties",
+    "*.env.production.local": "properties",
+    ".env.local": "properties"
+  }
 }

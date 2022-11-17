@@ -5,10 +5,10 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const JWT_SECRET_KEY = process.env.JWT;
-const IS_DEVELOPMENT = process.env.IS_DEVELOPMENT;
+const IS_DEVELOPMENT = process.env.IS_DEVELOPMENT === "true";
 
-let secureAndSameSite = {
-};
+let secureAndSameSite = {};
+
 
 if (!IS_DEVELOPMENT) {
   secureAndSameSite = {

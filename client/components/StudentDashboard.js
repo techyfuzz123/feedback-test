@@ -5,7 +5,7 @@ const StudentDashboard = () => {
   const IS_DEVELOPMENT = process.env.NEXT_PUBLIC_IS_DEVELOPMENT;
   const { studentLogout } = useAuth();
   const [subjects, setSubjects] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   let [error, setError] = useState(null);
   const [feedback, setFeedback] = useState({
     batch: "",
@@ -163,29 +163,21 @@ const StudentDashboard = () => {
     });
     if (unFilled > 0) {
       setError("fill all fields");
-      return 
+      return;
     } else {
- setError(null)
+      setError(null);
     }
   };
 
   const submitFeedback = async () => {
     setLoading(true);
 
-      const body = subjects;
+    const body = subjects;
 
-      let response = { eMessage: "no value received", path: "addfeedback" };
+    let response = { eMessage: "no value received", path: "addfeedback" };
 
-      response = await fetch(url + "/student/feedback", {
-        method: "POST",
-        body: JSON.stringify(body),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }).then(async function (res) {
-        const status = res.status;
-        const data = await res.json();
+    response = await useFetch("POST", "/student/feedback", body).then(
+      async function ({ status, data }) {
         if (status != 200) {
           setError(data.eMessage);
           return data;
@@ -197,15 +189,16 @@ const StudentDashboard = () => {
         if (status === 409) {
           return { eMessage: data.eMessage, path: "addfeedback" };
         }
-      });
+      }
+    );
 
-      setLoading(false);
-      return response;
-  }
+    setLoading(false);
+    return response;
+  };
 
   const submitData = async (e) => {
-    e.preventDefault()
-        let unFilled = 0;
+    e.preventDefault();
+    let unFilled = 0;
     await subjects.map((subject) => {
       headers.map((header) => {
         if (subject[header] === -1) {
@@ -216,11 +209,11 @@ const StudentDashboard = () => {
     });
     if (unFilled > 0) {
       setError("fill all fields");
-      return 
+      return;
     } else {
-      setError(null)
-      await submitFeedback()
-      return
+      setError(null);
+      await submitFeedback();
+      return;
     }
   };
 
@@ -258,7 +251,7 @@ const StudentDashboard = () => {
       <select
         value={subjects[id][columnItem.value]}
         onChange={(e) => handleChange(Number(e.target.value))}
-        onClick={()=> setError(null)}
+        onClick={() => setError(null)}
         className={`outline-none text-center bg-inherit`}
       >
         <option value={-1}>{"select"}</option>
@@ -358,20 +351,19 @@ const StudentDashboard = () => {
       </div>
       {/* table */}
       <form onSubmit={submitData} className="w-full">
-
-      <div className="w-full flex justify-center">
-        <Table data={subjects} column={subjectsColumns} />
-      </div>
-      {/* submit button */}
-      <div className="flex w-10/12 justify-end">
-        <button
+        <div className="w-full flex justify-center">
+          <Table data={subjects} column={subjectsColumns} />
+        </div>
+        {/* submit button */}
+        <div className="flex w-10/12 justify-end">
+          <button
             type="submit"
-          className="bg-dark-purple bg-opacity-30 px-4 py-2 rounded-lg
+            className="bg-dark-purple bg-opacity-30 px-4 py-2 rounded-lg
         text-white"
-        >
-          Submit
-        </button>
-      </div>
+          >
+            Submit
+          </button>
+        </div>
       </form>
       {IS_DEVELOPMENT && (
         <>

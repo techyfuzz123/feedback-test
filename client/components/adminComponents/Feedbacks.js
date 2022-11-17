@@ -1,24 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import { GlobalFilter } from "@components/GlobalFilter";
+import useFetch from "@hooks/useFetch";
 
 const Feedbacks = () => {
   const [feedbacks, setFeedbacks] = useState([]);
-  const url = process.env.NEXT_PUBLIC_BASE_URL;
 
   const fetchFeedbacks = async () => {
-    const response = await fetch(url + "/staff/a/feedbacks", {
-      method: "GET",
-      credentials: "include",
-    })
-      .then(async function (res) {
-        const value = {
-          status: res.status,
-          data: await res.json(),
-        };
-        return value;
-      })
-      .then(function ({ status, data }) {
+    const response = await useFetch("GET", "/staff/a/feedbacks").then(
+      function ({ status, data }) {
         if (status === 401) return "not 200 status";
         data.feedbacks.map((feedback) => {
           if (feedback.isLive) {
@@ -28,7 +18,8 @@ const Feedbacks = () => {
           }
         });
         return data.feedbacks;
-      });
+      }
+    );
 
     if (response) {
       const feedbacks = response;

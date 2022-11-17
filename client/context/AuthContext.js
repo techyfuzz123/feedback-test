@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import useSessionStorage from "@hooks/useSessionStorage";
+import useFetch from "@hooks/useFetch";
 
 export const AuthContext = createContext();
 
@@ -67,29 +68,16 @@ export const AuthContextProvider = ({ children }) => {
 
     let response = { eMessage: "no value received", path: "student" };
 
-    response = await fetch(url + "/auth/student/login", {
-      method: "POST",
-      body: JSON.stringify(body),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    })
-      .then(async function (res) {
-        const status = res.status;
-        const value = {
-          status,
-          data: await res.json(),
-        };
-        return value;
-      })
-      .then(function ({ data, status }) {
+    response = await useFetch("POST", "/auth/student/login", body).then(
+      async function ({ data, status }) {
         if (status != 200) {
           setstudentErrorMsg(data.eMessage);
           return data;
         }
         return data;
-      });
+      }
+    );
+
     if (!response["eMessage"]) {
       sessionStorage.setItem("user", JSON.stringify(response));
       sessionStorage.setItem("setupTime", now);
@@ -101,14 +89,8 @@ export const AuthContextProvider = ({ children }) => {
   // * function that is used to logout for students
   const studentLogout = async () => {
     setLoading(true);
-
-    await fetch(url + "/auth/student/logout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    })
+    let body = {};
+    await useFetch("POST", "/auth/student/logout", body)
       .then(async function (res) {
         sessionStorage.removeItem("user");
         sessionStorage.removeItem("setupTime");
@@ -131,29 +113,15 @@ export const AuthContextProvider = ({ children }) => {
 
     let response = { eMessage: "no value received" };
 
-    response = await fetch(url + "/auth/staff/login", {
-      method: "POST",
-      body: JSON.stringify(body),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    })
-      .then(async function (res) {
-        const status = res.status;
-        const value = {
-          status,
-          data: await res.json(),
-        };
-        return value;
-      })
-      .then(function ({ data, status }) {
+    response = await useFetch("POST", "/auth/staff/login", body).then(
+      function ({ data, status }) {
         if (status != 200) {
           setfacultyErrorMsg(data.eMessage);
           return data;
         }
         return data;
-      });
+      }
+    );
     if (!response["eMessage"]) {
       sessionStorage.setItem("user", JSON.stringify(response));
       sessionStorage.setItem("setupTime", now);
@@ -166,13 +134,8 @@ export const AuthContextProvider = ({ children }) => {
   const facultyLogout = async () => {
     setLoading(true);
 
-    await fetch(url + "/auth/staff/logout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    })
+    let body = {};
+    await useFetch("POST", "/auth/staff/logout", body)
       .then(async function (res) {
         sessionStorage.removeItem("user");
         sessionStorage.removeItem("setupTime");

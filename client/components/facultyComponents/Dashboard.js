@@ -1,27 +1,19 @@
 import React, { useEffect, useMemo, useState } from "react";
 import ReactTable from "@components/ReactTable";
+import useFetch from "@hooks/useFetch";
 // staff/dashboard
 export const Dashboard = () => {
   const [students, setStudents] = useState([]);
   const [liveFeedback, setLiveFeedback] = useState({});
-  const url = process.env.NEXT_PUBLIC_BASE_URL;
 
   const fetchStudents = async () => {
-    const response = await fetch(url + "/staff/dashboard", {
-      method: "GET",
-      credentials: "include",
-    })
-      .then(async function (res) {
-        const value = {
-          status: res.status,
-          data: await res.json(),
-        };
-        return value;
-      })
-      .then(function ({ status, data }) {
-        if (status === 401) return "not 200 status";
-        return data;
-      });
+    const response = await useFetch("GET", "/staff/dashboard").then(function ({
+      status,
+      data,
+    }) {
+      if (status === 401) return "not 200 status";
+      return data;
+    });
 
     if (response) {
       const students = response.notSubmittedStudents;
