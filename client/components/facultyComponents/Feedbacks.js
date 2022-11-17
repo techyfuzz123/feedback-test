@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import { GlobalFilter } from "@components/GlobalFilter";
-import useFetch from "@hooks/useFetch";
+import UseFetch from "@hooks/useFetch";
 
 const Feedbacks = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [details, setDetails] = useState({});
 
   const fetchFeedbacks = async () => {
-    const response = await useFetch("GET", "/staff/feedbacks").then(function ({
+    const response = await UseFetch("GET", "/staff/feedbacks").then(function ({
       status,
       data,
     }) {

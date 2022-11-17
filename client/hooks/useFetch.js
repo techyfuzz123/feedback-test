@@ -1,4 +1,4 @@
-async function useFetch(method, route, body) {
+async function UseFetch(method, route, body) {
   let url;
   let EXTERNAL_CLIENT = process.env.NEXT_PUBLIC_EXTERNAL_CLIENT === "true";
 
@@ -25,7 +25,7 @@ async function useFetch(method, route, body) {
   }
   const response = await fetch(url + route, config).then(async function (res) {
     const status = res.status;
-    const data = await res.json()
+    const data = await res.json();
     return {
       data,
       status,
@@ -34,4 +34,4 @@ async function useFetch(method, route, body) {
   return response;
 }
 
-export default useFetch;
+export default UseFetch;

@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import ReactTable from "@components/ReactTable";
-import useFetch from "@hooks/useFetch";
+import UseFetch from "@hooks/useFetch";
 // staff/dashboard
 export const Dashboard = () => {
   const [students, setStudents] = useState([]);
   const [liveFeedback, setLiveFeedback] = useState({});
 
   const fetchStudents = async () => {
-    const response = await useFetch("GET", "/staff/dashboard").then(function ({
+    const response = await UseFetch("GET", "/staff/dashboard").then(function ({
       status,
       data,
     }) {

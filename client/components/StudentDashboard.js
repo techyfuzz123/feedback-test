@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@context/AuthContext";
+import UseFetch from "@hooks/useFetch";
 
 const StudentDashboard = () => {
-  const IS_DEVELOPMENT = process.env.NEXT_PUBLIC_IS_DEVELOPMENT;
+  const IS_DEVELOPMENT = process.env.NEXT_PUBLIC_IS_DEVELOPMENT === "true";
   const { studentLogout } = useAuth();
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -13,24 +14,15 @@ const StudentDashboard = () => {
     degree: "",
     semester: "",
   });
-  const url = process.env.NEXT_PUBLIC_BASE_URL;
 
   const fetchSubjects = async () => {
-    const response = await fetch(url + "/student/feedback", {
-      method: "GET",
-      credentials: "include",
-    })
-      .then(async function (res) {
-        const value = {
-          status: res.status,
-          data: await res.json(),
-        };
-        return value;
-      })
-      .then(function ({ status, data }) {
-        if (status != 200) return "not 200 status";
-        return data.feedback;
-      });
+    const response = await UseFetch("GET", "/student/feedback").then(function ({
+      status,
+      data,
+    }) {
+      if (status != 200) return "not 200 status";
+      return data.feedback;
+    });
 
     if (response) {
       const subjects = response.subjects;
@@ -176,7 +168,7 @@ const StudentDashboard = () => {
 
     let response = { eMessage: "no value received", path: "addfeedback" };
 
-    response = await useFetch("POST", "/student/feedback", body).then(
+    response = await UseFetch("POST", "/student/feedback", body).then(
       async function ({ status, data }) {
         if (status != 200) {
           setError(data.eMessage);

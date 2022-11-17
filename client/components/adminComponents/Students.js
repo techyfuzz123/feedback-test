@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import { GlobalFilter } from "@components/GlobalFilter";
-import useFetch from "@hooks/useFetch";
+import UseFetch from "@hooks/useFetch";
 
 const Students = () => {
   const [students, setStudents] = useState([]);
   const url = process.env.NEXT_PUBLIC_BASE_URL;
 
   const fetchStudents = async () => {
-    const response = await useFetch("GET", "/staff/a/students").then(function ({
+    const response = await UseFetch("GET", "/staff/a/students").then(function ({
       status,
       data,
     }) {

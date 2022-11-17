@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import { GlobalFilter } from "@components/GlobalFilter";
-import useFetch from "../../hooks/useFetch";
+import UseFetch from "@hooks/useFetch";
 
 const Students = () => {
   const [students, setStudents] = useState([]);
@@ -12,7 +12,7 @@ const Students = () => {
 
   // Table
   const fetchStudents = async () => {
-    const response = await useFetch("GET", "/staff/students").then(function ({
+    const response = await UseFetch("GET", "/staff/students").then(function ({
       status,
       data,
     }) {
