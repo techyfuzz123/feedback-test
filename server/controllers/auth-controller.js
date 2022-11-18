@@ -9,7 +9,6 @@ const IS_DEVELOPMENT = process.env.IS_DEVELOPMENT === "true";
 
 let secureAndSameSite = {};
 
-
 if (!IS_DEVELOPMENT) {
   secureAndSameSite = {
     secure: true,
@@ -73,61 +72,6 @@ const studentLogin = async (req, res) => {
     degree: student.degree,
     section: student.section,
   };
-
-  // let liveFeedback;
-  // let isFeedbackSubmitted;
-  // const feedbackFilter = {
-  //   batch: student.batch,
-  //   degree: student.degree,
-  //   section: student.section,
-  //   isLive: true,
-  // };
-
-  // // * Checking if there is any feedback is alive for the student
-  // try {
-  //   liveFeedback = await Feedback.findOne(feedbackFilter);
-  //   if (!liveFeedback) {
-  //     return res
-  //       .status(200)
-  //       .json({ ...studentData, message: "No feedback to Submit" });
-  //   }
-  //   isFeedbackSubmitted =
-  //     student.isFeedbackSubmitted[liveFeedback.semester][
-  //       liveFeedback.feedbackNo
-  //     ];
-  // } catch (error) {
-  //   return new Error(error);
-  // }
-
-  // // * Checking if the student have submitted the alive feedback
-  // if (isFeedbackSubmitted) {
-  //   return res
-  //     .status(200)
-  //     .json({ ...studentData, message: "No feedback to Submit" });
-  // }
-
-  // // * combining the subjects and electives from feedback and student
-  // let subs = [...liveFeedback.subjects, ...student.subjects.include];
-
-  // const subjects = [];
-  // const map = new Map();
-  // for (const subject of subs) {
-  //   if (!map.has(subject.subjectCode)) {
-  //     map.set(subject.subjectCode, true); // set any value to Map
-  //     subjects.push({
-  //       subjectCode: subject.subjectCode,
-  //       subjectName: subject.subjectName,
-  //       faculty: subject.faculty,
-  //     });
-  //   }
-  // }
-
-  // // * Defining the data which has to be return to the user
-  // let feedback = {
-  //   semester: liveFeedback.semester,
-  //   feedbackNo: liveFeedback.feedbackNo,
-  //   subjects: subjects,
-  // };
 
   return res.status(200).json({ ...studentData });
 };

@@ -49,7 +49,11 @@ morgan.token("date", function () {
   return p[2] + "/" + p[1] + "/" + p[3] + ":" + p[4] + " " + p[5];
 });
 
-app.use(morgan("common"));
+app.use(
+  morgan(
+    '[:date[clf]] ":method :url" :status :res[content-length] B :response-time ms'
+  )
+);
 app.use(express.json());
 
 // set routes
