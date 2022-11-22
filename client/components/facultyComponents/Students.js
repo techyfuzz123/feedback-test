@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import { GlobalFilter } from "@components/GlobalFilter";
 import UseFetch from "@hooks/useFetch";
+import Loading from "@components/Loading";
+import { useRouter } from "next/router";
 
 const Students = () => {
   const [students, setStudents] = useState([]);
@@ -9,6 +11,7 @@ const Students = () => {
   const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState({});
   const isEven = (idx) => idx % 2 === 0;
+  const router = useRouter()
 
   // Table
   const fetchStudents = async () => {
@@ -16,7 +19,10 @@ const Students = () => {
       status,
       data,
     }) {
-      if (status === 401) return "not 200 status";
+       if (status === 401) {
+         router.push("/");
+         return "not 200 status";
+       }
       return data;
     });
 
@@ -112,16 +118,10 @@ const Students = () => {
 
       let response = { eMessage: "no value received", path: "addstudent" };
 
-      response = await fetch(url + "/student", {
-        method: "POST",
-        body: JSON.stringify(body),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }).then(async function (res) {
-        const status = res.status;
-        const data = await res.json();
+      response = await UseFetch("POST", "/student", body).then(async function ({
+        status,
+        data,
+      }) {
         if (status != 200) {
           setError(data.eMessage);
           return data;
@@ -184,18 +184,7 @@ const Students = () => {
     return (
       <>
         {loading ? (
-          <>
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-            <div className="fixed inset-0 z-10 overflow-y-auto">
-              <div
-                role="status"
-                className="flex  flex-col items-center justify-center min-h-screen"
-              >
-                <div className=""></div>
-                <span className="">Loading...</span>
-              </div>
-            </div>
-          </>
+<Loading light={true} />
         ) : (
           <div
             className="relative z-10"

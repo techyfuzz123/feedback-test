@@ -10,19 +10,7 @@ const feedback_routes = require("./routes/feedback-routes");
 const auth_routes = require("./routes/auth-routes");
 const response_routes = require("./routes/response-routes");
 const staff_routes = require("./routes/staff-routes");
-// const bodyParser = require("body-parser");
-
-// const IS_DEVELOPMENT = process.env.IS_DEVELOPMENT;
-// if (IS_DEVELOPMENT) {
-//   app.use(bodyParser.json({ limit: "50mb" }));
-//   app.use(
-//     bodyParser.urlencoded({
-//       limit: "50mb",
-//       extended: true,
-//       parameterLimit: 50000,
-//     })
-//   );
-// }
+const exec = require("child_process").exec; // for updating the server and client
 
 // connecting to database
 connection();
@@ -35,6 +23,24 @@ const corsOptions = {
   credentials: true,
   methods: "GET, PUT, POST, DELETE",
   contentType: "application/json",
+};
+const update_Image = (req, res) => {
+  //   Server update command : docker service update -d --image tamilarasug/feedback-server:latest backend_server
+  // client update command : docker service update -d --image tamilarasug/feedback-client:latest frontend_client
+  const command = "ls"
+  const data = exec(
+    command,
+    function (error, stdout, stderr) {
+      // console.log(stdout);
+      if (stdout) return stdout;
+
+      if (error) {
+        console.log(error);
+      }
+    }
+  );
+  if (data) return res.status(200).json(data);
+  return res.status(500).json("something wrong");
 };
 
 // middlewares
@@ -51,7 +57,7 @@ morgan.token("date", function () {
 
 app.use(
   morgan(
-    '[:date[clf]] ":method :url" :status :res[content-length] B :response-time ms'
+    `[:date[clf]] ":method :url" :status :res[content-length]b :response-time ms`
   )
 );
 app.use(express.json());
@@ -62,6 +68,9 @@ app.use("/api/feedback", feedback_routes);
 app.use("/api/auth", auth_routes);
 app.use("/api/response", response_routes);
 app.use("/api/staff", staff_routes);
+
+// route to update the server and client
+app.use("/api/update-image", update_Image);
 
 // listening to port
 try {

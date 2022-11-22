@@ -6,9 +6,9 @@ import Students from "@facultyComponents/Students";
 import { useAuth } from "@context/AuthContext";
 import { useRouter } from "next/router";
 
-const FacultyDashboard = ({ user }) => {
+const FacultyDashboard = () => {
   const [open, setOpen] = useState(true);
-  const [current, setCurrent] = useState("Dashboard");
+  const [current, setCurrent] = useState("Feedbacks");
   const { facultyLogout } = useAuth();
   const router = useRouter();
   const Menus = [
@@ -76,9 +76,9 @@ const FacultyDashboard = ({ user }) => {
       </aside>
       {/* components */}
       <div className={`flex w-full h-screen `}>
-        {current === "Dashboard" && <Dashboard user={user} />}
-        {current === "Feedbacks" && <Feedbacks user={user} />}
-        {current === "Students" && <Students user={user} />}
+        {current === "Dashboard" && <Dashboard />}
+        {current === "Feedbacks" && <Feedbacks />}
+        {current === "Students" && <Students />}
         {current === "Account" && <Account />}
       </div>
     </div>

@@ -8,6 +8,7 @@ const StudentDashboard = () => {
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(false);
   let [error, setError] = useState(null);
+  const isEven = (id) => id % 2 === 0;
   const [feedback, setFeedback] = useState({
     batch: "",
     section: "",
@@ -114,7 +115,6 @@ const StudentDashboard = () => {
   ];
 
   const TableRow = ({ item, column, id }) => {
-    const isEven = (id) => id % 2 === 0;
     return (
       <tr
         className={
@@ -209,10 +209,21 @@ const StudentDashboard = () => {
     }
   };
 
+  function getRandomItem() {
+    const arr = [0,2,4,6,8]
+    // get random index value
+    const randomIndex = Math.floor(Math.random() * arr.length);
+
+    // get random item
+    const item = arr[randomIndex];
+
+    return item;
+  }
+
   const fillData = () => {
     const newValues = subjects.map((subject) => {
       headers.map((header) => {
-        subject[header] = 2;
+        subject[header] = getRandomItem();
       });
       return subject;
     });

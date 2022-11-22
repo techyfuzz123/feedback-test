@@ -19,7 +19,7 @@ const Home = () => {
 
   if (user.regNo) return <StudentDashboard />;
 
-  if (user.role == "ADMIN" || user.role == "ADVISOR") {
+  if (user.role === "ADMIN" || user.role === "ADVISOR") {
     router.push("/dashboard");
   }
 

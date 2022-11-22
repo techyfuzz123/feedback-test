@@ -43,6 +43,14 @@ const studentSchema = mongoose.Schema(
         II: { type: Boolean, default: false },
       },
     },
+    feedbacks: [
+      {
+        semester: { type: String, required: true },
+        feedbackNo: { type: String, required: true },
+        isSubmitted: { type: Boolean, default: false },
+      },
+      { _id: false },
+    ],
     subjects: {
       include: [
         {
@@ -50,6 +58,7 @@ const studentSchema = mongoose.Schema(
           subjectName: { type: String, required: true },
           faculty: { type: String, required: true },
         },
+        { _id: false },
       ],
       exclude: [
         {
