@@ -1,12 +1,14 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "include": ["./**/*"],   
     "paths": {
-      "@/controllers/*": ["controllers/*"],
-      "@/models/*": ["models/*"],
+      "@controllers/*": ["controllers/*"],
+      "@models/*": ["models/*"],
       "@routes/*": ["routes/*"],
-      "@/utils/*": ["utils/*"],
-      "@/validation/*": ["utils/validation/*"]
+      "@utils/*": ["utils/*"],
+      "@validation/*": ["./utils/validation/*"],
+      "@middlewares/*": ["./utils/middlewares/*"]
     }
   },
 }

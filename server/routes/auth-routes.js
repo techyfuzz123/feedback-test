@@ -6,12 +6,16 @@ const {
   studentLogout,
   staffLogin,
   staffLogout,
+  studentRefresh,
+  staffRefresh
 } = require("../controllers/auth-controller.js");
 
 router.post("/student/login", studentLogin);
 router.post("/student/logout", studentLogout);
+router.post("/student/refresh", studentRefresh);
 router.post("/staff/login", staffLogin);
 router.post("/staff/logout", staffLogout);
+router.post("/staff/refresh", staffRefresh);
 router.get("/loggedIn", (req, res) => {
   try {
     const token = req.cookies["token"];

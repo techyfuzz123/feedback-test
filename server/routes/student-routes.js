@@ -8,7 +8,8 @@ const {
   deleteStudents,
 } = require("../controllers/student-controller");
 const studentValidationSchema = require("../utils/validation/student-validation");
-const { validateData, checkStudentAuth } = require("../utils/middlewares");
+const { checkStudentAuth } = require("../utils/middlewares/checkAuth");
+const validateData = require("../utils/middlewares/validateData")
 const {
   getFeedbackForStudent,
   submitFeedbackForStudent

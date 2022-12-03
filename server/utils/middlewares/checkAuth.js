@@ -1,7 +1,7 @@
-const { Responses } = require("../models/Response");
+const { Responses } = require("../../models/Response");
 const jwt = require("jsonwebtoken");
-const { Staff } = require("../models/Staff");
-const { Student } = require("../models/Student");
+const { Staff } = require("../../models/Staff");
+const { Student } = require("../../models/Student");
 require("dotenv").config();
 
 const JWT_SECRET_KEY = process.env.JWT;
@@ -25,44 +25,8 @@ const updateReport = async (req, res, next) => {
   });
 };
 
-// it is a middleware that takes schema and the req.body to validata the data
-function validateData(ajvValidate) {
-  return (req, res, next) => {
-    const valid = ajvValidate(req.body);
-    if (!valid) {
-      // it is imperative that the reference to the errors is copied
-      // the next time ajv runs the errors object could be overridden
-      // because under the hood it is just a pointer
-      // that's why the reference needs to be copied in the same execution
-      // block. Note that Node is single-threaded and you do not have
-      // concurrency
-      // in this simple example it would work without copying
-      // simply because we are directly terminating the request with
-      // res.status(400).json(...)
-      // but in general copying the errors reference is crucial
-      const errors = ajvValidate.errors;
-      return res.status(400).json(errors);
-    }
-    next();
-  };
-}
 
 // middleware
-const verifytoken = (req, res, next) => {
-  const cookies = req.headers.cookie;
-  const token_value = cookies?.split("=")[1];
-  if (!token_value) {
-    return res.status(404).json({ message: "No token found" });
-  }
-  jwt.verify(String(token_value), JWT_SECRET_KEY, (err, student) => {
-    if (err) {
-      return res.status(400).json(err);
-    }
-    req.regno = student.regno;
-  });
-  next();
-};
-
 //middleware function to check if the incoming request in authenticated:
 const checkStaffAuth = async (req, res, next) => {
   const token = req.cookies["token"];
@@ -190,9 +154,7 @@ const checkStudentAuth = async (req, res, next) => {
 };
 
 module.exports = {
-  validateData,
   checkStaffAuth,
   checkStudentAuth,
-  verifytoken,
   checkAdminAuth,
 };
