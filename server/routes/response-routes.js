@@ -1,9 +1,8 @@
-const { submitResponse } = require('../controllers/response-controller')
-const express = require('express');
-const router = express.Router()
-
+const { submitResponse } = require("../controllers/response-controller");
+const express = require("express");
+const router = express.Router();
 
 // routes
-router.post('/', submitResponse)
+router.post("/", submitResponse);
 
-module.exports = router
+module.exports = router;

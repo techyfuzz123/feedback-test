@@ -9,11 +9,9 @@ const {
 } = require("../controllers/staff-controller.js");
 
 const userValidationSchema = require("../utils/validation/staff-validation");
-const validateData = require("../utils/middlewares/validateData")
-const {
-  checkAdminAuth,
-} = require("../utils/middlewares/checkAuth");
-const {checkStaffAuth} = require("../utils/middlewares/checkAuth")
+const validateData = require("../utils/middlewares/validateData");
+const { checkAdminAuth } = require("../utils/middlewares/checkAuth");
+const { checkStaffAuth } = require("../utils/middlewares/checkAuth");
 const {
   getFeedbacksForAdvisor,
   getFeedbackForAdvisor,

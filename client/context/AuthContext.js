@@ -1,6 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import useSessionStorage from "@hooks/useSessionStorage";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import useLocalStorage from "@hooks/useLocalStorage";
 import useFetch from "@hooks/useFetch";
+import CryptoJS from "crypto-js";
 
 export const AuthContext = createContext();
 
@@ -11,6 +12,10 @@ export function useAuth() {
 export const AuthContextProvider = ({ children }) => {
   const [studentErrorMsg, setstudentErrorMsg] = useState(null);
   const [facultyErrorMsg, setfacultyErrorMsg] = useState(null);
+  // const [student, setStudent] = useState(null);
+  // const [staff, setStaff] = useState(null);
+  const student = useRef();
+  const staff = useRef();
   const [loading, setLoading] = useState(false);
   const url = process.env.NEXT_PUBLIC_BASE_URL;
   const now = new Date().getTime();
@@ -19,16 +24,25 @@ export const AuthContextProvider = ({ children }) => {
     setstudentErrorMsg(studentErrorMsg);
   }, [studentErrorMsg]);
 
-  // * to fetch the detail of student from session storage
+  // *  to fetch the detail of student from session storage
   const fetchUser = () => {
     setLoading(true);
-    const userData = useSessionStorage("user");
-    const user = JSON.parse(userData);
+    const cipher = useLocalStorage("user");
+    if (!cipher) {
+      setLoading(false);
+      return null;
+    }
+    const userData = CryptoJS.AES.decrypt(
+      cipher,
+      process.env.NEXT_PUBLIC_CIPHER_KEY
+    );
+    const originalText = userData.toString(CryptoJS.enc.Utf8);
+    const user = JSON.parse(originalText);
     setLoading(false);
     return user;
   };
 
-  const loggedIn = async () => {
+  const isLoggedIn = async () => {
     setLoading(true);
 
     let response = { eMessage: "no value received" };
@@ -47,13 +61,20 @@ export const AuthContextProvider = ({ children }) => {
       })
       .then(function ({ data, status }) {
         if (status != 200) {
-          setstudentErrorMsg(data.message);
-          return data;
+          // setstudentErrorMsg(data.message);
+          return status;
+        }
+        if (!Number(data.id)) {
+          // setStaff(data)
+          staff.current = data;
+        } else {
+          student.current = data;
         }
         return data;
       });
 
     setLoading(false);
+    return response;
   };
 
   // * function that is used to login for students
@@ -74,13 +95,23 @@ export const AuthContextProvider = ({ children }) => {
           setstudentErrorMsg(data.eMessage);
           return data;
         }
+        if (status === 200) {
+          const cipher = CryptoJS.AES.encrypt(
+            JSON.stringify(data),
+            process.env.NEXT_PUBLIC_CIPHER_KEY
+          );
+
+          localStorage.setItem("user", cipher);
+        }
         return data;
       }
     );
 
     if (!response["eMessage"]) {
-      sessionStorage.setItem("user", JSON.stringify(response));
-      sessionStorage.setItem("setupTime", now);
+      const accessToken = document.cookie.split("=")[1];
+
+      // sessionStorage.setItem("user", JSON.stringify(response));
+      // sessionStorage.setItem("setupTime", now);
     }
 
     setLoading(false);
@@ -92,8 +123,7 @@ export const AuthContextProvider = ({ children }) => {
     let body = {};
     await useFetch("POST", "/auth/student/logout", body)
       .then(async function (res) {
-        sessionStorage.removeItem("user");
-        sessionStorage.removeItem("setupTime");
+        localStorage.removeItem("user");
       })
       .catch((err) => {
         console.log(err);
@@ -119,13 +149,18 @@ export const AuthContextProvider = ({ children }) => {
           setfacultyErrorMsg(data.eMessage);
           return data;
         }
+        if (status === 200) {
+          const cipher = CryptoJS.AES.encrypt(
+            JSON.stringify(data),
+            process.env.NEXT_PUBLIC_CIPHER_KEY
+          );
+
+          localStorage.setItem("user", cipher);
+          sessionStorage.setItem("title", "Dashboard");
+        }
         return data;
       }
     );
-    if (!response["eMessage"]) {
-      sessionStorage.setItem("user", JSON.stringify(response));
-      sessionStorage.setItem("setupTime", now);
-    }
 
     setLoading(false);
   };
@@ -137,8 +172,7 @@ export const AuthContextProvider = ({ children }) => {
     let body = {};
     await useFetch("POST", "/auth/staff/logout", body)
       .then(async function (res) {
-        sessionStorage.removeItem("user");
-        sessionStorage.removeItem("setupTime");
+        localStorage.removeItem("user");
       })
       .catch((err) => {
         console.log(err);
@@ -147,10 +181,12 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const value = {
+    student,
+    staff,
     studentErrorMsg,
     facultyErrorMsg,
     studentLogin,
-    loggedIn,
+    isLoggedIn,
     fetchUser,
     studentLogout,
     facultyLogin,

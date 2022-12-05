@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "include": ["./**/*"],   
     "paths": {
       "@controllers/*": ["controllers/*"],
       "@models/*": ["models/*"],

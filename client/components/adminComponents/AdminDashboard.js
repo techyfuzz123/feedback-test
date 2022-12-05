@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Feedbacks from "@adminComponents/Feedbacks";
 import Dashboard from "@adminComponents/Dashboard";
 import Account from "@adminComponents/Account";
@@ -6,10 +6,10 @@ import Students from "@adminComponents/Students";
 import Advisors from "@adminComponents/Advisors";
 import { useAuth } from "@context/AuthContext";
 import { useRouter } from "next/router";
+import useSessionStorage from "@hooks/useSessionStorage";
 
 const AdminDashboard = () => {
   const [open, setOpen] = useState(true);
-  const [current, setCurrent] = useState("Dashboard");
   const { facultyLogout } = useAuth();
   const router = useRouter();
   const Menus = [
@@ -20,6 +20,13 @@ const AdminDashboard = () => {
     { title: "Account", src: "User" },
     { title: "Logout", src: "Setting", gap: true },
   ];
+
+  const sidebarTitle = useSessionStorage("title");
+  if (!sidebarTitle) {
+    sessionStorage.setItem("title", "Dashboard");
+  }
+  const [current, setCurrent] = useState(useSessionStorage("title"));
+
 
   return (
     <div className="flex overflow-auto">
@@ -59,6 +66,7 @@ const AdminDashboard = () => {
                   router.push("/");
                 }
                 setCurrent(Menu.title);
+                sessionStorage.setItem("title", Menu.title)
               }}
               key={index}
               className={`flex  rounded-md p-2 cursor-pointer

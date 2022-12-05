@@ -5,21 +5,22 @@ import StudentDashboard from "@components/StudentDashboard";
 import { useAuth } from "@context/AuthContext";
 
 const Home = () => {
-  const [user, setUser] = useState();
-  const { fetchUser } = useAuth();
+  const [user, setUser] = useState(null);
+  const { fetchUser} = useAuth();
   const router = useRouter();
 
-  // * Checking if User exits
+
   useEffect(() => {
-    setUser(fetchUser());
+    const user = fetchUser()
+    setUser(user)
   }, []);
 
   // * render Login Component if user does'nt exists
   if (!user) return <Login />;
 
-  if (user.regNo) return <StudentDashboard />;
+  if (user?.regNo) return <StudentDashboard />;
 
-  if (user.role === "ADMIN" || user.role === "ADVISOR") {
+  if (user?.role === "ADMIN" || user.role === "ADVISOR") {
     router.push("/dashboard");
   }
 

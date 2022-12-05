@@ -1,3 +1,5 @@
+import { Router } from "next/router";
+
 async function UseFetch(method, route, body) {
   let url;
   let EXTERNAL_CLIENT = process.env.NEXT_PUBLIC_EXTERNAL_CLIENT === "true";
@@ -26,6 +28,9 @@ async function UseFetch(method, route, body) {
   const response = await fetch(url + route, config).then(async function (res) {
     const status = res.status;
     const data = await res.json();
+    if(status === 401){
+      localStorage.removeItem("user")
+    }
     return {
       data,
       status,

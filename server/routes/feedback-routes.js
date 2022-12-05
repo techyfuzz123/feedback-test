@@ -10,7 +10,7 @@ const express = require("express");
 const router = express.Router();
 const feedbackValidationSchema = require("../utils/validation/feedback-validation");
 const { checkStaffAuth } = require("../utils/middlewares/checkAuth");
-const validateData = require("../utils/middlewares/validateData")
+const validateData = require("../utils/middlewares/validateData");
 
 // staff routes
 router.post("/staff", checkStaffAuth, addFeedback);

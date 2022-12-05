@@ -5,10 +5,10 @@ import Account from "@facultyComponents/Account";
 import Students from "@facultyComponents/Students";
 import { useAuth } from "@context/AuthContext";
 import { useRouter } from "next/router";
+import useSessionStorage from "@hooks/useSessionStorage";
 
 const FacultyDashboard = () => {
   const [open, setOpen] = useState(true);
-  const [current, setCurrent] = useState("Feedbacks");
   const { facultyLogout } = useAuth();
   const router = useRouter();
   const Menus = [
@@ -18,6 +18,11 @@ const FacultyDashboard = () => {
     { title: "Account", src: "User" },
     { title: "Logout", src: "Setting", gap: true },
   ];
+  const sidebarTitle = useSessionStorage("title");
+  if(!sidebarTitle) {
+    sessionStorage.setItem("title", "Dashboard")
+  }
+  const [current, setCurrent] = useState(useSessionStorage("title"));
 
   return (
     <div className="flex overflow-auto">
@@ -57,6 +62,7 @@ const FacultyDashboard = () => {
                   router.push("/");
                 }
                 setCurrent(Menu.title);
+                sessionStorage.setItem("title", Menu.title);
               }}
               key={index}
               className={`flex  rounded-md p-2 cursor-pointer

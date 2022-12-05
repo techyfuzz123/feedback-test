@@ -11,7 +11,7 @@ const Students = () => {
   const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState({});
   const isEven = (idx) => idx % 2 === 0;
-  const router = useRouter()
+  const router = useRouter();
 
   // Table
   const fetchStudents = async () => {
@@ -19,10 +19,10 @@ const Students = () => {
       status,
       data,
     }) {
-       if (status === 401) {
-         router.push("/");
-         return "not 200 status";
-       }
+      if (status === 401) {
+        router.push("/");
+        return "not 200 status";
+      }
       return data;
     });
 
@@ -184,7 +184,7 @@ const Students = () => {
     return (
       <>
         {loading ? (
-<Loading light={true} />
+          <Loading light={true} />
         ) : (
           <div
             className="relative z-10"
