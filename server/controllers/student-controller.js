@@ -160,11 +160,32 @@ const getStudentsForAdvisor = async (req, res) => {
   res.status(200).json([...students]);
 };
 
-const getStudentsForAdmin = async (req, res) => {
+const getAllStudentsForAdmin = async (req, res) => {
   let students;
 
   try {
     students = await Student.find({}, "regNo name batch degree section -_id");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+
+  if (!students[0]) {
+    return res.status(409).json({ message: "no students" });
+  }
+  res.status(200).json([...students]);
+};
+
+const getStudentsForAdmin = async (req, res) => {
+  let students;
+  const {batch, degree, section} = req.body
+
+  try {
+    students = await Student.find({
+      batch: batch,
+      degree: degree,
+      section: section
+    }, "regNo name batch degree section -_id");
   } catch (error) {
     console.log(error);
     return res.status(500).json(error);
@@ -184,4 +205,5 @@ module.exports = {
   deleteStudents,
   getStudentsForAdvisor,
   getStudentsForAdmin,
+  getAllStudentsForAdmin
 };

@@ -81,10 +81,17 @@ export const AuthContextProvider = ({ children }) => {
   const studentLogin = async (regNo, dob, password) => {
     setLoading(true);
 
+    const encrypt_password = CryptoJS.AES.encrypt(
+      password,
+      process.env.NEXT_PUBLIC_CIPHER_KEY
+    ).toString();
+
+    
+
     const body = {
       regNo: regNo,
       dob: dob,
-      password: password,
+      password: encrypt_password,
     };
 
     let response = { eMessage: "no value received", path: "student" };
@@ -136,9 +143,15 @@ export const AuthContextProvider = ({ children }) => {
   const facultyLogin = async (userName, password) => {
     setLoading(true);
 
+    const encrypt_password = CryptoJS.AES.encrypt(
+      password,
+      process.env.NEXT_PUBLIC_CIPHER_KEY
+    ).toString();
+
+
     const body = {
       userName: userName,
-      password: password,
+      password: encrypt_password,
     };
 
     let response = { eMessage: "no value received" };

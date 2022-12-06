@@ -1,4 +1,3 @@
-import { Router } from "next/router";
 
 async function UseFetch(method, route, body) {
   let url;

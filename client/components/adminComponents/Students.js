@@ -1,14 +1,24 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import { GlobalFilter } from "@components/GlobalFilter";
 import UseFetch from "@hooks/useFetch";
 
 const Students = () => {
   const [students, setStudents] = useState([]);
+  const [batch, setBatch] = useState()
+  const [degree, setDegree] = useState()
+  const [section, setSection] = useState()
   const url = process.env.NEXT_PUBLIC_BASE_URL;
 
   const fetchStudents = async () => {
-    const response = await UseFetch("GET", "/staff/a/students").then(function ({
+
+    const body = {
+      batch: batch,
+      degree: degree,
+      section: section
+    }
+
+    const response = await UseFetch("POST", "/staff/a/students", body).then(function ({
       status,
       data,
     }) {
@@ -21,6 +31,12 @@ const Students = () => {
       setStudents(students);
     }
   };
+
+      const handleSubmit = async (e) => {
+      e.preventDefault();
+      fetchStudents();
+    };
+
 
   const studentsData = useMemo(() => [...students], [students]);
   const studentsColumns = useMemo(
@@ -83,9 +99,9 @@ const Students = () => {
     state,
   } = tableInstance;
 
-  useEffect(() => {
-    fetchStudents();
-  }, []);
+  // useEffect(() => {
+  //   fetchStudents();
+  // }, []);
 
   const isEven = (idx) => idx % 2 === 0;
 
@@ -99,7 +115,163 @@ const Students = () => {
         Students
       </h1>
 
+      <form onSubmit={handleSubmit} className=" w-9/12 flex flex-row justify-between  ">
+        {/* Batch */}
+      <div className="flex items-center mb-4 md:mb-0">
+        <label
+          className="block uppercase tracking-wide
+        text-gray-700 text-xs font-bold mb-2 mr-2"
+          htmlFor="grid-degree"
+        >
+          Batch
+        </label>
+        <div className="relative">
+          <select
+            className="block appearance-none w-full
+          bg-gray-200 border border-gray-200
+          text-gray-700 py-3 px-4 pr-8 rounded 
+          leading-tight focus:outline-none focus:bg-white
+            focus:border-gray-500"
+            id="grid-degree"
+              name="degree"
+              value={batch}
+              onClick={(e)=>{setBatch(e.target.value)}}
+              // ref={batchRef}
+          >
+            <option>Select</option>
+            <option>2019</option>
+            <option>2020</option>
+            <option>2021</option>
+            <option>2022</option>
+          </select>
+          <div
+            className="pointer-events-none absolute inset-y-0
+        right-0 flex items-center px-2 text-gray-700"
+          >
+            <svg
+              className="fill-current h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      {/* Degree */}
+      <div className="flex items-center mb-4 md:mb-0">
+        <label
+          className="block uppercase tracking-wide
+        text-gray-700 text-xs font-bold mb-2 mr-2"
+          htmlFor="grid-degree"
+        >
+          Degree
+        </label>
+        <div className="relative">
+          <select
+            className="block appearance-none w-full
+          bg-gray-200 border border-gray-200
+          text-gray-700 py-3 px-4 pr-8 rounded 
+          leading-tight focus:outline-none focus:bg-white
+            focus:border-gray-500"
+            id="grid-degree"
+              name="degree"
+              value={degree}
+              onClick={(e)=>{setDegree(e.target.value)}}
+          >
+            <option>Select</option>
+            <option>BE-AERO</option>
+            <option>BE-AGRI</option>
+            <option>BE-AME</option>
+            <option>BE-BME</option>
+            <option>BTECH-CHE</option>
+            <option>BE-CIVIL</option>
+            <option>BE-CSE</option>
+            <option>BE-ECE</option>
+            <option>BE-EEE</option>
+            <option>BE-EIE</option>
+            <option>BTECH-FT</option>
+            <option>BTECH-IT</option>
+            <option>BTECH-AIML</option>
+            <option>BE-MECHAT</option>
+            <option>BE-MECH</option>
+            <option>ME-CSE</option>
+            <option>ME-ECE</option>
+            <option>ME-ES</option>
+            <option>ME-CAD/CAM</option>
+            <option>MCA</option>
+            <option>MBA</option>
+          </select>
+          <div
+            className="pointer-events-none absolute inset-y-0
+        right-0 flex items-center px-2 text-gray-700"
+          >
+            <svg
+              className="fill-current h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      {/* Section */}
+      <div className="flex items-center mb-4 md:mb-0">
+        <label
+          className="block uppercase tracking-wide
+        text-gray-700 text-xs font-bold mb-2 mr-2"
+          htmlFor="grid-degree"
+        >
+          Section
+        </label>
+        <div className="relative">
+          <select
+            className="block appearance-none w-full
+          bg-gray-200 border border-gray-200
+          text-gray-700 py-3 px-4 pr-8 rounded 
+          leading-tight focus:outline-none focus:bg-white
+            focus:border-gray-500"
+            id="grid-degree"
+              name="degree"
+              value={section}
+              onClick={(e)=>{setSection(e.target.value)}}
+          >
+            <option>Select</option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+          </select>
+          <div
+            className="pointer-events-none absolute inset-y-0
+        right-0 flex items-center px-2 text-gray-700"
+          >
+            <svg
+              className="fill-current h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+            </svg>
+          </div>
+        </div>
+        </div>
+        
+        <button type="submit" className="bg-green-500 rounded-lg text-white px-4 outline-none">Submit</button>
+      </form>
+      
+
+
+
+
+
+
       {/* feedbacks */}
+
+
+
       <div className=" w-9/12 flex flex-row justify-between items-center">
         <GlobalFilter
           preGlobalFilteredRows={preGlobalFilteredRows}

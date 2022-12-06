@@ -20,6 +20,7 @@ const {
 const {
   getStudentsForAdvisor,
   getStudentsForAdmin,
+  getAllStudentsForAdmin
 } = require("../controllers/student-controller");
 
 router.post("/", validateData(userValidationSchema), addStaff);
@@ -30,7 +31,8 @@ router.get("/dashboard", checkStaffAuth, getDashboardDetailsForAdvisor);
 
 // admin
 router.get("/a/feedbacks", checkAdminAuth, getFeedbacksForAdmin);
-router.get("/a/students", checkAdminAuth, getStudentsForAdmin);
+router.get("/ab/students", checkAdminAuth, getAllStudentsForAdmin);
+router.post("/a/students", checkAdminAuth, getStudentsForAdmin);
 router.get("/a/advisors", checkAdminAuth, getAdvisorsForAdmin);
 
 module.exports = router;
