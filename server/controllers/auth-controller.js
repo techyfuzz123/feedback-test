@@ -2,13 +2,29 @@ const { Student } = require("../models/Student");
 const { Staff } = require("../models/Staff");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const CryptoJS = require("crypto-js")
+const CryptoJS = require("crypto-js");
 require("dotenv").config();
+// const Cryptr = require("cryptr");
+// const { enCrypt } = require("../utils/encryptDecrypt");
+// const { deCrypt } = require("../utils/encryptDecrypt");
 
 const JWT_SECRET_KEY = process.env.JWT;
 const REFRESH_JWT_SECRET_KEY = process.env.REFRESH_JWT;
 const IS_DEVELOPMENT = process.env.IS_DEVELOPMENT === "true";
-const DECIPHER_KEY = process.env.DECIPHER_KEY
+// const DECIPHER_KEY = process.env.DECIPHER_KEY;
+// const cryptr = new Cryptr(DECIPHER_KEY);
+
+// function Encrypt(word, key = "share") {
+//   let encJson = CryptoJS.AES.encrypt(JSON.stringify(word), key).toString();
+//   let encData = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(encJson));
+//   return encData;
+// }
+
+// function Decrypt(word, key = "share") {
+//   let decData = CryptoJS.enc.Base64.parse(word).toString(CryptoJS.enc.Utf8);
+//   let bytes = CryptoJS.AES.decrypt(decData, key).toString(CryptoJS.enc.Utf8);
+//   return JSON.parse(bytes);
+// }
 
 let secureAndSameSite = {};
 
@@ -43,15 +59,19 @@ const studentLogin = async (req, res) => {
       .status(404)
       .json({ eMessage: "user not found", path: "student" });
   }
-
-  const decrypt_password = CryptoJS.AES.decrypt(
-      password,
-      DECIPHER_KEY
-  ).toString(CryptoJS.enc.Utf8);
+  // const decrypt_password = CryptoJS.AES.decrypt(
+  //     password,
+  //     DECIPHER_KEY
+  // ).toString(CryptoJS.enc.Utf8);
+  // const decrypt_password = deCrypt(password);
+  const decrypt_password = password
 
   // * Check if the dob and password are correct
   const isDobCorrect = dob === student.dob;
-  const isPasswordCorrect = bcrypt.compareSync(decrypt_password, student.password);
+  const isPasswordCorrect = bcrypt.compareSync(
+    decrypt_password,
+    student.password
+  );
 
   if (!isPasswordCorrect || !isDobCorrect) {
     return res
@@ -109,13 +129,17 @@ const staffLogin = async (req, res) => {
     return res.status(404).json({ eMessage: "user not found", path: "staff" });
   }
 
-  const decrypt_password = CryptoJS.AES.decrypt(
-      password,
-      DECIPHER_KEY
-    ).toString(CryptoJS.enc.Utf8);
+  // const decrypt_password = CryptoJS.AES.decrypt(
+  //   password,
+  //   DECIPHER_KEY
+  // ).toString(CryptoJS.enc.Utf8);
+  const decrypt_password = password
 
   // * Check if the password are correct
-  const isPasswordCorrect = bcrypt.compareSync(decrypt_password, staff.password);
+  const isPasswordCorrect = bcrypt.compareSync(
+    decrypt_password,
+    staff.password
+  );
 
   if (!isPasswordCorrect) {
     return res

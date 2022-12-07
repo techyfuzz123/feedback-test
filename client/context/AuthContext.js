@@ -1,13 +1,28 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import useLocalStorage from "@hooks/useLocalStorage";
 import useFetch from "@hooks/useFetch";
-import CryptoJS from "crypto-js";
+// import CryptoJS from "crypto-js";
+// const Cryptr = require("cryptr");
+// import {deCrypt} from "../utils/encryptDecrypt"
+// import {enCrypt} from "../utils/encryptDecrypt";
 
 export const AuthContext = createContext();
 
 export function useAuth() {
   return useContext(AuthContext);
 }
+
+// export function Encrypt(word, key = "share") {
+//   let encJson = CryptoJS.AES.encrypt(JSON.stringify(word), key).toString();
+//   let encData = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(encJson));
+//   return encData;
+// }
+
+// export function Decrypt(word, key = "share") {
+//   let decData = CryptoJS.enc.Base64.parse(word).toString(CryptoJS.enc.Utf8);
+//   let bytes = CryptoJS.AES.decrypt(decData, key).toString(CryptoJS.enc.Utf8);
+//   return JSON.parse(bytes);
+// }
 
 export const AuthContextProvider = ({ children }) => {
   const [studentErrorMsg, setstudentErrorMsg] = useState(null);
@@ -18,7 +33,7 @@ export const AuthContextProvider = ({ children }) => {
   const staff = useRef();
   const [loading, setLoading] = useState(false);
   const url = process.env.NEXT_PUBLIC_BASE_URL;
-  const now = new Date().getTime();
+  // const cryptr = new Cryptr(process.env.NEXT_PUBLIC_CIPHER_KEY);
 
   useEffect(() => {
     setstudentErrorMsg(studentErrorMsg);
@@ -32,12 +47,9 @@ export const AuthContextProvider = ({ children }) => {
       setLoading(false);
       return null;
     }
-    const userData = CryptoJS.AES.decrypt(
-      cipher,
-      process.env.NEXT_PUBLIC_CIPHER_KEY
-    );
-    const originalText = userData.toString(CryptoJS.enc.Utf8);
-    const user = JSON.parse(originalText);
+    // const userData = deCrypt(cipher)
+    const userData = cipher
+    const user = JSON.parse(userData);
     setLoading(false);
     return user;
   };
@@ -81,12 +93,8 @@ export const AuthContextProvider = ({ children }) => {
   const studentLogin = async (regNo, dob, password) => {
     setLoading(true);
 
-    const encrypt_password = CryptoJS.AES.encrypt(
-      password,
-      process.env.NEXT_PUBLIC_CIPHER_KEY
-    ).toString();
-
-    
+    // const encrypt_password = enCrypt(password);
+    const encrypt_password = password
 
     const body = {
       regNo: regNo,
@@ -103,10 +111,8 @@ export const AuthContextProvider = ({ children }) => {
           return data;
         }
         if (status === 200) {
-          const cipher = CryptoJS.AES.encrypt(
-            JSON.stringify(data),
-            process.env.NEXT_PUBLIC_CIPHER_KEY
-          );
+          // const cipher = cryptr.encrypt(JSON.stringify(data));
+          const cipher = JSON.stringify(data);
 
           localStorage.setItem("user", cipher);
         }
@@ -143,11 +149,8 @@ export const AuthContextProvider = ({ children }) => {
   const facultyLogin = async (userName, password) => {
     setLoading(true);
 
-    const encrypt_password = CryptoJS.AES.encrypt(
-      password,
-      process.env.NEXT_PUBLIC_CIPHER_KEY
-    ).toString();
-
+    // const encrypt_password = cryptr.encrypt(password);
+    const encrypt_password = password;
 
     const body = {
       userName: userName,
@@ -163,12 +166,11 @@ export const AuthContextProvider = ({ children }) => {
           return data;
         }
         if (status === 200) {
-          const cipher = CryptoJS.AES.encrypt(
-            JSON.stringify(data),
-            process.env.NEXT_PUBLIC_CIPHER_KEY
-          );
+          // const cipher = cryptr.encrypt(JSON.stringify(data));
+          const cipher = JSON.stringify(data);
 
           localStorage.setItem("user", cipher);
+
           sessionStorage.setItem("title", "Dashboard");
         }
         return data;
