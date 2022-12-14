@@ -48,7 +48,7 @@ export const AuthContextProvider = ({ children }) => {
       return null;
     }
     // const userData = deCrypt(cipher)
-    const userData = cipher
+    const userData = cipher;
     const user = JSON.parse(userData);
     setLoading(false);
     return user;
@@ -94,7 +94,7 @@ export const AuthContextProvider = ({ children }) => {
     setLoading(true);
 
     // const encrypt_password = enCrypt(password);
-    const encrypt_password = password
+    const encrypt_password = password;
 
     const body = {
       regNo: regNo,

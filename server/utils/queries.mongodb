@@ -1,0 +1,7 @@
+
+
+// switch to feedback database
+use("feedback")
+
+// show collections
+db.getCollectionNames()

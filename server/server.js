@@ -18,7 +18,7 @@ connection();
 // Variables
 const PORT = process.env.PORT || 8080;
 const corsOptions = {
-  origin: `${process.env.FRONT_URL}`,
+  origin: process.env.FRONT_URL,
   optionsSuccessStatus: 200, // For legacy browser support
   credentials: true,
   methods: "GET, PUT, POST, DELETE",
@@ -27,24 +27,21 @@ const corsOptions = {
 const update_Image = (req, res) => {
   //   Server update command : docker service update -d --image tamilarasug/feedback-server:latest backend_server
   // client update command : docker service update -d --image tamilarasug/feedback-client:latest frontend_client
-  const command = "ls"
-  const data = exec(
-    command,
-    function (error, stdout, stderr) {
-      // console.log(stdout);
-      if (stdout) return stdout;
+  const command = "ls";
+  const data = exec(command, function (error, stdout, stderr) {
+    // console.log(stdout);
+    if (stdout) return stdout;
 
-      if (error) {
-        console.log(error);
-      }
+    if (error) {
+      console.log(error);
     }
-  );
+  });
   if (data) return res.status(200).json(data);
   return res.status(500).json("something wrong");
 };
 
 // middlewares
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 app.use(cookieParser());
 
 morgan.token("date", function () {

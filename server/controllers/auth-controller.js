@@ -64,7 +64,7 @@ const studentLogin = async (req, res) => {
   //     DECIPHER_KEY
   // ).toString(CryptoJS.enc.Utf8);
   // const decrypt_password = deCrypt(password);
-  const decrypt_password = password
+  const decrypt_password = password;
 
   // * Check if the dob and password are correct
   const isDobCorrect = dob === student.dob;
@@ -109,6 +109,7 @@ const studentLogout = async (req, res) => {
 };
 
 const staffLogin = async (req, res) => {
+  console.log(req.headers);
   const { userName, password } = req.body;
 
   // * checking if all three values are available
@@ -133,7 +134,7 @@ const staffLogin = async (req, res) => {
   //   password,
   //   DECIPHER_KEY
   // ).toString(CryptoJS.enc.Utf8);
-  const decrypt_password = password
+  const decrypt_password = password;
 
   // * Check if the password are correct
   const isPasswordCorrect = bcrypt.compareSync(
