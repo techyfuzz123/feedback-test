@@ -40,7 +40,7 @@ let corsOptions = {
   },
   optionsSuccessStatus: 200, // For legacy browser support
   credentials: true,
-  methods: ["GET", "POST"],
+  methods: ["GET", "POST", "OPTIONS"],
   contentType: "application/json",
 };
 
