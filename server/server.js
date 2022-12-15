@@ -28,6 +28,17 @@ connection();
 // Variables
 const PORT = process.env.PORT || 8080;
 const whitelist = [process.env.FRONT_URL];
+
+const corsOptionsDelegate = function (req, callback) {
+  let corsOptions;
+  if (whitelist.indexOf(req.header('Origin')) !== -1) {
+    corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+  } else {
+    corsOptions = { origin: false } // disable CORS for this request
+  }
+  callback(null, corsOptions) // callback expects two parameters: error and options
+}
+
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
@@ -59,7 +70,7 @@ const update_Image = (req, res, next) => {
 };
 
 // middlewares
-app.use(cors(corsOptions));
+app.use(cors(corsOptionsDelegate));
 app.use(cookieParser());
 
 morgan.token("date", function () {
