@@ -9,9 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@tanstack/react-table": "^8.5.21",
-    "crypto-js": "^4.1.1",
-    "cryptr": "^6.0.3",
     "jsonwebtoken": "^8.5.1",
     "next": "12.3.1",
     "react": "18.2.0",

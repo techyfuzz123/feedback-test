@@ -15,16 +15,34 @@ const exec = require("child_process").exec; // for updating the server and clien
 // connecting to database
 connection();
 
+// var corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1 || !origin) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+// };
+
 // Variables
 const PORT = process.env.PORT || 8080;
+const whitelist = [process.env.FRONT_URL];
 const corsOptions = {
-  origin: process.env.FRONT_URL,
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   optionsSuccessStatus: 200, // For legacy browser support
   credentials: true,
   methods: "GET, PUT, POST, DELETE",
   contentType: "application/json",
 };
-const update_Image = (req, res) => {
+
+const update_Image = (req, res, next) => {
   //   Server update command : docker service update -d --image tamilarasug/feedback-server:latest backend_server
   // client update command : docker service update -d --image tamilarasug/feedback-client:latest frontend_client
   const command = "ls";
@@ -40,8 +58,9 @@ const update_Image = (req, res) => {
   return res.status(500).json("something wrong");
 };
 
+
 // middlewares
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(cookieParser());
 
 morgan.token("date", function () {
@@ -80,5 +99,12 @@ try {
 
 // backup cmd
 // mongodump --uri='mongodb://username:password@localhost:27017/feedback' --gzip --archive=/data/backup/backup.gz
-// restore cmd "ignore this"
+// restore cmd
 // mongorestore mongodb://username:password@0.0.0.0:27017/feedback --gzip --archive=./temp.gz --authenticationDatabase=admin
+
+// TODO: cors stop postman
+// TODO: change useEffect to something
+// TODO: removed unwanted dependencies
+// TODO: change way of handling passwords
+// TODO: add electives to subject
+// TODO: student submit feedback
