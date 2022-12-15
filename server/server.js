@@ -38,7 +38,7 @@ const corsOptions = {
   },
   optionsSuccessStatus: 200, // For legacy browser support
   credentials: true,
-  methods: "GET, PUT, POST, DELETE, OPTIONS",
+  methods: "GET, POST",
   contentType: "application/json",
 };
 
@@ -57,7 +57,6 @@ const update_Image = (req, res, next) => {
   if (data) return res.status(200).json(data);
   return res.status(500).json("something wrong");
 };
-
 
 // middlewares
 app.use(cors(corsOptions));
