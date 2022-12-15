@@ -108,3 +108,4 @@ try {
 // TODO: change way of handling passwords
 // TODO: add electives to subject
 // TODO: student submit feedback
+// TODO: update server automatically
