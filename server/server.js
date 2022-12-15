@@ -15,50 +15,32 @@ const exec = require("child_process").exec; // for updating the server and clien
 // connecting to database
 connection();
 
-// var corsOptions = {
-//   origin: function (origin, callback) {
-//     if (whitelist.indexOf(origin) !== -1 || !origin) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"));
-//     }
-//   },
-// };
-
 // Variables
 const PORT = process.env.PORT || 8080;
 const whitelist = [process.env.FRONT_URL];
 const IS_DEVELOPMENT = process.env.IS_DEVELOPMENT === "true";
 
-let corsOptions = {
+const corsOptions = {
   origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
+    if (whitelist.indexOf(origin) !== -1 || IS_DEVELOPMENT) {
       callback(null, true);
     } else {
-      callback("Not allowed.", false); // new Error("Not allowed by CORS")
+      callback("Not allowed.", false);
     }
   },
   optionsSuccessStatus: 200, // For legacy browser support
   credentials: true,
+  allowedHeaders: [
+    "Access-Control-Allow-Origin",
+    "Origin",
+    "X-Requested-With",
+    "Content-Type",
+    "Accept",
+    "Authorization",
+  ],
   methods: ["GET", "POST", "OPTIONS"],
   contentType: "application/json",
 };
-
-if (IS_DEVELOPMENT) {
-  corsOptions = {
-    origin: function (origin, callback) {
-      if (whitelist.indexOf(origin) !== -1 || !origin) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    optionsSuccessStatus: 200, // For legacy browser support
-    credentials: true,
-    methods: ["GET", "POST"],
-    contentType: "application/json",
-  };
-}
 
 const update_Image = (req, res, next) => {
   //   Server update command : docker service update -d --image tamilarasug/feedback-server:latest backend_server
@@ -77,6 +59,7 @@ const update_Image = (req, res, next) => {
 };
 
 // middlewares
+app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
