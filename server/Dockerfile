@@ -1,7 +1,7 @@
 # Dockerfile
 
 # base image
-FROM node:lts-alpine3.16
+FROM node:lts-alpine3.17
 
 # create & set working directory
 WORKDIR /app
@@ -18,6 +18,14 @@ COPY . /app
 # install dependencies
 RUN npm install
 
-# start app
+#Expose ports
 EXPOSE 5000
+
+#Change ownership
+RUN chown -R node:node /app
+
+#Switch User
+USER node
+
+# start app
 CMD npm run start

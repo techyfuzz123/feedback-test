@@ -28,30 +28,37 @@ connection();
 // Variables
 const PORT = process.env.PORT || 8080;
 const whitelist = [process.env.FRONT_URL];
+const IS_DEVELOPMENT = process.env.IS_DEVELOPMENT === "true";
 
-const corsOptionsDelegate = function (req, callback) {
-  let corsOptions;
-  if (whitelist.indexOf(req.header('Origin')) !== -1) {
-    corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
-  } else {
-    corsOptions = { origin: false } // disable CORS for this request
-  }
-  callback(null, corsOptions) // callback expects two parameters: error and options
-}
-
-const corsOptions = {
+let corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback("Not allowed.", false); // new Error("Not allowed by CORS")
     }
   },
   optionsSuccessStatus: 200, // For legacy browser support
   credentials: true,
-  methods: "GET, POST",
+  methods: ["GET", "POST"],
   contentType: "application/json",
 };
+
+if (IS_DEVELOPMENT) {
+  corsOptions = {
+    origin: function (origin, callback) {
+      if (whitelist.indexOf(origin) !== -1 || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    optionsSuccessStatus: 200, // For legacy browser support
+    credentials: true,
+    methods: ["GET", "POST"],
+    contentType: "application/json",
+  };
+}
 
 const update_Image = (req, res, next) => {
   //   Server update command : docker service update -d --image tamilarasug/feedback-server:latest backend_server
@@ -70,7 +77,7 @@ const update_Image = (req, res, next) => {
 };
 
 // middlewares
-app.use(cors(corsOptionsDelegate));
+app.use(cors(corsOptions));
 app.use(cookieParser());
 
 morgan.token("date", function () {

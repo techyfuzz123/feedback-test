@@ -43,10 +43,7 @@ const studentLogin = async (req, res) => {
 
   // * Check if the dob and password are correct
   const isDobCorrect = dob === student.dob;
-  const isPasswordCorrect = bcrypt.compareSync(
-    password,
-    student.password
-  );
+  const isPasswordCorrect = bcrypt.compareSync(password, student.password);
 
   if (!isPasswordCorrect || !isDobCorrect) {
     return res
@@ -106,10 +103,7 @@ const staffLogin = async (req, res) => {
   }
 
   // * Check if the password are correct
-  const isPasswordCorrect = bcrypt.compareSync(
-    password,
-    staff.password
-  );
+  const isPasswordCorrect = bcrypt.compareSync(password, staff.password);
 
   if (!isPasswordCorrect) {
     return res
