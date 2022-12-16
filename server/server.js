@@ -59,8 +59,8 @@ const update_Image = (req, res, next) => {
 };
 
 // middlewares
-app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(cookieParser());
 
 morgan.token("date", function () {
