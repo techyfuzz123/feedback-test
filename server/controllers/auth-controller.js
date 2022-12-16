@@ -81,7 +81,6 @@ const studentLogout = async (req, res) => {
 };
 
 const staffLogin = async (req, res) => {
-  console.log(req.headers);
   const { userName, password } = req.body;
 
   // * checking if all three values are available

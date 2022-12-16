@@ -40,6 +40,7 @@ const corsOptions = {
   ],
   methods: ["GET", "POST", "OPTIONS"],
   contentType: "application/json",
+  maxAge: 3600
 };
 
 const update_Image = (req, res, next) => {
