@@ -20,27 +20,35 @@ const PORT = process.env.PORT || 8080;
 const whitelist = [process.env.FRONT_URL];
 const IS_DEVELOPMENT = process.env.IS_DEVELOPMENT === "true";
 
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1 || IS_DEVELOPMENT) {
+//       callback(null, true);
+//     } else {
+//       callback("Not allowed.", false);
+//     }
+//   },
+//   optionsSuccessStatus: 200, // For legacy browser support
+//   credentials: true,
+//   allowedHeaders: [
+//     "Access-Control-Allow-Origin",
+//     "Origin",
+//     "X-Requested-With",
+//     "Content-Type",
+//     "Accept",
+//     "Authorization",
+//   ],
+//   methods: ["GET", "POST", "OPTIONS"],
+//   contentType: "application/json",
+//   maxAge: 3600
+// };
+
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1 || IS_DEVELOPMENT) {
-      callback(null, true);
-    } else {
-      callback("Not allowed.", false);
-    }
-  },
+  origin: `${process.env.FRONT_URL}`,
   optionsSuccessStatus: 200, // For legacy browser support
   credentials: true,
-  allowedHeaders: [
-    "Access-Control-Allow-Origin",
-    "Origin",
-    "X-Requested-With",
-    "Content-Type",
-    "Accept",
-    "Authorization",
-  ],
-  methods: ["GET", "POST", "OPTIONS"],
+  methods: "GET, PUT, POST, DELETE",
   contentType: "application/json",
-  maxAge: 3600
 };
 
 const update_Image = (req, res, next) => {
