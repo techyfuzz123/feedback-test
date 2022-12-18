@@ -20,15 +20,21 @@ jobs:
       with:
         username: ${{ secrets.DOCK_USERNAME }}
         password: ${{ secrets.DOCK_PASSWD }}
+    - name: Setup buildx
+      uses: docker/setup-buildx-action@v2
     - name: Build and Push Server
       uses: docker/build-push-action@v3
       with:
         context: ./server
-        tags: tamilarasug/feedback-server:latest, tamilarasug/feedback-server:${{ github.run_number }}
+        tags: techyfuzz123/feedback-test:latest, techyfuzz123/:feedback-test${{ github.run_number }}
         push: true
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
     - name: Build and Push Client
       uses: docker/build-push-action@v3
       with:
         context: ./client
-        tags: tamilarasug/feedback-client:latest, tamilarasug/feedback-client:${{ github.run_number }}
+        tags: techyfuzz123/client-test:latest, techyfuzz123/client-test:${{ github.run_number }}
         push: true
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
