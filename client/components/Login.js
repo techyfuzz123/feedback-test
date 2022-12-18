@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@context/AuthContext";
 
 const Login = () => {
-  // Student
+  // Studenti
   const [regNo, setRegNo] = useState(222);
   const [dob, setDob] = useState("07/03/2003");
   const [studentPassword, setStudentPassword] = useState("hicet");

@@ -10,7 +10,7 @@ WORKDIR /app
 RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Kolkata /etc/localtime && echo "Asia/Kolkata" > /etc/timezone && apk del tzdata
 
 # copy source files
-COPY package.json package-lock.json .
+COPY package.json package-lock.json /app/
 
 # install dependencies
 RUN npm install
