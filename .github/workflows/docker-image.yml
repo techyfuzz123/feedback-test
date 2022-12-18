@@ -26,7 +26,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         context: ./server
-        tags: techyfuzz123/feedback-test:latest, techyfuzz123/:feedback-test:${{ github.run_number }}
+        tags: techyfuzz123/feedback-test:latest, techyfuzz123/feedback-test:${{ github.run_number }}
         push: true
         cache-from: type=gha
         cache-to: type=gha,mode=max
