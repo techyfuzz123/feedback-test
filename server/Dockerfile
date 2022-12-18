@@ -13,7 +13,7 @@ RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Kolkata /etc/localtime && echo
 EXPOSE 6069
 
 # copy dependencies files
-COPY package.json package-lock.json .
+COPY package.json package-lock.json /app/
 
 # install dependencies
 RUN npm install
