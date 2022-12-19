@@ -9,6 +9,9 @@ WORKDIR /app
 #Change TimeZone
 RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Kolkata /etc/localtime && echo "Asia/Kolkata" > /etc/timezone && apk del tzdata
 
+#Expose ports
+EXPOSE 3000
+
 # copy source files
 COPY package.json package-lock.json /app/
 
@@ -20,9 +23,6 @@ COPY . /app
 
 # Build the source code
 RUN npm run build
-
-#Expose ports
-EXPOSE 3000
 
 #Change ownership
 RUN chown -R node:node /app
