@@ -67,7 +67,7 @@ const update_Image = (req, res, next) => {
   return res.status(500).json("something wrong");
 };
 
-//optionaltestthreefourfivesixserverseven
+//optionaltestthreefourfivesixserverseveneight
 // middlewares
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
