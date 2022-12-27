@@ -21,7 +21,7 @@ jobs:
           echo $DOCK_PASSWD | docker login -u $DOCK_USER --password-stdin
           docker push techyfuzz123/feedback-test:$SERVER_TAG
 
-  build:
+  builds:
     docker:
       - image: cimg/go:1.17
         auth:
