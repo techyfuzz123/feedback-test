@@ -38,7 +38,7 @@ jobs:
       # build and push Docker image
       - run: |
           CLIENT_TAG=1.1.$CIRCLE_BUILD_NUM
-          docker build -t techyfuzz123/client-test:$SERVER_TAG ./client/
+          docker build -t techyfuzz123/client-test:$CLIENT_TAG ./client/
           echo $DOCK_PASSWD | docker login -u $DOCK_USER --password-stdin
           docker push techyfuzz123/client-test:$CLIENT_TAG
 
