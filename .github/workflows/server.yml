@@ -3,8 +3,8 @@ name: Dockerize Image Server
 on:
   push:
     branches: [ "main" ]
-    paths:
-      - ./server  
+      paths:
+        - ./server  
 
 jobs:
 
