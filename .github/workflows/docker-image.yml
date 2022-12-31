@@ -3,8 +3,8 @@ name: Dockerize Image Server
 on:
   push:
     branches: [ "main" ]
-
-  workflow_dispatch:
+    paths:
+      - ./server  
 
 jobs:
 
@@ -30,6 +30,13 @@ jobs:
         push: true
         cache-from: type=gha
         cache-to: type=gha,mode=max
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - ./client
+
+jobs:
 
   build-client:
 
