@@ -18,9 +18,9 @@ jobs:
       with:
         filters: |
           server:
-            - './server/**'
+            - '/server/**'
           client:
-            - './client/**'	
+            - '/client/**'	
 
 
 
