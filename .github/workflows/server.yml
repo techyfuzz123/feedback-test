@@ -6,7 +6,6 @@ on:
 
   checkout-diff:
     runs-on: ubuntu-latest
-    permissions: read-all 
     outputs:
       server: ${{ steps.filter.outputs.server }}
       client: ${{ steps.filter.outputs.client }}
