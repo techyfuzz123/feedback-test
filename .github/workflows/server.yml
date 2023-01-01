@@ -26,8 +26,8 @@ jobs:
   
 
   build-server:
-    needs: changes
-    if: ${{ needs.changes.outputs.server == 'true' }}	
+    needs: checkout-diff
+    if: ${{ needs.checkout-diff.outputs.server == 'true' }}	
     runs-on: ubuntu-latest
 
     steps:
@@ -50,8 +50,8 @@ jobs:
         cache-to: type=gha,mode=max
 
   build-client:
-    needs: changes
-    if: ${{ needs.changes.outputs.client == 'true' }}
+    needs: checkout-diff
+    if: ${{ needs.checkout-diff.outputs.client == 'true' }}
     runs-on: ubuntu-latest
 
     steps:
