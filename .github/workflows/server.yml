@@ -4,6 +4,8 @@ on:
   push:
     branches: [ "main" ]
 
+jobs:
+
   checkout-diff:
     runs-on: ubuntu-latest
     outputs:
@@ -70,8 +72,6 @@ on:
         push: true
         cache-from: type=gha
         cache-to: type=gha,mode=max
-
-jobs:
 
   changes:
     runs-on: ubuntu-latest
