@@ -72,19 +72,3 @@ jobs:
         push: true
         cache-from: type=gha
         cache-to: type=gha,mode=max
-
-  changes:
-    runs-on: ubuntu-latest
-    permissions: read-all 
-    outputs:
-      server: ${{ steps.filter.outputs.server }}
-      client: ${{ steps.filter.outputs.client }}
-    steps:
-    - uses: dorny/paths-filter@v2
-      id: filter
-      with:
-        filters: |
-          server:
-            - '**/server/**'
-          client:
-            - '**/client/**'	
