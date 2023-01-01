@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-	changes:
+  changes:
     runs-on: ubuntu-latest
     outputs:
       server: ${{ steps.filter.outputs.server }}
@@ -48,7 +48,7 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
-	build-client:
+  build-client:
 		needs: changes
     if: ${{ needs.changes.outputs.client == 'true' }}
     runs-on: ubuntu-latest
