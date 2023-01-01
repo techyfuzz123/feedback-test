@@ -8,8 +8,7 @@ jobs:
 
   changes:
     runs-on: ubuntu-latest
-    permissions: 
-      push: read
+    permissions: read-all 
     outputs:
       server: ${{ steps.filter.outputs.server }}
       client: ${{ steps.filter.outputs.client }}
