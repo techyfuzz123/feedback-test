@@ -4,26 +4,25 @@ on:
   push:
     branches: [ "main" ]
 
-jobs:
-
-  changes:
-    runs-on: ubuntu-latest
+  checkout-diff:
+  runs-on: ubuntu-latest
     permissions: read-all 
     outputs:
       server: ${{ steps.filter.outputs.server }}
       client: ${{ steps.filter.outputs.client }}
     steps:
-    - uses: dorny/paths-filter@v2
+    - name: Checkout the code
+      uses: actions/checkout@v3
+    - name: Check diff
+      uses: dorny/paths-filter@v2
       id: filter
       with:
         filters: |
           server:
-            - '**/server/**'
+            - 'server/**'
           client:
-            - '**/client/**'	
-
-
-
+            - 'client/**'
+  
 
   build-server:
     needs: changes
@@ -72,3 +71,21 @@ jobs:
         push: true
         cache-from: type=gha
         cache-to: type=gha,mode=max
+
+jobs:
+
+  changes:
+    runs-on: ubuntu-latest
+    permissions: read-all 
+    outputs:
+      server: ${{ steps.filter.outputs.server }}
+      client: ${{ steps.filter.outputs.client }}
+    steps:
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          server:
+            - '**/server/**'
+          client:
+            - '**/client/**'	
