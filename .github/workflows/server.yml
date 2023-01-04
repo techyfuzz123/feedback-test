@@ -44,7 +44,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         context: ./server
-        tags: techyfuzz123/feedback-test:latest, techyfuzz123/feedback-test:${{ github.run_number }}
+        tags: $username/feedback-test:latest, $username/feedback-test:${{ github.run_number }}
         push: true
         cache-from: type=gha
         cache-to: type=gha,mode=max
@@ -68,7 +68,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         context: ./client
-        tags: techyfuzz123/client-test:latest, techyfuzz123/client-test:${{ github.run_number }}
+        tags: $username/client-test:latest, $username/client-test:${{ github.run_number }}
         push: true
         cache-from: type=gha
         cache-to: type=gha,mode=max
