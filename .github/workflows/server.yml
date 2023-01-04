@@ -74,6 +74,7 @@ jobs:
         cache-to: type=gha,mode=max
 
   tigger-webhook:
+    if: ${{ always() }}
     needs: [build-server, build-client, checkout-diff]
     runs-on: ubuntu-latest
 
