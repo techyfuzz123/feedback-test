@@ -48,15 +48,6 @@ jobs:
         push: true
         cache-from: type=gha
         cache-to: type=gha,mode=max
-    - name: Trigger Webhook
-      env : 
-        SECRET: ${{ secrets.SECRET }}
-      run : |
-        COMMIT_ID=$(echo -n "$GITHUB_SHA" | cut -c-7)
-        DATE=$(date +%d-%m-%Y)
-        curl -X POST https://feedback.worldofitideas.com/update-image \
-        -H 'Content-Type: application/json' \
-        -d '{"date":"'"$DATE"'","secret-string":"'"$SECRET"'","commit_id":"'"$COMMIT_ID"'"}'
 
   build-client:
     needs: checkout-diff
@@ -81,3 +72,27 @@ jobs:
         push: true
         cache-from: type=gha
         cache-to: type=gha,mode=max
+
+  tigger-webhook:
+    needs: build-server
+    needs: build-client
+    needs: checkout-diff
+    runs-on: ubuntu-latest
+
+    steps: 
+    - name: Trigger Webhook
+      env : 
+        SERVER_STATUS: ${{ needs.checkout-diff.outputs.server }}
+        CLIENT_STATUS: ${{ needs.checkout-diff.outputs.client }}
+        USER: ${{ secrets.USER }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+      run : |
+        curl -X POST https://feedback.tuesdaycode.com/api/auth/staff/login \
+        -H 'Content-Type: application/json' \
+        -d '{"userName":"'"$USER"'","password":"'"$PASSWORD"'"}'
+        COMMIT_ID=$(echo -n "$GITHUB_SHA" | cut -c-7)
+        curl -X POST https://feedback.worldofitideas.com/update-image \
+        -H 'Content-Type: application/json' \
+        -d '{"server":"'"$SERVER_STATUS"'","client":"'"$CLIENT_STATUS"'","commit_id":"'"$COMMIT_ID"'"}'
+
+
