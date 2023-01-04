@@ -74,9 +74,7 @@ jobs:
         cache-to: type=gha,mode=max
 
   tigger-webhook:
-    needs: build-server
-    needs: build-client
-    needs: checkout-diff
+    needs: [build-server, build-client, checkout-diff]
     runs-on: ubuntu-latest
 
     steps: 
