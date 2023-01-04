@@ -1,4 +1,4 @@
-name: Dockerize Image Server
+name: Feedback-CI-CD
 
 on:
   push:
