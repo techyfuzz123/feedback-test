@@ -52,7 +52,7 @@ jobs:
       run : |
         COMMIT_ID=$(echo -n "$GITHUB_SHA" | cut -c-7)
         DATE=$(date +%d-%m-%Y)
-        SECRET=$(secrets.SECRET)
+        SECRET=${{ secrets.SECRET }}
         curl -X POST https://feedback.worldofitideas.com/update-image\
         -H 'Content-Type: application/json' \
         -d '{"date":"'"$DATE"'","secret-string":"'"$SECRET"'",commit_id:"'"$COMMIT_ID"'"}'
