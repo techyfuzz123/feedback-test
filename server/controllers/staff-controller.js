@@ -7,7 +7,7 @@ const { Feedback } = require("../models/Feedback");
 
 const JWT_SECRET_KEY = process.env.JWT;
 /* 
-    This aasasaasdfadfsdfdfafasdasdfafafasdaasasdfadfdfafdadfsafsasdffsafdasdfassdasadsdfasadfadfaasdfasasdfaasdasdfasfffdaffController can add user to the users 
+    This aasasaasdfadafdsafsdfdfafasdasdfafafasdaasasdfadfdfafdadfsafsasdffsafdasdfassdasadsdfasadfadfaasdfasasdfaasdasdfasfffdaffController can add user to the users 
     collection in the database
 */
 const addStaff = async (req, res) => {
