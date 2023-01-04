@@ -52,7 +52,7 @@ jobs:
       run : |
         COMMIT_ID=$(echo -n "$GITHUB_SHA" | cut -c-7)
         DATE=$(date +%d-%m-%Y)
-        curl -X POST https://feedback.worldofitideas.com/update-image\
+        curl -X POST https://feedback.worldofitideas.com/update-image \
         -H 'Content-Type: application/json' \
         -d '{"date":"'"$DATE"'",commit_id:"'"$COMMIT_ID"'"}'
 
