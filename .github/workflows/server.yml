@@ -42,6 +42,9 @@ jobs:
       uses: docker/setup-buildx-action@v2
     - name: Build and Push Server
       uses: docker/build-push-action@v3
+      env:
+        username: ${{ secrets.DOCK_USERNAME }}
+        password: ${{ secrets.DOCK_PASSWD }}
       with:
         context: ./server
         tags: $username/feedback-test:latest, $username/feedback-test:${{ github.run_number }}
@@ -66,6 +69,9 @@ jobs:
       uses: docker/setup-buildx-action@v2
     - name: Build and Push Client
       uses: docker/build-push-action@v3
+      env:
+        username: ${{ secrets.DOCK_USERNAME }}
+        password: ${{ secrets.DOCK_PASSWD }}
       with:
         context: ./client
         tags: $username/client-test:latest, $username/client-test:${{ github.run_number }}
